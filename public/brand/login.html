@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SponsorKit Brands — Connexion</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07070f;--bg2:#10101a;--bg3:#181826;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.12);
+  --text:#f0f0fa;--text2:#8888aa;--text3:#55556a;
+  --accent:#22d3a8;--accent2:#16a880;
+  --purple:#7c6fff;--red:#f05e5e;
+  --font:'DM Sans',sans-serif;--display:'Syne',sans-serif;
+}
+html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;display:flex;align-items:center;justify-content:center}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 40% at 50% -5%,rgba(34,211,168,0.12),transparent);pointer-events:none}
+.wrap{position:relative;z-index:1;width:100%;max-width:440px;padding:20px}
+.logo-area{text-align:center;margin-bottom:32px}
+.logo-icon{width:54px;height:54px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:14px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px;box-shadow:0 0 40px rgba(34,211,168,0.25)}
+.logo-icon i{font-size:26px;color:#fff}
+.logo-name{font-family:var(--display);font-size:24px;font-weight:800}
+.logo-badge{display:inline-block;font-size:11px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:6px;padding:2px 10px;font-weight:600;margin-top:4px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:32px}
+.tabs{display:flex;background:var(--bg3);border-radius:10px;padding:4px;margin-bottom:26px}
+.tab{flex:1;text-align:center;padding:9px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text3);transition:all .2s}
+.tab.active{background:var(--bg2);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,0.3)}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:11px;color:var(--text3);margin-bottom:5px;font-weight:500;text-transform:uppercase;letter-spacing:.05em}
+.field input,.field select,.field textarea{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:var(--font);outline:none;transition:border-color .2s}
+.field input:focus,.field select:focus{border-color:var(--accent)}
+.field select option{background:var(--bg3)}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{width:100%;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:600;font-family:var(--font);cursor:pointer;margin-top:6px;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s}
+.btn-main{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
+.btn-main:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(34,211,168,0.3)}
+.btn-main:disabled{opacity:.6;cursor:default;transform:none}
+.msg{padding:10px 14px;border-radius:8px;font-size:12px;margin-bottom:14px;display:none;align-items:center;gap:8px}
+.msg.error{background:rgba(240,94,94,.1);border:1px solid rgba(240,94,94,.25);color:var(--red)}
+.msg.success{background:rgba(34,211,168,.1);border:1px solid rgba(34,211,168,.25);color:var(--accent)}
+.msg.show{display:flex}
+.step-dots{display:flex;gap:6px;justify-content:center;margin-bottom:22px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--border2);transition:all .2s}
+.dot.active{background:var(--accent);box-shadow:0 0 8px var(--accent)}
+.dot.done{background:var(--accent2)}
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.plan-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.plan-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px;cursor:pointer;transition:all .15s;text-align:center}
+.plan-card:hover{border-color:var(--border2)}
+.plan-card.selected{border-color:var(--accent);background:rgba(34,211,168,.08)}
+.plan-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
+.plan-price{font-size:11px;color:var(--accent);font-weight:600}
+.plan-desc{font-size:10px;color:var(--text3);margin-top:3px}
+.foot{text-align:center;font-size:12px;color:var(--text3);margin-top:20px}
+.foot a{color:var(--text2);text-decoration:none}
+@media(max-width:480px){.card{padding:22px 18px}.field-row{grid-template-columns:1fr}.plan-cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo-area">
+    <div class="logo-icon"><i class="ti ti-building-store"></i></div>
+    <div class="logo-name">SponsorKit</div>
+    <div class="logo-badge">FOR BRANDS</div>
+  </div>
+
+  <div class="card">
+    <div class="tabs">
+      <div class="tab active" id="tabLogin" onclick="showTab('login')">Se connecter</div>
+      <div class="tab" id="tabRegister" onclick="showTab('register')">Créer un compte</div>
+    </div>
+
+    <div class="msg error show" id="msgError"><i class="ti ti-alert-circle"></i><span id="errTxt"></span></div>
+    <div class="msg success" id="msgSuccess"><i class="ti ti-check"></i><span id="okTxt"></span></div>
+
+    <!-- LOGIN -->
+    <div id="formLogin">
+      <div class="field"><label>Email professionnel</label><input type="email" id="loginEmail" placeholder="marketing@marque.com" autocomplete="email"></div>
+      <div class="field"><label>Mot de passe</label><input type="password" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <div style="text-align:right;margin-bottom:14px"><a href="#" style="font-size:12px;color:var(--text3);text-decoration:none" onclick="showForgot()">Mot de passe oublié ?</a></div>
+      <button class="btn btn-main" id="btnLogin" onclick="doLogin()"><span>Accéder à mon espace</span><i class="ti ti-arrow-right"></i></button>
+    </div>
+
+    <!-- REGISTER -->
+    <div id="formRegister" style="display:none">
+      <div class="step-dots">
+        <div class="dot active" id="d1"></div>
+        <div class="dot" id="d2"></div>
+        <div class="dot" id="d3"></div>
+      </div>
+
+      <!-- STEP 1: compte -->
+      <div id="s1">
+        <div class="field-row">
+          <div class="field"><label>Prénom</label><input type="text" id="rFirst" placeholder="Sophie"></div>
+          <div class="field"><label>Nom</label><input type="text" id="rLast" placeholder="Durand"></div>
+        </div>
+        <div class="field"><label>Email professionnel</label><input type="email" id="rEmail" placeholder="marketing@marque.com"></div>
+        <div class="field"><label>Mot de passe</label><input type="password" id="rPass" placeholder="Min. 8 caractères"></div>
+        <button class="btn btn-main" onclick="next(2)">Suivant <i class="ti ti-arrow-right"></i></button>
+      </div>
+
+      <!-- STEP 2: entreprise -->
+      <div id="s2" style="display:none">
+        <div class="field"><label>Nom de la marque / entreprise</label><input type="text" id="rBrand" placeholder="Nike, Squarespace, NordVPN..."></div>
+        <div class="field"><label>Site web</label><input type="url" id="rWebsite" placeholder="https://marque.com"></div>
+        <div class="field-row">
+          <div class="field"><label>Secteur</label>
+            <select id="rSector">
+              <option>Tech & Software</option><option>Finance</option><option>E-commerce</option>
+              <option>Gaming</option><option>Lifestyle</option><option>Santé & Fitness</option>
+              <option>Voyage</option><option>Food & Boisson</option><option>Mode</option><option>Autre</option>
+            </select>
+          </div>
+          <div class="field"><label>Taille équipe</label>
+            <select id="rSize">
+              <option>1–10</option><option>10–50</option><option>50–200</option><option>200+</option>
+            </select>
+          </div>
+        </div>
+        <div class="field"><label>Budget mensuel influenceurs (€)</label>
+          <select id="rBudget">
+            <option value="500">Moins de 1 000 €</option><option value="2500">1 000 – 5 000 €</option>
+            <option value="10000">5 000 – 20 000 €</option><option value="50000">20 000 €+</option>
+          </select>
+        </div>
+        <button class="btn btn-main" onclick="next(3)">Suivant <i class="ti ti-arrow-right"></i></button>
+        <button style="width:100%;background:none;border:none;color:var(--text3);font-size:12px;cursor:pointer;margin-top:8px;font-family:var(--font)" onclick="next(1)">← Retour</button>
+      </div>
+
+      <!-- STEP 3: plan -->
+      <div id="s3" style="display:none">
+        <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Choisissez votre plan</div>
+        <div class="plan-cards">
+          <div class="plan-card selected" onclick="selPlan(this,'starter')" id="planStarter">
+            <div class="plan-name">Starter</div>
+            <div class="plan-price">Gratuit</div>
+            <div class="plan-desc">3 campagnes · 10 créateurs</div>
+          </div>
+          <div class="plan-card" onclick="selPlan(this,'growth')" id="planGrowth">
+            <div class="plan-name">Growth</div>
+            <div class="plan-price">49 €/mois</div>
+            <div class="plan-desc">Illimité · Analytics · IA</div>
+          </div>
+          <div class="plan-card" onclick="selPlan(this,'pro')" id="planPro">
+            <div class="plan-name">Pro</div>
+            <div class="plan-price">149 €/mois</div>
+            <div class="plan-desc">Multi-équipe · API · Contrats</div>
+          </div>
+          <div class="plan-card" onclick="selPlan(this,'enterprise')" id="planEnterprise">
+            <div class="plan-name">Enterprise</div>
+            <div class="plan-price">Sur devis</div>
+            <div class="plan-desc">White-label · SLA · Support</div>
+          </div>
+        </div>
+        <button class="btn btn-main" id="btnReg" onclick="doRegister()"><span>Créer mon compte marque</span><i class="ti ti-rocket"></i></button>
+        <button style="width:100%;background:none;border:none;color:var(--text3);font-size:12px;cursor:pointer;margin-top:8px;font-family:var(--font)" onclick="next(2)">← Retour</button>
+      </div>
+    </div>
+  </div>
+  <div class="foot">Vous êtes un créateur ? <a href="/login.html">Espace créateur →</a></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SUPABASE_URL  = window.ENV_SUPABASE_URL  || 'REMPLACE_PAR_TON_URL_SUPABASE';
+const SUPABASE_ANON = window.ENV_SUPABASE_ANON || 'REMPLACE_PAR_TA_CLE_ANON';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+let selectedPlan = 'starter';
+
+function showTab(t){
+  document.getElementById('formLogin').style.display  = t==='login'?'block':'none';
+  document.getElementById('formRegister').style.display = t==='register'?'block':'none';
+  document.getElementById('tabLogin').classList.toggle('active',t==='login');
+  document.getElementById('tabRegister').classList.toggle('active',t==='register');
+  hideMsg();
+}
+function showErr(m){document.getElementById('errTxt').textContent=m;document.getElementById('msgError').classList.add('show');document.getElementById('msgSuccess').classList.remove('show')}
+function showOk(m){document.getElementById('okTxt').textContent=m;document.getElementById('msgSuccess').classList.add('show');document.getElementById('msgError').classList.remove('show')}
+function hideMsg(){document.getElementById('msgError').classList.remove('show');document.getElementById('msgSuccess').classList.remove('show')}
+function selPlan(el,v){document.querySelectorAll('.plan-card').forEach(p=>p.classList.remove('selected'));el.classList.add('selected');selectedPlan=v}
+function setLoad(id,on){const b=document.getElementById(id);if(on){b._h=b.innerHTML;b.innerHTML='<div class="spinner"></div>';b.disabled=true}else{b.innerHTML=b._h;b.disabled=false}}
+
+function next(n){
+  hideMsg();
+  if(n===2){
+    if(!document.getElementById('rFirst').value.trim())return showErr('Entre ton prénom.');
+    if(!document.getElementById('rEmail').value.includes('@'))return showErr('Email invalide.');
+    if(document.getElementById('rPass').value.length<8)return showErr('Mot de passe trop court.');
+  }
+  if(n===3){
+    if(!document.getElementById('rBrand').value.trim())return showErr('Entre le nom de ta marque.');
+  }
+  [1,2,3].forEach(i=>{
+    document.getElementById('s'+i).style.display=i===n?'block':'none';
+    const d=document.getElementById('d'+i);
+    d.className='dot'+(i===n?' active':i<n?' done':'');
+  });
+}
+
+async function doLogin(){
+  hideMsg();
+  const email=document.getElementById('loginEmail').value.trim();
+  const pass=document.getElementById('loginPass').value;
+  if(!email||!pass)return showErr('Remplis tous les champs.');
+  setLoad('btnLogin',true);
+  const {error}=await sb.auth.signInWithPassword({email,password:pass});
+  setLoad('btnLogin',false);
+  if(error)return showErr(error.message==='Invalid login credentials'?'Email ou mot de passe incorrect.':error.message);
+
+  // Vérifier que c'est bien un compte marque
+  const {data:brand}=await sb.from('brands').select('id').eq('email',email).single();
+  if(!brand)return showErr('Ce compte n\'est pas un compte marque. Utilisez l\'espace créateur.');
+  window.location.href='/brand/';
+}
+
+async function doRegister(){
+  hideMsg();
+  setLoad('btnReg',true);
+  const email=document.getElementById('rEmail').value.trim();
+  const pass=document.getElementById('rPass').value;
+  const {data:authData,error:authError}=await sb.auth.signUp({email,password:pass,
+    options:{data:{first_name:document.getElementById('rFirst').value.trim(),last_name:document.getElementById('rLast').value.trim(),account_type:'brand'}}
+  });
+  if(authError){setLoad('btnReg',false);return showErr(authError.message)}
+  const {error:brandError}=await sb.from('brands').insert({
+    id:authData.user.id,email,
+    first_name:document.getElementById('rFirst').value.trim(),
+    last_name:document.getElementById('rLast').value.trim(),
+    brand_name:document.getElementById('rBrand').value.trim(),
+    website:document.getElementById('rWebsite').value.trim()||null,
+    sector:document.getElementById('rSector').value,
+    team_size:document.getElementById('rSize').value,
+    monthly_budget:parseInt(document.getElementById('rBudget').value)||0,
+    plan:selectedPlan,
+    created_at:new Date().toISOString()
+  });
+  setLoad('btnReg',false);
+  if(brandError&&!brandError.message.includes('duplicate'))return showErr('Erreur profil: '+brandError.message);
+  showOk('Compte créé ! Vérifie ton email puis connecte-toi.');
+  setTimeout(()=>showTab('login'),2500);
+}
+
+function showForgot(){
+  const email=document.getElementById('loginEmail').value.trim();
+  if(!email)return showErr('Entre ton email d\'abord.');
+  sb.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin+'/brand/reset'});
+  showOk('Email de réinitialisation envoyé !');
+}
+
+sb.auth.getSession().then(({data:{session}})=>{if(session)window.location.href='/brand/'});
+document.getElementById('msgError').classList.remove('show');
+</script>
+</body>
+</html>

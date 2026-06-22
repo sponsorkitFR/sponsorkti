@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SponsorKit Brands</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+:root{
+  --bg:#07070f;--bg2:#0f0f1a;--bg3:#171726;--bg4:#1e1e30;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.11);
+  --text:#eeeef8;--text2:#8888aa;--text3:#55556a;
+  --accent:#22d3a8;--accent2:#16a880;--accent-glow:rgba(34,211,168,0.15);
+  --purple:#7c6fff;--purple-bg:rgba(124,111,255,0.1);
+  --orange:#f59e4b;--orange-bg:rgba(245,158,75,0.08);
+  --red:#f05e5e;--red-bg:rgba(240,94,94,0.08);
+  --blue:#60a5fa;--blue-bg:rgba(96,165,250,0.08);
+  --green-bg:rgba(34,211,168,0.08);
+  --radius:10px;--radius-lg:14px;
+  --sidebar-w:230px;
+  --font:'DM Sans',sans-serif;--display:'Syne',sans-serif;
+  --shadow:0 4px 24px rgba(0,0,0,0.5);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.5;overflow:hidden}
+input,select,textarea,button{font-family:var(--font);font-size:14px;color:var(--text)}
+input,select,textarea{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:9px 13px;width:100%;color:var(--text);outline:none;transition:border-color .2s}
+input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+select option{background:var(--bg3)}
+textarea{resize:vertical}
+
+/* LAYOUT */
+.app{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;transition:transform .3s;z-index:100}
+.main{flex:1;overflow-y:auto;background:var(--bg)}
+.main::-webkit-scrollbar{width:4px}
+.main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* LOGO */
+.logo{padding:18px 16px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+.logo-mark{width:32px;height:32px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-mark i{font-size:16px;color:#fff}
+.logo-text{display:flex;flex-direction:column}
+.logo-name{font-family:var(--display);font-size:15px;font-weight:800;line-height:1}
+.logo-sub{font-size:10px;color:var(--accent);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+
+/* NAV */
+.nav-s{padding:12px 10px 0}
+.nav-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;padding:0 8px;margin-bottom:4px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--radius);cursor:pointer;font-size:13px;color:var(--text2);margin-bottom:2px;transition:all .15s}
+.nav-item:hover{background:var(--bg3);color:var(--text)}
+.nav-item.active{background:var(--green-bg);color:var(--accent);font-weight:500}
+.nav-item i{font-size:16px;flex-shrink:0}
+.bdg{font-size:10px;padding:1px 7px;border-radius:20px;margin-left:auto;font-weight:500}
+.bg{background:var(--green-bg);color:var(--accent)}
+.bp{background:var(--purple-bg);color:var(--purple)}
+.bo{background:var(--orange-bg);color:var(--orange)}
+.br{background:var(--red-bg);color:var(--red)}
+
+/* PAGES */
+.page{display:none;padding:28px}
+.page.active{display:block}
+.ph{margin-bottom:22px}
+.ph h1{font-family:var(--display);font-size:22px;font-weight:800;margin-bottom:4px}
+.ph p{font-size:13px;color:var(--text2)}
+
+/* STAT CARDS */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.kpi{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px}
+.kpi-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.kpi-val{font-size:26px;font-weight:700;color:var(--text);line-height:1;font-family:var(--display)}
+.kpi-sub{font-size:11px;margin-top:5px;display:flex;align-items:center;gap:3px}
+.up{color:var(--accent)}.dn{color:var(--red)}.neu{color:var(--text3)}
+
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px;margin-bottom:14px}
+.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.ct{font-size:13px;font-weight:600;color:var(--text)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+
+/* BUTTONS */
+.btn-p{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:var(--radius);padding:9px 16px;font-size:13px;cursor:pointer;font-weight:500;display:inline-flex;align-items:center;gap:6px;transition:all .15s}
+.btn-p:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(34,211,168,0.25)}
+.btn-p:disabled{opacity:.6;transform:none;cursor:default}
+.btn-g{background:transparent;border:1px solid var(--border2);border-radius:var(--radius);padding:8px 14px;font-size:13px;cursor:pointer;color:var(--text2);transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+.btn-g:hover{border-color:var(--accent);color:var(--text)}
+.btn-d{background:transparent;border:1px solid var(--red-bg);border-radius:var(--radius);padding:8px 14px;font-size:13px;cursor:pointer;color:var(--red);transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+.btn-d:hover{background:var(--red-bg)}
+
+/* PILLS */
+.pill{font-size:10px;padding:3px 9px;border-radius:20px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.pg{background:var(--green-bg);color:var(--accent)}
+.pp{background:var(--purple-bg);color:var(--purple)}
+.pa{background:var(--orange-bg);color:var(--orange)}
+.pr{background:var(--red-bg);color:var(--red)}
+.pb{background:var(--blue-bg);color:var(--blue)}
+.pgy{background:rgba(255,255,255,.04);color:var(--text3)}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);padding:8px 12px;border-bottom:1px solid var(--border);text-align:left;font-weight:500}
+.tbl td{padding:11px 12px;border-bottom:1px solid var(--border);font-size:12px;color:var(--text2)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:var(--bg3);color:var(--text);cursor:pointer}
+.tbl td:first-child{color:var(--text);font-weight:500}
+
+/* CREATOR CARD (découverte) */
+.creator-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.creator-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;transition:all .2s;cursor:pointer}
+.creator-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 24px rgba(34,211,168,0.1)}
+.cc-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.cc-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0}
+.cc-name{font-size:13px;font-weight:600;color:var(--text)}
+.cc-handle{font-size:11px;color:var(--text3)}
+.cc-metrics{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
+.cc-metric{background:var(--bg3);border-radius:8px;padding:8px;text-align:center}
+.cc-mval{font-size:14px;font-weight:700;color:var(--text)}
+.cc-mlbl{font-size:10px;color:var(--text3)}
+.cc-niche{font-size:11px;color:var(--text2);margin-bottom:10px}
+.cc-rate{font-size:13px;font-weight:600;color:var(--accent);margin-bottom:10px}
+
+/* FILTERS */
+.filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.filter-chip{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--text2);cursor:pointer;transition:all .15s}
+.filter-chip:hover,.filter-chip.active{background:var(--green-bg);border-color:var(--accent);color:var(--accent)}
+.search-box{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:8px 12px 8px 36px;font-size:13px;color:var(--text);width:220px;position:relative}
+.search-wrap{position:relative}
+.search-wrap i{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:15px;pointer-events:none}
+
+/* AI BOX */
+.ai-b{background:linear-gradient(135deg,rgba(34,211,168,.1),rgba(22,168,128,.05));border:1px solid rgba(34,211,168,.2);border-radius:var(--radius);padding:12px 14px;margin-bottom:12px}
+.ai-bh{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--accent);margin-bottom:5px}
+.ai-bt{font-size:12px;color:var(--text2);line-height:1.6}
+
+/* PROGRESS BAR */
+.prog-wrap{height:6px;background:var(--bg4);border-radius:3px;overflow:hidden;margin-bottom:3px}
+.prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+
+/* CAMPAIGN CARD */
+.camp-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;margin-bottom:12px;transition:border-color .2s}
+.camp-card:hover{border-color:var(--border2)}
+.camp-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.camp-title{font-size:15px;font-weight:700;color:var(--text)}
+.camp-budget{font-size:13px;font-weight:600;color:var(--accent)}
+.camp-meta{font-size:11px;color:var(--text3);margin-top:2px}
+.camp-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.camp-stat{background:var(--bg3);border-radius:8px;padding:8px;text-align:center}
+.camp-sv{font-size:15px;font-weight:700;color:var(--text)}
+.camp-sl{font-size:10px;color:var(--text3)}
+
+/* BRIEF EDITOR */
+.brief-editor{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:16px}
+.brief-section{margin-bottom:16px}
+.brief-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;display:block}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);z-index:9998;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:18px;padding:28px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow)}
+.modal::-webkit-scrollbar{width:3px}
+.modal::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.modal-title{font-family:var(--display);font-size:18px;font-weight:800}
+
+/* TEAM MEMBER */
+.member-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.member-row:last-child{border-bottom:none}
+.member-av{width:36px;height:36px;border-radius:50%;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0}
+
+/* DELIVERABLE */
+.deliv-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.deliv-row:last-child{border-bottom:none}
+.deliv-thumb{width:48px;height:36px;background:var(--bg4);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* PLAN BOX */
+.plan-box{margin-top:auto;padding:10px}
+.plan-inner{background:var(--green-bg);border:1px solid rgba(34,211,168,.2);border-radius:var(--radius);padding:10px 12px}
+.plan-name{font-weight:600;color:var(--accent);font-size:12px;margin-bottom:1px}
+.plan-desc{font-size:11px;color:var(--text2)}
+
+/* MOBILE */
+.mobile-header{display:none;padding:14px 18px;border-bottom:1px solid var(--border);background:var(--bg2);position:sticky;top:0;z-index:50;align-items:center;justify-content:space-between}
+.hamburger{width:34px;height:34px;border:1px solid var(--border2);border-radius:var(--radius);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2)}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99}
+.sidebar-overlay.open{display:block}
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);padding:8px 0;z-index:90;padding-bottom:env(safe-area-inset-bottom)}
+.mob-items{display:flex;justify-content:space-around}
+.mob-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 10px;cursor:pointer;color:var(--text3);font-size:10px}
+.mob-item.active{color:var(--accent)}
+.mob-item i{font-size:20px}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
+
+@media(max-width:768px){
+  .sidebar{position:fixed;top:0;bottom:0;left:0;transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .mobile-header{display:flex}
+  .mobile-nav{display:block}
+  .page{padding:16px 16px 80px}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .two-col,.three-col{grid-template-columns:1fr}
+  .creator-grid{grid-template-columns:1fr 1fr}
+  .camp-stats{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+<div class="app">
+  <div class="sidebar" id="sidebar">
+    <div class="logo">
+      <div class="logo-mark"><i class="ti ti-building-store"></i></div>
+      <div class="logo-text">
+        <div class="logo-name">SponsorKit</div>
+        <div class="logo-sub">For Brands</div>
+      </div>
+    </div>
+    <div class="nav-s">
+      <div class="nav-lbl">Tableau de bord</div>
+      <div class="nav-item active" onclick="sw('dashboard',this)"><i class="ti ti-layout-dashboard"></i> Dashboard</div>
+      <div class="nav-item" onclick="sw('campaigns',this)"><i class="ti ti-speakerphone"></i> Campagnes <span class="bdg bg" id="campBadge">0</span></div>
+      <div class="nav-item" onclick="sw('discover',this)"><i class="ti ti-search"></i> Découvrir <span class="bdg bp">New</span></div>
+    </div>
+    <div class="nav-s" style="margin-top:8px">
+      <div class="nav-lbl">Gestion</div>
+      <div class="nav-item" onclick="sw('applications',this)"><i class="ti ti-users"></i> Candidatures <span class="bdg bo" id="appBadge">0</span></div>
+      <div class="nav-item" onclick="sw('deliverables',this)"><i class="ti ti-file-check"></i> Livrables <span class="bdg br" id="delivBadge">0</span></div>
+      <div class="nav-item" onclick="sw('payments',this)"><i class="ti ti-currency-euro"></i> Paiements</div>
+      <div class="nav-item" onclick="sw('reporting',this)"><i class="ti ti-chart-bar"></i> Reporting</div>
+    </div>
+    <div class="nav-s" style="margin-top:8px">
+      <div class="nav-lbl">Compte</div>
+      <div class="nav-item" onclick="sw('team',this)"><i class="ti ti-users-group"></i> Équipe</div>
+      <div class="nav-item" onclick="sw('settings',this)"><i class="ti ti-settings"></i> Paramètres</div>
+      <div class="nav-item" onclick="window.location.href='/network'" style="background:rgba(34,211,168,.08);color:#22d3a8;font-weight:500"><i class="ti ti-world"></i> Réseau <span class="bdg" style="background:rgba(34,211,168,.15);color:#22d3a8">New</span></div>
+    </div>
+    <div class="plan-box">
+      <div class="plan-inner">
+        <div class="plan-name" id="planName">Plan Starter</div>
+        <div class="plan-desc" id="planDesc">3 campagnes · 10 créateurs</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main" id="mainContent">
+    <div class="mobile-header">
+      <button class="hamburger" onclick="openSidebar()"><i class="ti ti-menu-2"></i></button>
+      <div style="font-family:var(--display);font-weight:800;font-size:15px">SponsorKit <span style="color:var(--accent);font-size:11px">BRANDS</span></div>
+      <div style="width:34px"></div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="page-dashboard" class="page active">
+      <div class="ph"><h1 id="dashGreet">Bonjour 👋</h1><p id="dashSub">Vue d'ensemble de vos campagnes</p></div>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-lbl">Campagnes actives</div><div class="kpi-val" id="kCamp">—</div><div class="kpi-sub up"><i class="ti ti-speakerphone" style="font-size:10px"></i> en cours</div></div>
+        <div class="kpi"><div class="kpi-lbl">Créateurs engagés</div><div class="kpi-val" id="kCreators">—</div><div class="kpi-sub up"><i class="ti ti-arrow-up" style="font-size:10px"></i> partenaires actifs</div></div>
+        <div class="kpi"><div class="kpi-lbl">Budget dépensé</div><div class="kpi-val" id="kSpent">—</div><div class="kpi-sub neu">ce mois</div></div>
+        <div class="kpi"><div class="kpi-lbl">ROI moyen</div><div class="kpi-val" id="kROI">—</div><div class="kpi-sub up"><i class="ti ti-arrow-up" style="font-size:10px"></i> vs objectif</div></div>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <div class="ch"><span class="ct">Campagnes récentes</span><span style="font-size:12px;color:var(--accent);cursor:pointer" onclick="sw('campaigns',document.querySelectorAll('.nav-item')[1])">Voir tout →</span></div>
+          <div id="dashCampaigns"><div style="text-align:center;padding:20px;color:var(--text3);font-size:12px">Aucune campagne</div></div>
+        </div>
+        <div>
+          <div class="ai-b">
+            <div class="ai-bh"><i class="ti ti-sparkles" style="font-size:13px"></i> Recommandation IA</div>
+            <div class="ai-bt" id="aiReco">Chargement des recommandations...</div>
+          </div>
+          <div class="card" style="margin-bottom:0">
+            <div class="ch"><span class="ct">Candidatures en attente</span></div>
+            <div id="dashApplications"><div style="font-size:12px;color:var(--text3)">Aucune candidature</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAMPAIGNS -->
+    <div id="page-campaigns" class="page">
+      <div class="ph"><h1>Campagnes</h1><p>Gérez vos campagnes d'influence de A à Z</p></div>
+      <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
+        <button class="btn-p" onclick="openCampaignModal()"><i class="ti ti-plus"></i> Nouvelle campagne</button>
+        <button class="btn-g" onclick="filterCampaigns('all')" id="cf-all" style="border-color:var(--accent);color:var(--accent)">Toutes</button>
+        <button class="btn-g" onclick="filterCampaigns('active')" id="cf-active">Actives</button>
+        <button class="btn-g" onclick="filterCampaigns('draft')" id="cf-draft">Brouillons</button>
+        <button class="btn-g" onclick="filterCampaigns('completed')" id="cf-completed">Terminées</button>
+      </div>
+      <div id="campaignsList"><div style="text-align:center;padding:40px;color:var(--text3)"><i class="ti ti-speakerphone" style="font-size:32px;display:block;margin-bottom:10px;opacity:.4"></i>Aucune campagne. Créez-en une !</div></div>
+    </div>
+
+    <!-- DISCOVER CREATORS -->
+    <div id="page-discover" class="page">
+      <div class="ph"><h1>Découvrir des créateurs</h1><p>Base de créateurs SponsorKit — filtrée par niche, métriques et tarifs</p></div>
+      <div class="filter-bar">
+        <div class="search-wrap"><i class="ti ti-search"></i><input type="text" class="search-box" id="creatorSearch" placeholder="Rechercher..." oninput="filterCreators()"></div>
+        <select id="filterNiche" onchange="filterCreators()" style="width:140px;border-radius:20px;padding:5px 12px;font-size:12px">
+          <option value="">Toutes niches</option>
+          <option>Tech</option><option>Finance</option><option>Lifestyle</option>
+          <option>Gaming</option><option>Food</option><option>Fitness</option><option>Voyage</option>
+        </select>
+        <select id="filterPlatform" onchange="filterCreators()" style="width:130px;border-radius:20px;padding:5px 12px;font-size:12px">
+          <option value="">Toutes plateformes</option>
+          <option>YouTube</option><option>Instagram</option><option>TikTok</option>
+          <option>Twitch</option><option>Newsletter</option>
+        </select>
+        <select id="filterBudget" onchange="filterCreators()" style="width:160px;border-radius:20px;padding:5px 12px;font-size:12px">
+          <option value="">Tous budgets</option>
+          <option value="500">Moins de 500 €</option>
+          <option value="1000">Moins de 1 000 €</option>
+          <option value="5000">Moins de 5 000 €</option>
+        </select>
+      </div>
+      <div class="creator-grid" id="creatorGrid"><div style="text-align:center;padding:40px;color:var(--text3);grid-column:1/-1">Chargement des créateurs...</div></div>
+    </div>
+
+    <!-- APPLICATIONS -->
+    <div id="page-applications" class="page">
+      <div class="ph"><h1>Candidatures</h1><p>Créateurs ayant postulé à vos campagnes</p></div>
+      <div id="applicationsList">
+        <div style="text-align:center;padding:40px;color:var(--text3)"><i class="ti ti-users" style="font-size:32px;display:block;margin-bottom:10px;opacity:.4"></i>Aucune candidature reçue</div>
+      </div>
+    </div>
+
+    <!-- DELIVERABLES -->
+    <div id="page-deliverables" class="page">
+      <div class="ph"><h1>Livrables</h1><p>Validez les contenus soumis par vos créateurs</p></div>
+      <div id="deliverablesList">
+        <div class="card">
+          <div style="text-align:center;padding:20px;color:var(--text3)"><i class="ti ti-file-check" style="font-size:32px;display:block;margin-bottom:10px;opacity:.4"></i>Aucun livrable en attente de validation</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENTS -->
+    <div id="page-payments" class="page">
+      <div class="ph"><h1>Paiements</h1><p>Payez vos créateurs directement depuis SponsorKit</p></div>
+      <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr)">
+        <div class="kpi"><div class="kpi-lbl">Total payé</div><div class="kpi-val" id="pTotal">0 €</div><div class="kpi-sub neu">all time</div></div>
+        <div class="kpi"><div class="kpi-lbl">En attente</div><div class="kpi-val" id="pPending">0 €</div><div class="kpi-sub pa">à envoyer</div></div>
+        <div class="kpi"><div class="kpi-lbl">Créateurs payés</div><div class="kpi-val" id="pCreators">0</div><div class="kpi-sub neu">total</div></div>
+      </div>
+      <div class="card">
+        <div class="ch"><span class="ct">Historique des paiements</span></div>
+        <div id="paymentsList"><div style="font-size:12px;color:var(--text3);text-align:center;padding:20px">Aucun paiement effectué</div></div>
+      </div>
+      <div class="card">
+        <div class="ch"><span class="ct">Envoyer un paiement</span></div>
+        <div class="two-col">
+          <div>
+            <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">CAMPAGNE</label>
+            <select id="paymentCampaign" style="margin-bottom:10px"><option value="">Sélectionner...</option></select>
+            <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">CRÉATEUR</label>
+            <select id="paymentCreator" style="margin-bottom:10px"><option value="">Sélectionner...</option></select>
+          </div>
+          <div>
+            <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">MONTANT (€)</label>
+            <input type="number" id="paymentAmount" placeholder="1200" style="margin-bottom:10px">
+            <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">MÉTHODE</label>
+            <select id="paymentMethod" style="margin-bottom:14px">
+              <option>Virement bancaire</option>
+              <option>Stripe</option>
+              <option>PayPal</option>
+            </select>
+            <button class="btn-p" style="width:100%;justify-content:center" onclick="sendPayment()"><i class="ti ti-send"></i> Envoyer le paiement</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORTING -->
+    <div id="page-reporting" class="page">
+      <div class="ph"><h1>Reporting & ROI</h1><p>Performance détaillée de toutes vos campagnes</p></div>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-lbl">Vues totales</div><div class="kpi-val" id="rViews">—</div><div class="kpi-sub up">toutes campagnes</div></div>
+        <div class="kpi"><div class="kpi-lbl">Engagement moy.</div><div class="kpi-val" id="rEngage">—</div><div class="kpi-sub up">taux moyen</div></div>
+        <div class="kpi"><div class="kpi-lbl">Coût par vue</div><div class="kpi-val" id="rCPV">—</div><div class="kpi-sub neu">CPV moyen</div></div>
+        <div class="kpi"><div class="kpi-lbl">Meilleure campagne</div><div class="kpi-val" id="rBest" style="font-size:14px">—</div><div class="kpi-sub up">ROI le plus élevé</div></div>
+      </div>
+      <div id="reportingContent"><div style="text-align:center;padding:40px;color:var(--text3)">Lancez des campagnes pour voir le reporting.</div></div>
+    </div>
+
+    <!-- TEAM -->
+    <div id="page-team" class="page">
+      <div class="ph"><h1>Équipe</h1><p>Gérez les accès de votre équipe marketing</p></div>
+      <div style="display:flex;gap:8px;margin-bottom:16px">
+        <button class="btn-p" onclick="inviteTeam()"><i class="ti ti-user-plus"></i> Inviter un membre</button>
+      </div>
+      <div class="card">
+        <div class="ch"><span class="ct">Membres actifs</span></div>
+        <div id="teamList"></div>
+      </div>
+      <div class="card">
+        <div class="ch"><span class="ct">Rôles et permissions</span></div>
+        <table class="tbl">
+          <thead><tr><th>Rôle</th><th>Campagnes</th><th>Paiements</th><th>Équipe</th><th>Paramètres</th></tr></thead>
+          <tbody>
+            <tr><td>Admin</td><td style="color:var(--accent)">✅ Full</td><td style="color:var(--accent)">✅ Full</td><td style="color:var(--accent)">✅ Full</td><td style="color:var(--accent)">✅ Full</td></tr>
+            <tr><td>Manager</td><td style="color:var(--accent)">✅ Full</td><td style="color:var(--orange)">👁 Lecture</td><td style="color:var(--red)">❌</td><td style="color:var(--red)">❌</td></tr>
+            <tr><td>Analyste</td><td style="color:var(--orange)">👁 Lecture</td><td style="color:var(--red)">❌</td><td style="color:var(--red)">❌</td><td style="color:var(--red)">❌</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div id="page-settings" class="page">
+      <div class="ph"><h1>Paramètres</h1><p>Profil de votre marque et préférences</p></div>
+      <div class="two-col">
+        <div class="card">
+          <div class="ch"><span class="ct">Profil de la marque</span></div>
+          <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">NOM DE LA MARQUE</label>
+          <input type="text" id="sBrandName" style="margin-bottom:10px">
+          <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">SITE WEB</label>
+          <input type="url" id="sWebsite" style="margin-bottom:10px">
+          <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">SECTEUR</label>
+          <select id="sSector" style="margin-bottom:10px">
+            <option>Tech & Software</option><option>Finance</option><option>E-commerce</option><option>Gaming</option><option>Lifestyle</option>
+          </select>
+          <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">DESCRIPTION DE LA MARQUE</label>
+          <textarea id="sBrandDesc" style="height:80px;margin-bottom:14px" placeholder="Décrivez votre marque en quelques lignes..."></textarea>
+          <button class="btn-p" onclick="saveBrandProfile()"><i class="ti ti-check"></i> Enregistrer</button>
+        </div>
+        <div class="card">
+          <div class="ch"><span class="ct">Automatisations</span></div>
+          <div id="automationToggles"></div>
+          <div class="ch" style="margin-top:16px"><span class="ct">Notifications</span></div>
+          <div style="display:flex;flex-direction:column;gap:8px" id="notifSettings"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<div class="mobile-nav">
+  <div class="mob-items">
+    <div class="mob-item active" onclick="sw('dashboard',null);setMob(this)"><i class="ti ti-layout-dashboard"></i><span>Dashboard</span></div>
+    <div class="mob-item" onclick="sw('campaigns',null);setMob(this)"><i class="ti ti-speakerphone"></i><span>Campagnes</span></div>
+    <div class="mob-item" onclick="sw('discover',null);setMob(this)"><i class="ti ti-search"></i><span>Découvrir</span></div>
+    <div class="mob-item" onclick="sw('applications',null);setMob(this)"><i class="ti ti-users"></i><span>Candidatures</span></div>
+    <div class="mob-item" onclick="sw('reporting',null);setMob(this)"><i class="ti ti-chart-bar"></i><span>ROI</span></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SUPABASE_URL  = window.ENV_SUPABASE_URL  || 'REMPLACE_PAR_TON_URL_SUPABASE';
+const SUPABASE_ANON = window.ENV_SUPABASE_ANON || 'REMPLACE_PAR_TA_CLE_ANON';
+const API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:3000' : '';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+let currentUser = null, brandProfile = null, userToken = null;
+let allCampaigns = [], allCreators = [], allApplications = [];
+
+// ── HELPERS ───────────────────────────────────────────────────────────────
+function sw(name, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  if (el) el.classList.add('active');
+  closeSidebar();
+  if (name === 'discover') loadCreators();
+  if (name === 'campaigns') renderCampaigns();
+  if (name === 'applications') renderApplications();
+  if (name === 'deliverables') renderDeliverables();
+  if (name === 'reporting') renderReporting();
+  if (name === 'team') renderTeam();
+  if (name === 'settings') loadSettings();
+}
+function setMob(el) { document.querySelectorAll('.mob-item').forEach(m => m.classList.remove('active')); el.classList.add('active'); }
+function openSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('open'); }
+function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('open'); }
+
+function fmtEur(n) { return (n||0).toLocaleString('fr') + ' €'; }
+function fmtNum(n) { return n >= 1000000 ? (n/1000000).toFixed(1)+'M' : n >= 1000 ? Math.round(n/1000)+'K' : String(n||0); }
+
+const STATUS_LABELS = { draft:'Brouillon', active:'Active', paused:'En pause', completed:'Terminée', cancelled:'Annulée' };
+const STATUS_PILLS  = { draft:'pgy', active:'pg', paused:'pa', completed:'pb', cancelled:'pr' };
+
+// ── AUTH ──────────────────────────────────────────────────────────────────
+async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { window.location.href = '/brand/login.html'; return; }
+  currentUser = session.user;
+  userToken = session.access_token;
+
+  sb.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_OUT') { window.location.href = '/brand/login.html'; }
+    if (session) userToken = session.access_token;
+  });
+
+  await loadBrandProfile();
+  await loadCampaigns();
+  renderDashboard();
+  loadAIReco();
+}
+
+// ── BRAND PROFILE ─────────────────────────────────────────────────────────
+async function loadBrandProfile() {
+  const res = await fetch(API_BASE + '/api/brand/profile', {
+    headers: { Authorization: 'Bearer ' + userToken }
+  });
+  if (res.ok) {
+    const d = await res.json();
+    brandProfile = d.brand;
+    if (brandProfile) {
+      document.getElementById('dashGreet').textContent = 'Bonjour, ' + (brandProfile.brand_name || brandProfile.first_name) + ' 👋';
+      document.getElementById('planName').textContent  = 'Plan ' + (brandProfile.plan || 'Starter');
+      const planDescs = { starter:'3 campagnes · 10 créateurs', growth:'Illimité · Analytics', pro:'Multi-équipe · Contrats', enterprise:'White-label · SLA' };
+      document.getElementById('planDesc').textContent  = planDescs[brandProfile.plan] || '';
+      // settings
+      const sbn = document.getElementById('sBrandName'); if (sbn) sbn.value = brandProfile.brand_name || '';
+      const sw2 = document.getElementById('sWebsite'); if (sw2) sw2.value = brandProfile.website || '';
+    }
+  }
+}
+
+// ── CAMPAIGNS ─────────────────────────────────────────────────────────────
+async function loadCampaigns() {
+  const res = await fetch(API_BASE + '/api/brand/campaigns', {
+    headers: { Authorization: 'Bearer ' + userToken }
+  });
+  if (res.ok) {
+    const d = await res.json();
+    allCampaigns = d.campaigns || [];
+    document.getElementById('campBadge').textContent = allCampaigns.filter(c => c.status === 'active').length || '';
+    // update payment selects
+    const sel = document.getElementById('paymentCampaign');
+    if (sel) { sel.innerHTML = '<option value="">Sélectionner...</option>' + allCampaigns.map(c => `<option value="${c.id}">${c.title}</option>`).join(''); }
+  }
+}
+
+function renderCampaigns(filter = 'all') {
+  const list = allCampaigns.filter(c => filter === 'all' || c.status === filter);
+  const el = document.getElementById('campaignsList');
+  if (!el) return;
+  if (list.length === 0) {
+    el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3)"><i class="ti ti-speakerphone" style="font-size:32px;display:block;margin-bottom:10px;opacity:.4"></i>Aucune campagne. Créez-en une !</div>';
+    return;
+  }
+  el.innerHTML = list.map(c => `
+    <div class="camp-card" onclick="openCampaignDetail('${c.id}')">
+      <div class="camp-header">
+        <div>
+          <div class="camp-title">${c.title}</div>
+          <div class="camp-meta">${c.format || 'Multi-format'} · Créé le ${new Date(c.created_at).toLocaleDateString('fr')}</div>
+        </div>
+        <div style="text-align:right">
+          <div class="camp-budget">${fmtEur(c.total_budget)}</div>
+          <span class="pill ${STATUS_PILLS[c.status]||'pgy'}" style="margin-top:4px;display:inline-block">${STATUS_LABELS[c.status]||c.status}</span>
+        </div>
+      </div>
+      <div class="camp-stats">
+        <div class="camp-stat"><div class="camp-sv">${c.creators_count||0}</div><div class="camp-sl">Créateurs</div></div>
+        <div class="camp-stat"><div class="camp-sv">${c.applications_count||0}</div><div class="camp-sl">Candidatures</div></div>
+        <div class="camp-stat"><div class="camp-sv">${fmtNum(c.total_views||0)}</div><div class="camp-sl">Vues estimées</div></div>
+        <div class="camp-stat"><div class="camp-sv">${c.deliverables_pending||0}</div><div class="camp-sl">Livrables</div></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn-g" style="font-size:11px;padding:5px 10px" onclick="event.stopPropagation();openBriefModal('${c.id}')"><i class="ti ti-file-text"></i> Brief</button>
+        <button class="btn-g" style="font-size:11px;padding:5px 10px" onclick="event.stopPropagation();sw('applications',null)"><i class="ti ti-users"></i> Candidatures</button>
+        <button class="btn-g" style="font-size:11px;padding:5px 10px" onclick="event.stopPropagation();sw('reporting',null)"><i class="ti ti-chart-bar"></i> Stats</button>
+        ${c.status==='draft'?`<button class="btn-p" style="font-size:11px;padding:5px 10px;margin-left:auto" onclick="event.stopPropagation();publishCampaign('${c.id}')"><i class="ti ti-rocket"></i> Publier</button>`:''}
+      </div>
+    </div>`).join('');
+}
+
+function filterCampaigns(f) {
+  ['all','active','draft','completed'].forEach(id => {
+    const btn = document.getElementById('cf-'+id);
+    if (btn) btn.style.borderColor = btn.style.color = id===f?'var(--accent)':'';
+  });
+  renderCampaigns(f);
+}
+
+// ── CAMPAIGN MODAL ────────────────────────────────────────────────────────
+function openCampaignModal(campId) {
+  const camp = campId ? allCampaigns.find(c => c.id === campId) : null;
+  const m = document.createElement('div');
+  m.className = 'modal-overlay';
+  m.innerHTML = `
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">${camp ? 'Modifier la campagne' : '✨ Nouvelle campagne'}</div>
+        <button onclick="this.closest('.modal-overlay').remove()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:20px"><i class="ti ti-x"></i></button>
+      </div>
+      <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">TITRE DE LA CAMPAGNE *</label>
+      <input type="text" id="mTitle" value="${camp?.title||''}" placeholder="Ex: Lancement produit Été 2026" style="margin-bottom:12px">
+      <div class="two-col" style="margin-bottom:12px">
+        <div>
+          <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">BUDGET TOTAL (€)</label>
+          <input type="number" id="mBudget" value="${camp?.total_budget||''}" placeholder="5000">
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">NOMBRE DE CRÉATEURS</label>
+          <input type="number" id="mCreators" value="${camp?.creators_needed||''}" placeholder="5">
+        </div>
+      </div>
+      <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">FORMAT</label>
+      <select id="mFormat" style="margin-bottom:12px">
+        ${['Intégration vidéo','Vidéo dédiée','Post Instagram','Stories','TikTok','Newsletter','Podcast'].map(f=>`<option ${camp?.format===f?'selected':''}>${f}</option>`).join('')}
+      </select>
+      <div class="two-col" style="margin-bottom:12px">
+        <div>
+          <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">DATE DÉBUT</label>
+          <input type="date" id="mStart" value="${camp?.start_date?.slice(0,10)||''}">
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">DATE FIN</label>
+          <input type="date" id="mEnd" value="${camp?.end_date?.slice(0,10)||''}">
+        </div>
+      </div>
+      <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">NICHES CIBLES</label>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px" id="nicheSelect">
+        ${['Tech','Finance','Lifestyle','Gaming','Food','Fitness','Voyage','Éducation'].map(n=>`<div class="filter-chip ${(camp?.target_niches||[]).includes(n)?'active':''}" onclick="this.classList.toggle('active')">${n}</div>`).join('')}
+      </div>
+      <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">DESCRIPTION / OBJECTIFS</label>
+      <textarea id="mDesc" style="height:80px;margin-bottom:14px" placeholder="Décrivez vos objectifs, le message à transmettre...">${camp?.description||''}</textarea>
+      <div id="mErr" style="font-size:12px;color:var(--red);margin-bottom:10px;display:none"></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn-g" id="mBtnDraft" onclick="saveCampaign('${campId||''}','draft')" style="flex:1;justify-content:center">💾 Brouillon</button>
+        <button class="btn-p" id="mBtnPublish" onclick="saveCampaign('${campId||''}','active')" style="flex:1;justify-content:center"><i class="ti ti-rocket"></i> Publier maintenant</button>
+      </div>
+    </div>`;
+  document.body.appendChild(m);
+  m.addEventListener('click', e => { if (e.target === m) m.remove(); });
+}
+
+async function saveCampaign(campId, status) {
+  const title = document.getElementById('mTitle').value.trim();
+  const err = document.getElementById('mErr');
+  if (!title) { err.textContent = 'Titre requis'; err.style.display = 'block'; return; }
+  err.style.display = 'none';
+  const niches = [...document.querySelectorAll('#nicheSelect .filter-chip.active')].map(n => n.textContent);
+  const payload = {
+    title, status,
+    total_budget: parseFloat(document.getElementById('mBudget').value)||0,
+    creators_needed: parseInt(document.getElementById('mCreators').value)||0,
+    format: document.getElementById('mFormat').value,
+    start_date: document.getElementById('mStart').value || null,
+    end_date: document.getElementById('mEnd').value || null,
+    description: document.getElementById('mDesc').value.trim(),
+    target_niches: niches
+  };
+  const method = campId ? 'PUT' : 'POST';
+  const body = campId ? { id: campId, ...payload } : payload;
+  const res = await fetch(API_BASE + '/api/brand/campaigns', {
+    method, headers: { 'Content-Type':'application/json', Authorization:'Bearer '+userToken },
+    body: JSON.stringify(body)
+  });
+  const data = await res.json();
+  if (!res.ok) { err.textContent = data.error; err.style.display='block'; return; }
+  document.querySelector('.modal-overlay').remove();
+  await loadCampaigns();
+  renderCampaigns();
+  renderDashboard();
+}
+
+async function publishCampaign(id) {
+  await fetch(API_BASE + '/api/brand/campaigns', {
+    method: 'PUT',
+    headers: { 'Content-Type':'application/json', Authorization:'Bearer '+userToken },
+    body: JSON.stringify({ id, status: 'active' })
+  });
+  await loadCampaigns(); renderCampaigns();
+}
+
+// ── BRIEF MODAL ───────────────────────────────────────────────────────────
+function openBriefModal(campId) {
+  const camp = allCampaigns.find(c => c.id === campId);
+  const m = document.createElement('div');
+  m.className = 'modal-overlay';
+  m.innerHTML = `
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">📄 Brief — ${camp?.title||'Campagne'}</div>
+        <button onclick="this.closest('.modal-overlay').remove()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:20px"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="ai-b" style="margin-bottom:16px">
+        <div class="ai-bh"><i class="ti ti-sparkles"></i> Générer le brief avec l'IA</div>
+        <div class="ai-bt">L'IA peut rédiger un brief professionnel basé sur votre campagne.</div>
+        <button class="btn-p" style="margin-top:8px;font-size:12px;padding:6px 12px" onclick="genBrief('${campId}')"><i class="ti ti-wand"></i> Générer automatiquement</button>
+      </div>
+      <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">OBJECTIFS</label>
+      <textarea id="bObjectives" style="height:70px;margin-bottom:10px" placeholder="Ex: Augmenter la notoriété de notre nouveau produit auprès des 18-30 ans tech..."></textarea>
+      <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">MESSAGES CLÉS À TRANSMETTRE</label>
+      <textarea id="bMessages" style="height:70px;margin-bottom:10px" placeholder="Ex: Notre outil fait gagner 2h par jour, est disponible sur iOS et Android..."></textarea>
+      <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">CONTRAINTES & MENTIONS OBLIGATOIRES</label>
+      <textarea id="bConstraints" style="height:60px;margin-bottom:10px" placeholder="Mentionner le lien de téléchargement, hashtag #NomProduit, code promo CREATOR20..."></textarea>
+      <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">DÉLAI DE LIVRAISON</label>
+      <input type="date" id="bDeadline" style="margin-bottom:14px">
+      <div style="display:flex;gap:8px">
+        <button class="btn-p" onclick="saveBrief('${campId}')" style="flex:1;justify-content:center"><i class="ti ti-send"></i> Envoyer aux créateurs</button>
+        <button class="btn-g" onclick="downloadBrief('${campId}')" style="justify-content:center"><i class="ti ti-download"></i> PDF</button>
+      </div>
+    </div>`;
+  document.body.appendChild(m);
+  m.addEventListener('click', e => { if (e.target === m) m.remove(); });
+}
+
+async function genBrief(campId) {
+  const camp = allCampaigns.find(c => c.id === campId);
+  const btn = event.target.closest('button');
+  btn.disabled = true; btn.innerHTML = '<div class="spinner"></div> Génération...';
+  try {
+    const res = await fetch(API_BASE + '/api/brand/brief-ai', {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json', Authorization:'Bearer '+userToken },
+      body: JSON.stringify({ campaign: camp, brand: brandProfile })
+    });
+    const data = await res.json();
+    if (data.brief) {
+      document.getElementById('bObjectives').value  = data.brief.objectives || '';
+      document.getElementById('bMessages').value    = data.brief.messages || '';
+      document.getElementById('bConstraints').value = data.brief.constraints || '';
+    }
+  } catch(e) { alert('Erreur: ' + e.message); }
+  btn.disabled = false; btn.innerHTML = '<i class="ti ti-wand"></i> Générer automatiquement';
+}
+
+async function saveBrief(campId) {
+  const res = await fetch(API_BASE + '/api/brand/campaigns', {
+    method: 'PUT',
+    headers: { 'Content-Type':'application/json', Authorization:'Bearer '+userToken },
+    body: JSON.stringify({
+      id: campId,
+      brief: {
+        objectives: document.getElementById('bObjectives').value,
+        messages: document.getElementById('bMessages').value,
+        constraints: document.getElementById('bConstraints').value,
+        deadline: document.getElementById('bDeadline').value
+      }
+    })
+  });
+  if (res.ok) { document.querySelector('.modal-overlay').remove(); alert('✅ Brief envoyé aux créateurs !'); }
+}
+
+function downloadBrief() { alert('Export PDF disponible dans la version Pro.'); }
+
+// ── DISCOVER CREATORS ─────────────────────────────────────────────────────
+async function loadCreators() {
+  const res = await fetch(API_BASE + '/api/brand/creators', {
+    headers: { Authorization: 'Bearer ' + userToken }
+  });
+  if (res.ok) {
+    const d = await res.json();
+    allCreators = d.creators || [];
+    renderCreatorGrid(allCreators);
+  }
+}
+
+function renderCreatorGrid(creators) {
+  const el = document.getElementById('creatorGrid');
+  if (!el) return;
+  if (!creators.length) { el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3);grid-column:1/-1">Aucun créateur trouvé.</div>'; return; }
+  const bgColors = ['rgba(124,111,255,.15)','rgba(34,211,168,.1)','rgba(245,158,75,.1)','rgba(96,165,250,.1)','rgba(240,94,94,.1)'];
+  const fgColors = ['var(--purple)','var(--accent)','var(--orange)','var(--blue)','var(--red)'];
+  el.innerHTML = creators.map((c, i) => {
+    const ci = i % bgColors.length;
+    const initials = (c.channel_name || c.first_name || 'C').slice(0, 2).toUpperCase();
+    const rate = c.base_rate ? fmtEur(c.base_rate) + '/intégration' : 'Tarif sur demande';
+    return `
+      <div class="creator-card">
+        <div class="cc-header">
+          <div class="cc-avatar" style="background:${bgColors[ci]};color:${fgColors[ci]}">${initials}</div>
+          <div>
+            <div class="cc-name">${c.channel_name || c.first_name}</div>
+            <div class="cc-handle">${c.platform || 'YouTube'} · ${c.niche || 'Créateur'}</div>
+          </div>
+        </div>
+        <div class="cc-metrics">
+          <div class="cc-metric"><div class="cc-mval">${fmtNum(c.subscribers||0)}</div><div class="cc-mlbl">Abonnés</div></div>
+          <div class="cc-metric"><div class="cc-mval">${(c.engagement_rate||0).toFixed(1)}%</div><div class="cc-mlbl">Engagement</div></div>
+        </div>
+        <div class="cc-niche">📊 ${fmtNum(c.avg_views||0)} vues moy.</div>
+        <div class="cc-rate">${rate}</div>
+        <div style="display:flex;gap:6px">
+          <button class="btn-p" style="flex:1;justify-content:center;font-size:12px;padding:7px" onclick="contactCreator('${c.id}','${c.channel_name||c.first_name}')"><i class="ti ti-send"></i> Contacter</button>
+          <button class="btn-g" style="font-size:12px;padding:7px" onclick="inviteTocamp('${c.id}')"><i class="ti ti-plus"></i></button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function filterCreators() {
+  const q = document.getElementById('creatorSearch')?.value.toLowerCase() || '';
+  const niche = document.getElementById('filterNiche')?.value || '';
+  const platform = document.getElementById('filterPlatform')?.value || '';
+  const budget = parseInt(document.getElementById('filterBudget')?.value) || 0;
+  const filtered = allCreators.filter(c =>
+    (!q || (c.channel_name||c.first_name||'').toLowerCase().includes(q) || (c.niche||'').toLowerCase().includes(q)) &&
+    (!niche || (c.niche||'').toLowerCase().includes(niche.toLowerCase())) &&
+    (!platform || (c.platform||'').toLowerCase() === platform.toLowerCase()) &&
+    (!budget || !c.base_rate || c.base_rate <= budget)
+  );
+  renderCreatorGrid(filtered);
+}
+
+function contactCreator(creatorId, name) {
+  const m = document.createElement('div');
+  m.className = 'modal-overlay';
+  m.innerHTML = `
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">📩 Contacter ${name}</div>
+        <button onclick="this.closest('.modal-overlay').remove()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:20px"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="ai-b" style="margin-bottom:14px">
+        <div class="ai-bh"><i class="ti ti-sparkles"></i> Message IA personnalisé</div>
+        <button class="btn-p" style="font-size:11px;padding:5px 10px;margin-top:6px" onclick="genOutreach('${creatorId}','${name}')"><i class="ti ti-wand"></i> Générer</button>
+      </div>
+      <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">CAMPAGNE CONCERNÉE</label>
+      <select id="outreachCamp" style="margin-bottom:10px">${allCampaigns.map(c=>`<option value="${c.id}">${c.title}</option>`).join('')}</select>
+      <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">MESSAGE</label>
+      <textarea id="outreachMsg" style="height:140px;margin-bottom:14px" placeholder="Bonjour, je suis..."></textarea>
+      <button class="btn-p" style="width:100%;justify-content:center" onclick="sendOutreach('${creatorId}')"><i class="ti ti-send"></i> Envoyer la proposition</button>
+    </div>`;
+  document.body.appendChild(m);
+  m.addEventListener('click', e => { if (e.target === m) m.remove(); });
+}
+
+async function genOutreach(creatorId, name) {
+  const creator = allCreators.find(c => c.id === creatorId);
+  const campId = document.getElementById('outreachCamp')?.value;
+  const camp = allCampaigns.find(c => c.id === campId);
+  const btn = event.target.closest('button');
+  btn.disabled = true; btn.innerHTML = '<div class="spinner"></div>';
+  try {
+    const res = await fetch(API_BASE + '/api/brand/brief-ai', {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json', Authorization:'Bearer '+userToken },
+      body: JSON.stringify({ type: 'outreach', creator, campaign: camp, brand: brandProfile })
+    });
+    const data = await res.json();
+    const ta = document.getElementById('outreachMsg');
+    if (ta && data.message) ta.value = data.message;
+  } catch(e) {}
+  btn.disabled = false; btn.innerHTML = '<i class="ti ti-wand"></i> Générer';
+}
+
+async function sendOutreach(creatorId) {
+  const campId = document.getElementById('outreachCamp')?.value;
+  const message = document.getElementById('outreachMsg')?.value.trim();
+  if (!message) return alert('Écris un message d\'abord.');
+  await fetch(API_BASE + '/api/brand/applications', {
+    method: 'POST',
+    headers: { 'Content-Type':'application/json', Authorization:'Bearer '+userToken },
+    body: JSON.stringify({ creator_id: creatorId, campaign_id: campId, message, type: 'brand_invite' })
+  });
+  document.querySelector('.modal-overlay').remove();
+  alert('✅ Proposition envoyée !');
+}
+
+function inviteTocamp(creatorId) {
+  if (!allCampaigns.length) return alert('Créez d\'abord une campagne.');
+  contactCreator(creatorId, allCreators.find(c=>c.id===creatorId)?.channel_name||'ce créateur');
+}
+
+// ── APPLICATIONS ─────────────────────────────────────────────────────────
+async function renderApplications() {
+  const res = await fetch(API_BASE + '/api/brand/applications', {
+    headers: { Authorization: 'Bearer ' + userToken }
+  });
+  const el = document.getElementById('applicationsList');
+  if (!res.ok || !el) return;
+  const { applications } = await res.json();
+  allApplications = applications || [];
+  document.getElementById('appBadge').textContent = allApplications.filter(a=>a.status==='pending').length || '';
+  if (!allApplications.length) { el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3)"><i class="ti ti-users" style="font-size:32px;display:block;margin-bottom:10px;opacity:.4"></i>Aucune candidature reçue</div>'; return; }
+  el.innerHTML = allApplications.map(a => `
+    <div class="card" style="margin-bottom:12px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--text)">${a.creator_name||'Créateur'}</div>
+          <div style="font-size:12px;color:var(--text3)">${a.campaign_title||'Campagne'} · ${new Date(a.created_at).toLocaleDateString('fr')}</div>
+        </div>
+        <span class="pill ${a.status==='pending'?'pa':a.status==='accepted'?'pg':'pr'}">${a.status==='pending'?'En attente':a.status==='accepted'?'Accepté':'Refusé'}</span>
+      </div>
+      ${a.message?`<div style="font-size:12px;color:var(--text2);background:var(--bg3);border-radius:var(--radius);padding:10px;margin-bottom:10px;line-height:1.6">${a.message}</div>`:''}
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        ${a.status==='pending'?`
+          <button class="btn-p" style="font-size:12px;padding:6px 12px" onclick="updateApplication('${a.id}','accepted')"><i class="ti ti-check"></i> Accepter</button>
+          <button class="btn-d" style="font-size:12px;padding:6px 12px" onclick="updateApplication('${a.id}','rejected')"><i class="ti ti-x"></i> Refuser</button>
+        `:''}
+        <button class="btn-g" style="font-size:12px;padding:6px 12px" onclick="viewCreatorProfile('${a.creator_id}')"><i class="ti ti-user"></i> Profil</button>
+      </div>
+    </div>`).join('');
+}
+
+async function updateApplication(appId, status) {
+  await fetch(API_BASE + '/api/brand/applications', {
+    method: 'PUT',
+    headers: { 'Content-Type':'application/json', Authorization:'Bearer '+userToken },
+    body: JSON.stringify({ id: appId, status })
+  });
+  renderApplications();
+  if (status === 'accepted') {
+    await loadCampaigns();
+    alert('✅ Créateur accepté ! Un email lui a été envoyé avec le brief.');
+  }
+}
+
+// ── DELIVERABLES ──────────────────────────────────────────────────────────
+async function renderDeliverables() {
+  const res = await fetch(API_BASE + '/api/brand/deliverables', {
+    headers: { Authorization: 'Bearer ' + userToken }
+  });
+  const el = document.getElementById('deliverablesList');
+  if (!res.ok || !el) return;
+  const { deliverables } = await res.json();
+  const pending = (deliverables||[]).filter(d => d.status === 'pending_review');
+  document.getElementById('delivBadge').textContent = pending.length || '';
+  if (!deliverables?.length) { el.innerHTML = '<div class="card"><div style="text-align:center;padding:20px;color:var(--text3)">Aucun livrable soumis</div></div>'; return; }
+  el.innerHTML = deliverables.map(d => `
+    <div class="card" style="margin-bottom:12px">
+      <div class="deliv-row" style="border:none;padding:0;margin-bottom:12px">
+        <div class="deliv-thumb"><i class="ti ti-${d.type==='video'?'brand-youtube':'file'}" style="font-size:20px;color:var(--text3)"></i></div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600;color:var(--text)">${d.creator_name||'Créateur'} — ${d.campaign_title||'Campagne'}</div>
+          <div style="font-size:11px;color:var(--text3)">${d.type||'Contenu'} · Soumis le ${new Date(d.created_at).toLocaleDateString('fr')}</div>
+        </div>
+        <span class="pill ${d.status==='pending_review'?'pa':d.status==='approved'?'pg':'pr'}">${d.status==='pending_review'?'À valider':d.status==='approved'?'Approuvé':'Rejeté'}</span>
+      </div>
+      ${d.url?`<a href="${d.url}" target="_blank" style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--accent);margin-bottom:10px"><i class="ti ti-external-link"></i> Voir le contenu</a>`:''}
+      ${d.notes?`<div style="font-size:12px;color:var(--text2);background:var(--bg3);border-radius:var(--radius);padding:10px;margin-bottom:10px">${d.notes}</div>`:''}
+      ${d.status==='pending_review'?`
+      <div style="display:flex;gap:8px">
+        <button class="btn-p" onclick="reviewDeliverable('${d.id}','approved')" style="font-size:12px;padding:6px 12px"><i class="ti ti-check"></i> Approuver</button>
+        <button class="btn-d" onclick="reviewDeliverable('${d.id}','rejected')" style="font-size:12px;padding:6px 12px"><i class="ti ti-x"></i> Rejeter</button>
+        <button class="btn-g" onclick="requestRevision('${d.id}')" style="font-size:12px;padding:6px 12px"><i class="ti ti-edit"></i> Demander modifs</button>
+      </div>`:''}
+    </div>`).join('');
+}
+
+async function reviewDeliverable(id, status) {
+  await fetch(API_BASE + '/api/brand/deliverables', {
+    method: 'PUT',
+    headers: { 'Content-Type':'application/json', Authorization:'Bearer '+userToken },
+    body: JSON.stringify({ id, status })
+  });
+  renderDeliverables();
+  if (status === 'approved') alert('✅ Livrable approuvé ! Le créateur est notifié.');
+}
+
+function requestRevision(id) {
+  const reason = prompt('Décris les modifications demandées :');
+  if (!reason) return;
+  fetch(API_BASE + '/api/brand/deliverables', {
+    method: 'PUT',
+    headers: { 'Content-Type':'application/json', Authorization:'Bearer '+userToken },
+    body: JSON.stringify({ id, status: 'revision_requested', revision_notes: reason })
+  }).then(() => renderDeliverables());
+}
+
+// ── PAYMENTS ─────────────────────────────────────────────────────────────
+async function sendPayment() {
+  const campId = document.getElementById('paymentCampaign').value;
+  const amount = parseFloat(document.getElementById('paymentAmount').value);
+  const method = document.getElementById('paymentMethod').value;
+  if (!campId || !amount) return alert('Sélectionne une campagne et un montant.');
+  const res = await fetch(API_BASE + '/api/brand/payments', {
+    method: 'POST',
+    headers: { 'Content-Type':'application/json', Authorization:'Bearer '+userToken },
+    body: JSON.stringify({ campaign_id: campId, amount, method })
+  });
+  const data = await res.json();
+  if (res.ok) { alert('✅ Paiement initié !'); loadPayments(); }
+  else alert('Erreur: ' + data.error);
+}
+
+async function loadPayments() {
+  const res = await fetch(API_BASE + '/api/brand/payments', { headers: { Authorization:'Bearer '+userToken } });
+  if (!res.ok) return;
+  const { payments, summary } = await res.json();
+  const el = document.getElementById('paymentsList');
+  if (summary) {
+    document.getElementById('pTotal').textContent = fmtEur(summary.total_paid);
+    document.getElementById('pPending').textContent = fmtEur(summary.total_pending);
+    document.getElementById('pCreators').textContent = summary.creators_paid || 0;
+  }
+  if (!el || !payments?.length) return;
+  el.innerHTML = `<table class="tbl"><thead><tr><th>Créateur</th><th>Campagne</th><th>Montant</th><th>Méthode</th><th>Date</th><th>Statut</th></tr></thead><tbody>
+    ${payments.map(p=>`<tr><td>${p.creator_name||'—'}</td><td>${p.campaign_title||'—'}</td><td style="color:var(--accent);font-weight:600">${fmtEur(p.amount)}</td><td>${p.method||'—'}</td><td>${new Date(p.created_at).toLocaleDateString('fr')}</td><td><span class="pill ${p.status==='completed'?'pg':'pa'}">${p.status==='completed'?'Payé':'En attente'}</span></td></tr>`).join('')}
+  </tbody></table>`;
+}
+
+// ── REPORTING ─────────────────────────────────────────────────────────────
+async function renderReporting() {
+  const res = await fetch(API_BASE + '/api/brand/reporting', { headers: { Authorization:'Bearer '+userToken } });
+  if (!res.ok) return;
+  const { stats, campaigns } = await res.json();
+  if (stats) {
+    document.getElementById('rViews').textContent   = fmtNum(stats.total_views||0);
+    document.getElementById('rEngage').textContent  = (stats.avg_engagement||0).toFixed(1) + '%';
+    document.getElementById('rCPV').textContent     = stats.cpv ? stats.cpv.toFixed(3) + ' €' : '—';
+    document.getElementById('rBest').textContent    = stats.best_campaign || '—';
+  }
+  const el = document.getElementById('reportingContent');
+  if (!el || !campaigns?.length) return;
+  el.innerHTML = campaigns.map(c => `
+    <div class="card" style="margin-bottom:12px">
+      <div class="ch"><span class="ct">${c.title}</span><span class="pill ${STATUS_PILLS[c.status]||'pgy'}">${STATUS_LABELS[c.status]||c.status}</span></div>
+      <div class="camp-stats">
+        <div class="camp-stat"><div class="camp-sv">${fmtNum(c.views||0)}</div><div class="camp-sl">Vues</div></div>
+        <div class="camp-stat"><div class="camp-sv">${(c.engagement||0).toFixed(1)}%</div><div class="camp-sl">Engagement</div></div>
+        <div class="camp-stat"><div class="camp-sv">${fmtEur(c.spent||0)}</div><div class="camp-sl">Dépensé</div></div>
+        <div class="camp-stat"><div class="camp-sv" style="color:var(--accent)">${c.roi ? 'x'+c.roi.toFixed(1) : '—'}</div><div class="camp-sl">ROI</div></div>
+      </div>
+      <div class="prog-wrap"><div class="prog-fill" style="width:${Math.min((c.spent||0)/(c.total_budget||1)*100,100)}%"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:3px">
+        <span>${fmtEur(c.spent||0)} dépensé</span><span>Budget: ${fmtEur(c.total_budget||0)}</span>
+      </div>
+    </div>`).join('');
+}
+
+// ── TEAM ─────────────────────────────────────────────────────────────────
+function renderTeam() {
+  const el = document.getElementById('teamList');
+  if (!el) return;
+  const members = [
+    { name: brandProfile?.first_name+' '+brandProfile?.last_name, email: currentUser?.email, role: 'Admin', initials: (brandProfile?.first_name||'A').slice(0,1)+(brandProfile?.last_name||'').slice(0,1) }
+  ];
+  el.innerHTML = members.map(m => `
+    <div class="member-row">
+      <div class="member-av">${m.initials}</div>
+      <div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--text)">${m.name}</div><div style="font-size:11px;color:var(--text3)">${m.email}</div></div>
+      <span class="pill pg">${m.role}</span>
+    </div>`).join('');
+}
+
+function inviteTeam() {
+  const email = prompt('Email du nouveau membre :');
+  if (!email) return;
+  fetch(API_BASE + '/api/brand/team', {
+    method: 'POST',
+    headers: { 'Content-Type':'application/json', Authorization:'Bearer '+userToken },
+    body: JSON.stringify({ email, role: 'manager' })
+  }).then(() => alert('✅ Invitation envoyée à ' + email));
+}
+
+// ── SETTINGS ──────────────────────────────────────────────────────────────
+function loadSettings() {
+  const automations = [
+    { id: 'autoRelance', label: 'Relances automatiques créateurs', default: true },
+    { id: 'autoNotif', label: 'Notification nouveaux candidats', default: true },
+    { id: 'autoReport', label: 'Rapport hebdomadaire par email', default: false },
+    { id: 'autoPay', label: 'Paiement auto à validation livrable', default: false },
+  ];
+  const el = document.getElementById('automationToggles');
+  if (el) el.innerHTML = automations.map(a => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+      <div style="font-size:13px;color:var(--text)">${a.label}</div>
+      <label style="position:relative;width:40px;height:22px;flex-shrink:0">
+        <input type="checkbox" id="${a.id}" ${a.default?'checked':''} style="opacity:0;width:0;height:0;position:absolute">
+        <div onclick="this.previousElementSibling.click()" style="position:absolute;inset:0;background:var(--bg4);border:1px solid var(--border2);border-radius:11px;cursor:pointer;transition:.2s" id="${a.id}Sl">
+          <div style="position:absolute;width:16px;height:16px;background:var(--text3);border-radius:50%;top:2px;left:2px;transition:.2s" id="${a.id}Th"></div>
+        </div>
+      </label>
+    </div>`).join('');
+  const notifEl = document.getElementById('notifSettings');
+  if (notifEl) notifEl.innerHTML = ['Email','In-app','SMS'].map(n=>`
+    <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2)">
+      <input type="checkbox" checked style="width:14px;height:14px;accent-color:var(--accent)"> ${n}
+    </div>`).join('');
+}
+
+async function saveBrandProfile() {
+  const res = await fetch(API_BASE + '/api/brand/profile', {
+    method: 'PUT',
+    headers: { 'Content-Type':'application/json', Authorization:'Bearer '+userToken },
+    body: JSON.stringify({
+      brand_name: document.getElementById('sBrandName').value.trim(),
+      website: document.getElementById('sWebsite').value.trim(),
+      sector: document.getElementById('sSector').value,
+      description: document.getElementById('sBrandDesc').value.trim()
+    })
+  });
+  if (res.ok) alert('✅ Profil enregistré !');
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────
+function renderDashboard() {
+  const active = allCampaigns.filter(c => c.status === 'active');
+  const creators = allCampaigns.reduce((s,c)=>(s+(c.creators_count||0)),0);
+  const spent = allCampaigns.reduce((s,c)=>(s+(c.spent||0)),0);
+  document.getElementById('kCamp').textContent     = active.length;
+  document.getElementById('kCreators').textContent = creators;
+  document.getElementById('kSpent').textContent    = fmtEur(spent);
+  document.getElementById('kROI').textContent      = allCampaigns.length ? 'x2.4' : '—';
+
+  const el = document.getElementById('dashCampaigns');
+  if (el) {
+    if (!allCampaigns.length) { el.innerHTML = '<div style="text-align:center;padding:16px;color:var(--text3);font-size:12px">Aucune campagne</div>'; }
+    else el.innerHTML = allCampaigns.slice(0,3).map(c=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)" class="last:border-none">
+        <div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--text)">${c.title}</div><div style="font-size:11px;color:var(--text3)">${c.creators_count||0} créateurs</div></div>
+        <div style="font-size:12px;font-weight:600;color:var(--accent)">${fmtEur(c.total_budget)}</div>
+        <span class="pill ${STATUS_PILLS[c.status]||'pgy'}">${STATUS_LABELS[c.status]||c.status}</span>
+      </div>`).join('');
+  }
+}
+
+async function loadAIReco() {
+  const el = document.getElementById('aiReco');
+  if (!el) return;
+  try {
+    const res = await fetch(API_BASE + '/api/brand/brief-ai', {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json', Authorization:'Bearer '+userToken },
+      body: JSON.stringify({ type: 'dashboard_reco', brand: brandProfile, campaigns: allCampaigns })
+    });
+    const d = await res.json();
+    if (d.recommendation) el.textContent = d.recommendation;
+    else el.textContent = allCampaigns.length ? 'Analysez le ROI de vos campagnes actives dans l\'onglet Reporting.' : 'Créez votre première campagne pour commencer à connecter des créateurs.';
+  } catch { el.textContent = 'Créez votre première campagne pour commencer.'; }
+}
+
+function viewCreatorProfile(id) { alert('Profil détaillé disponible dans la version Growth.'); }
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>

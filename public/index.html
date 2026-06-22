@@ -1,0 +1,2515 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SponsorKit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+:root {
+  --bg: #0e0e14;
+  --bg2: #16161f;
+  --bg3: #1d1d2a;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #f0f0f7;
+  --text2: #a0a0b8;
+  --text3: #6a6a85;
+  --accent: #7f6fff;
+  --accent2: #5e54d4;
+  --accent-glow: rgba(127,111,255,0.18);
+  --green: #2ed8a8;
+  --green-bg: rgba(46,216,168,0.1);
+  --orange: #f59e4b;
+  --orange-bg: rgba(245,158,75,0.1);
+  --red: #f05e5e;
+  --red-bg: rgba(240,94,94,0.1);
+  --purple-bg: rgba(127,111,255,0.1);
+  --radius: 10px;
+  --radius-lg: 14px;
+  --sidebar-w: 220px;
+  --font: 'DM Sans', sans-serif;
+  --font-display: 'Syne', sans-serif;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.5;overflow:hidden}
+input,select,textarea,button{font-family:var(--font);font-size:14px;color:var(--text)}
+input,select,textarea{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:8px 12px;width:100%;color:var(--text);outline:none;transition:border-color .2s}
+input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+select option{background:var(--bg3)}
+
+/* LAYOUT */
+.app{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;transition:transform .3s;z-index:100}
+.main{flex:1;overflow-y:auto;background:var(--bg)}
+.main::-webkit-scrollbar{width:4px}
+.main::-webkit-scrollbar-track{background:transparent}
+.main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* LOGO */
+.logo{padding:20px 16px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+.logo-mark{width:30px;height:30px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center}
+.logo-mark i{font-size:15px;color:#fff}
+.logo-text{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--text)}
+
+/* NAV */
+.nav-s{padding:12px 10px 0}
+.nav-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;padding:0 8px;margin-bottom:4px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--radius);cursor:pointer;font-size:13px;color:var(--text2);margin-bottom:2px;transition:all .15s;position:relative}
+.nav-item:hover{background:var(--bg3);color:var(--text)}
+.nav-item.active{background:var(--purple-bg);color:var(--accent);font-weight:500}
+.nav-item i{font-size:16px;flex-shrink:0}
+.bdg{font-size:10px;padding:1px 7px;border-radius:20px;margin-left:auto;font-weight:500}
+.bdg.purple{background:var(--purple-bg);color:var(--accent)}
+.bdg.green{background:var(--green-bg);color:var(--green)}
+.bdg.red{background:var(--red-bg);color:var(--red)}
+
+/* CONTENT */
+.page{display:none;padding:28px}
+.page.active{display:block}
+.ph{margin-bottom:24px}
+.ph h1{font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--text);margin-bottom:4px}
+.ph p{font-size:13px;color:var(--text2)}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.sc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;transition:border-color .2s}
+.sc:hover{border-color:var(--border2)}
+.sc-lbl{font-size:11px;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em}
+.sc-val{font-size:24px;font-weight:600;color:var(--text);line-height:1}
+.sc-d{font-size:11px;margin-top:6px;display:flex;align-items:center;gap:3px}
+.up{color:var(--green)}.dn{color:var(--red)}
+
+/* CARDS */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px}
+.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.ct{font-size:13px;font-weight:600;color:var(--text)}
+.ca{font-size:12px;color:var(--accent);cursor:pointer;opacity:.8}
+.ca:hover{opacity:1}
+
+/* DEAL ROWS */
+.dr{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.dr:last-child{border-bottom:none}
+.bl{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0}
+.di{flex:1;min-width:0}
+.dn2{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ds{font-size:11px;color:var(--text3)}
+.da{font-size:13px;font-weight:600;color:var(--text);text-align:right;margin-right:8px;white-space:nowrap}
+.pill{font-size:10px;padding:3px 9px;border-radius:20px;font-weight:600;white-space:nowrap;text-transform:uppercase;letter-spacing:.05em}
+.pp{background:var(--purple-bg);color:var(--accent)}
+.pg{background:var(--green-bg);color:var(--green)}
+.pa{background:var(--orange-bg);color:var(--orange)}
+.pr{background:var(--red-bg);color:var(--red)}
+.pgy{background:rgba(255,255,255,0.05);color:var(--text3)}
+
+/* AI INSIGHT */
+.ai-b{background:linear-gradient(135deg,rgba(127,111,255,0.12),rgba(94,84,212,0.06));border:1px solid rgba(127,111,255,0.25);border-radius:var(--radius);padding:12px 14px;margin-bottom:14px}
+.ai-bh{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--accent);margin-bottom:6px}
+.ai-bt{font-size:12px;color:var(--text2);line-height:1.6}
+
+/* METRICS */
+.mr{display:flex;justify-content:space-between;align-items:center;padding:7px 0;font-size:12px;border-bottom:1px solid var(--border)}
+.mr:last-child{border-bottom:none}
+.ml{color:var(--text3)}
+.mv{font-weight:600;color:var(--text)}
+
+/* BUTTONS */
+.btn-p{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:var(--radius);padding:9px 16px;font-size:13px;cursor:pointer;font-weight:500;display:inline-flex;align-items:center;gap:6px;transition:opacity .15s}
+.btn-p:hover{opacity:.9}
+.btn-g{background:transparent;border:1px solid var(--border2);border-radius:var(--radius);padding:8px 14px;font-size:13px;cursor:pointer;color:var(--text2);transition:all .15s}
+.btn-g:hover{border-color:var(--accent);color:var(--text)}
+.fl{font-size:11px;color:var(--text3);margin-bottom:5px;display:block;margin-top:10px}
+.pf textarea{height:80px;resize:vertical}
+
+/* RANGES */
+input[type=range]{-webkit-appearance:none;height:4px;background:var(--border2);border-radius:2px;border:none;padding:0;cursor:pointer;margin-bottom:6px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--bg)}
+
+/* CHAT */
+.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 180px);min-height:400px}
+.chat-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.chat-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.chat-avatar i{font-size:16px;color:#fff}
+.chat-title{font-size:13px;font-weight:600;color:var(--text)}
+.chat-sub{font-size:11px;color:var(--text3)}
+.chat-status{width:8px;height:8px;border-radius:50%;background:var(--green);margin-left:auto;box-shadow:0 0 6px var(--green)}
+.chat-msgs{flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:14px}
+.chat-msgs::-webkit-scrollbar{width:3px}
+.chat-msgs::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.msg{display:flex;gap:8px;align-items:flex-start}
+.msg.user{flex-direction:row-reverse}
+.msg-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;font-weight:600}
+.msg-avatar.ai{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
+.msg-avatar.usr{background:var(--bg3);color:var(--accent);border:1px solid var(--border2)}
+.msg-bubble{max-width:80%;padding:10px 14px;border-radius:var(--radius-lg);font-size:13px;line-height:1.6}
+.msg.ai .msg-bubble{background:var(--bg3);color:var(--text);border-radius:4px var(--radius-lg) var(--radius-lg) var(--radius-lg)}
+.msg.user .msg-bubble{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:var(--radius-lg) 4px var(--radius-lg) var(--radius-lg)}
+.msg-time{font-size:10px;color:var(--text3);margin-top:4px;display:block}
+.msg.user .msg-time{text-align:right}
+.typing{display:flex;gap:4px;align-items:center;padding:4px 0}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:blink 1.2s infinite;opacity:.4}
+.typing span:nth-child(2){animation-delay:.2s}
+.typing span:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.switch{position:relative;display:inline-block;width:38px;height:22px}
+.switch input{opacity:0;width:0;height:0}
+.switch-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:var(--bg3);border:1px solid var(--border);border-radius:22px;transition:.2s}
+.switch-slider:before{position:absolute;content:"";height:16px;width:16px;left:2px;bottom:2px;background:var(--text3);border-radius:50%;transition:.2s}
+.switch input:checked + .switch-slider{background:var(--accent);border-color:var(--accent)}
+.switch input:checked + .switch-slider:before{transform:translateX(15px);background:#fff}
+.agent-badge{display:inline-block;font-size:9px;font-weight:600;color:var(--accent);background:var(--purple-bg);padding:2px 7px;border-radius:20px;margin-bottom:4px}
+.agent-selector{display:flex;gap:5px;padding:6px 14px 0;flex-wrap:wrap}
+.agent-chip{font-size:10px;padding:4px 9px;border-radius:20px;border:1px solid var(--border);color:var(--text3);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:4px}
+.agent-chip.active{background:var(--purple-bg);color:var(--accent);border-color:var(--accent)}
+.agent-chip:hover:not(.active){background:var(--bg3);color:var(--text2)}
+.chat-suggestions{padding:10px 18px;border-top:1px solid var(--border);display:flex;gap:6px;flex-wrap:wrap}
+.sugg{font-size:11px;padding:5px 11px;border-radius:20px;border:1px solid var(--border2);cursor:pointer;color:var(--text3);background:transparent;white-space:nowrap;transition:all .15s}
+.sugg:hover{border-color:var(--accent);color:var(--accent);background:var(--purple-bg)}
+.chat-input-row{padding:12px 18px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-end}
+.chat-input-row textarea{flex:1;height:40px;min-height:40px;max-height:100px;resize:none;border-radius:var(--radius);padding:10px 14px;line-height:1.4;overflow-y:auto}
+.send-btn{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity .15s}
+.send-btn:hover{opacity:.85}
+.send-btn i{font-size:15px;color:#fff}
+.send-btn:disabled{background:var(--bg3);cursor:default;opacity:1}
+.send-btn:disabled i{color:var(--text3)}
+
+/* COOKIE BANNER */
+.cookie-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);z-index:9999;display:flex;align-items:flex-end;justify-content:center;padding:24px}
+.cookie-banner{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:24px 28px;max-width:680px;width:100%;box-shadow:var(--shadow);animation:slideUp .4s ease}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.cookie-title{font-family:var(--font-display);font-size:17px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.cookie-text{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:18px}
+.cookie-toggles{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+.cookie-toggle{display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:var(--radius);padding:10px 14px}
+.toggle-label{font-size:12px;color:var(--text);font-weight:500}
+.toggle-sub{font-size:11px;color:var(--text3);margin-top:1px}
+.toggle-sw{position:relative;width:40px;height:22px;flex-shrink:0}
+.toggle-sw input{opacity:0;width:0;height:0;position:absolute}
+.toggle-slider{position:absolute;inset:0;background:var(--bg3);border:1px solid var(--border2);border-radius:11px;cursor:pointer;transition:.2s}
+.toggle-slider:before{content:'';position:absolute;width:16px;height:16px;left:2px;top:2px;background:var(--text3);border-radius:50%;transition:.2s}
+.toggle-sw input:checked + .toggle-slider{background:var(--accent);border-color:var(--accent)}
+.toggle-sw input:checked + .toggle-slider:before{transform:translateX(18px);background:#fff}
+.toggle-sw input:disabled + .toggle-slider{cursor:default;opacity:.7}
+.cookie-actions{display:flex;gap:10px;flex-wrap:wrap}
+.cookie-actions .btn-p{flex:1;justify-content:center}
+.cookie-actions .btn-g{flex:1;justify-content:center;display:flex;align-items:center}
+
+/* MOBILE BOTTOM NAV */
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);padding:8px 0;z-index:90;padding-bottom:env(safe-area-inset-bottom)}
+.mobile-nav-items{display:flex;justify-content:space-around}
+.mob-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 12px;cursor:pointer;color:var(--text3);transition:color .15s;font-size:10px;position:relative}
+.mob-item.active{color:var(--accent)}
+.mob-item i{font-size:20px}
+.mob-bdg{position:absolute;top:4px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--red)}
+
+/* MOBILE HEADER */
+.mobile-header{display:none;padding:14px 18px;border-bottom:1px solid var(--border);background:var(--bg2);position:sticky;top:0;z-index:50;align-items:center;justify-content:space-between}
+.hamburger{width:34px;height:34px;border:1px solid var(--border2);border-radius:var(--radius);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2)}
+
+/* SIDEBAR MOBILE OVERLAY */
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:99;backdrop-filter:blur(2px)}
+.sidebar-overlay.open{display:block}
+
+/* PRO BADGE */
+.pro-badge{font-size:9px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:4px;padding:2px 6px;margin-left:6px;font-weight:600;vertical-align:middle}
+
+/* PLAN BOX */
+.plan-box{margin-top:auto;padding:10px}
+.plan-inner{background:var(--purple-bg);border:1px solid rgba(127,111,255,0.2);border-radius:var(--radius);padding:10px 12px;font-size:11px;color:var(--text2)}
+.plan-title{font-weight:600;color:var(--accent);margin-bottom:2px;font-size:12px}
+
+/* MEDIA KIT PREVIEW */
+.mk-preview{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:14px}
+.mk-head{background:linear-gradient(135deg,var(--accent),var(--accent2));padding:14px 16px;color:#fff}
+.mk-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px}
+.mk-stat{background:var(--bg3);border-radius:var(--radius);padding:10px;text-align:center}
+.mk-val{font-size:15px;font-weight:600;color:var(--text)}
+.mk-lbl{font-size:10px;color:var(--text3);margin-top:2px}
+
+/* NOTIF */
+.notif-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:6px}
+
+@media (max-width: 768px) {
+  .sidebar{position:fixed;top:0;bottom:0;left:0;transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .mobile-header{display:flex}
+  .mobile-nav{display:block}
+  .page{padding:16px 16px 80px}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .two-col{grid-template-columns:1fr}
+  .chat-wrap{height:calc(100vh - 220px)}
+  .main{padding-top:0}
+  .cookie-banner{border-radius:var(--radius-lg) var(--radius-lg) 0 0;max-width:100%}
+  .cookie-overlay{padding:0;align-items:flex-end}
+}
+@media (min-width:769px) and (max-width:1100px) {
+  :root{--sidebar-w:190px}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- COOKIE CONSENT -->
+<div class="cookie-overlay" id="cookieOverlay">
+  <div class="cookie-banner">
+    <div class="cookie-title">🍪 <span id="cTitle">Cookies & Confidentialité</span></div>
+    <p class="cookie-text" id="cText">SponsorKit utilise des cookies pour améliorer votre expérience, analyser l'usage du site et personnaliser l'interface. Choisissez les cookies que vous acceptez ci-dessous.</p>
+    <div class="cookie-toggles">
+      <div class="cookie-toggle">
+        <div><div class="toggle-label" id="cNec">Essentiels</div><div class="toggle-sub" id="cNecSub">Requis pour le fonctionnement du site</div></div>
+        <label class="toggle-sw"><input type="checkbox" checked disabled><div class="toggle-slider"></div></label>
+      </div>
+      <div class="cookie-toggle">
+        <div><div class="toggle-label" id="cAna">Analytiques</div><div class="toggle-sub" id="cAnaSub">Statistiques anonymes d'usage</div></div>
+        <label class="toggle-sw"><input type="checkbox" id="cookieAna" checked><div class="toggle-slider"></div></label>
+      </div>
+      <div class="cookie-toggle">
+        <div><div class="toggle-label" id="cMkt">Marketing</div><div class="toggle-sub" id="cMktSub">Publicités personnalisées</div></div>
+        <label class="toggle-sw"><input type="checkbox" id="cookieMkt"><div class="toggle-slider"></div></label>
+      </div>
+    </div>
+    <div class="cookie-actions">
+      <button class="btn-g" onclick="rejectCookies()" id="cRefuse">Refuser tout</button>
+      <button class="btn-g" onclick="saveCookies()" id="cCustom">Personnaliser</button>
+      <button class="btn-p" onclick="acceptAll()" id="cAccept">Tout accepter</button>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR OVERLAY (mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="logo">
+      <div class="logo-mark"><i class="ti ti-star"></i></div>
+      <span class="logo-text">SponsorKit</span>
+    </div>
+    <div class="nav-s">
+      <div class="nav-lbl" id="navMain">Principal</div>
+      <div class="nav-item active" onclick="sw('dashboard',this)"><i class="ti ti-layout-dashboard"></i> <span data-t="dashboard">Dashboard</span></div>
+      <div class="nav-item" onclick="sw('deals',this)"><i class="ti ti-briefcase"></i> <span data-t="deals">Mes deals</span> <span class="bdg purple">3</span></div>
+      <div class="nav-item" onclick="sw('pricing',this)"><i class="ti ti-sparkles"></i> <span data-t="pricing">Pricing IA</span></div>
+      <div class="nav-item" onclick="sw('pitch',this)"><i class="ti ti-send"></i> <span data-t="pitch">Pitch builder</span></div>
+      <div class="nav-item" onclick="sw('mediakit',this)"><i class="ti ti-id"></i> <span data-t="mediakit">Media kit</span></div>
+    </div>
+    <div class="nav-s" style="margin-top:8px">
+      <div class="nav-lbl" id="navAI">Outils IA</div>
+      <div class="nav-item" onclick="sw('sponsors',this)"><i class="ti ti-target-arrow"></i> <span data-t="sponsorFinder">Trouver des sponsors</span> <span class="bdg purple" id="sponsorBadge" style="display:none">0</span></div>
+      <div class="nav-item" onclick="sw('chat',this)"><i class="ti ti-message-circle"></i> <span data-t="aiAssistant">Assistant IA</span> <span class="bdg red">New</span></div>
+    </div>
+    <div class="nav-s" style="margin-top:8px">
+      <div class="nav-lbl" id="navAccount">Compte</div>
+      <div class="nav-item" onclick="sw('notifs',this)"><i class="ti ti-bell"></i> <span data-t="alerts">Alertes</span> <span class="bdg green">2</span></div>
+      <div class="nav-item" onclick="sw('automations',this)"><i class="ti ti-robot"></i> <span data-t="automations">Automatisations</span></div>
+    </div>
+    <div class="plan-box">
+      <div class="plan-inner">
+        <div class="plan-title">⚡ Plan Pro</div>
+        <span id="planDesc">IA illimitée · Deals · Templates</span>
+      </div>
+    </div>
+    <div style="padding:8px 16px 14px;text-align:center">
+      <a href="legal.html" style="font-size:10px;color:var(--text3);text-decoration:none" data-t="legalLink">CGU & confidentialité</a>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main" id="mainContent">
+    <!-- MOBILE HEADER -->
+    <div class="mobile-header">
+      <button class="hamburger" onclick="openSidebar()"><i class="ti ti-menu-2"></i></button>
+      <div style="font-family:var(--font-display);font-weight:700;font-size:15px">SponsorKit</div>
+      <div style="width:34px"></div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="page-dashboard" class="page active">
+      <div class="ph"><h1 id="dashTitle">Bonjour, Alex 👋 <span id="verifiedBadge" style="display:none;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--green);background:rgba(46,216,168,.12);border:1px solid rgba(46,216,168,.3);padding:3px 10px;border-radius:20px;vertical-align:middle"><i class="ti ti-rosette-discount-check" style="font-size:13px"></i> <span data-t="verifiedLabel">Vérifié</span></span></h1><p id="dashSub">Résumé de tes deals et opportunités</p></div>
+      <div class="stats-grid">
+        <div class="sc"><div class="sc-lbl" data-t="monthRevenue">Revenus ce mois</div><div class="sc-val" id="kpi-revenue">—</div><div class="sc-d" id="kpi-revenue-trend"><i class="ti ti-minus" style="font-size:10px"></i> —</div></div>
+        <div class="sc"><div class="sc-lbl" data-t="activeDeals">Deals actifs</div><div class="sc-val" id="kpi-active">—</div><div class="sc-d" id="kpi-nego-info"><i class="ti ti-briefcase" style="font-size:10px"></i> <span id="kpi-nego-txt">—</span></div></div>
+        <div class="sc"><div class="sc-lbl" data-t="engagement">Engagement</div><div class="sc-val" id="kpi-engagement">—</div><div class="sc-d" id="kpi-eng-trend"><i class="ti ti-minus" style="font-size:10px"></i> <span id="kpi-eng-vs">vs marché</span></div></div>
+        <div class="sc"><div class="sc-lbl" data-t="responseTime">Score sponsor</div><div class="sc-val" id="kpi-score">—</div><div class="sc-d" id="kpi-score-sub"><i class="ti ti-minus" style="font-size:10px"></i> <span id="kpi-score-txt">—</span></div></div>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <div class="ch"><span class="ct" data-t="recentDeals">Deals récents</span><span class="ca" onclick="sw('deals',document.querySelectorAll('.nav-item')[1])" data-t="seeAll">Voir tout →</span></div>
+          <div class="dr"><div class="bl" style="background:rgba(24,95,165,.15);color:#4fa3e0">NM</div><div class="di"><div class="dn2">NordLayer VPN</div><div class="ds">Vidéo · 15 mai</div></div><div class="da">1 800 €</div><span class="pill pg" data-t="signed">Signé</span></div>
+          <div class="dr"><div class="bl" style="background:rgba(46,216,168,.1);color:var(--green)">SQ</div><div class="di"><div class="dn2">Squarespace</div><div class="ds">Intégration · 20 mai</div></div><div class="da">950 €</div><span class="pill pa" data-t="ongoing">En cours</span></div>
+          <div class="dr"><div class="bl" style="background:rgba(245,158,75,.1);color:var(--orange)">AG</div><div class="di"><div class="dn2">Agoda Travel</div><div class="ds">Série · proposition</div></div><div class="da">3 500 €</div><span class="pill pp" data-t="negotiation">Négociation</span></div>
+        </div>
+        <div class="card">
+          <div class="ch"><span class="ct" data-t="aiInsight">Insight IA</span><span class="ca" onclick="sw('chat',document.querySelectorAll('.nav-item')[6])" data-t="askAI">Demander à l'IA →</span></div>
+          <div class="ai-b">
+            <div class="ai-bh"><i class="ti ti-sparkles" style="font-size:13px"></i> <span data-t="aiReco">Recommandation du jour</span></div>
+            <div class="ai-bt" id="dash-ai-reco">Chargement de ton analyse personnalisée...</div>
+          </div>
+          <div class="mr"><span class="ml" data-t="engagement">Engagement</span><span class="mv" id="dash-eng-val" style="color:var(--green)">—</span></div>
+          <div class="mr"><span class="ml">CPM estimé</span><span class="mv" id="dash-cpm-val">—</span></div>
+          <div class="mr"><span class="ml" data-t="marketScore">Score marché</span><span class="mv" id="dash-market-score">—</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEALS -->
+    <div id="page-deals" class="page">
+      <div class="ph"><h1 data-t="deals">Mes deals</h1><p data-t="dealsSub">Suivi de toutes tes collaborations</p></div>
+      <div style="display:flex;gap:8px;margin-bottom:16px">
+        <button class="btn-p" onclick="sw('pitch',document.querySelectorAll('.nav-item')[3])"><i class="ti ti-plus"></i> <span data-t="newDeal">Nouveau deal</span></button>
+        <button class="btn-g" data-t="filter">Filtrer</button>
+      </div>
+      <div class="card">
+        <div class="dr"><div class="bl" style="background:rgba(24,95,165,.15);color:#4fa3e0">NM</div><div class="di"><div class="dn2">NordLayer VPN</div><div class="ds">sarah@nordlayer.com · Vidéo dédiée</div></div><div class="da">1 800 €</div><span class="pill pg" data-t="signed">Signé</span></div>
+        <div class="dr"><div class="bl" style="background:rgba(46,216,168,.1);color:var(--green)">SQ</div><div class="di"><div class="dn2">Squarespace</div><div class="ds">partnerships@sq.com · Intégration 60s</div></div><div class="da">950 €</div><span class="pill pa" data-t="ongoing">En cours</span></div>
+        <div class="dr"><div class="bl" style="background:rgba(245,158,75,.1);color:var(--orange)">AG</div><div class="di"><div class="dn2">Agoda Travel</div><div class="ds">Série de 3 vidéos · deadline 2 juin</div></div><div class="da">3 500 €</div><span class="pill pp" data-t="negotiation">Négociation</span></div>
+        <div class="dr"><div class="bl" style="background:var(--red-bg);color:var(--red)">FG</div><div class="di"><div class="dn2">Fiverr Pro</div><div class="ds" data-t="noReply12">Sans réponse depuis 12j</div></div><div class="da">400 €</div><span class="pill pgy">Ghost</span></div>
+        <div class="dr"><div class="bl" style="background:rgba(46,216,168,.1);color:var(--green)">NO</div><div class="di"><div class="dn2">Notion</div><div class="ds" data-t="newsletterDone">Newsletter · terminé</div></div><div class="da">600 €</div><span class="pill pg" data-t="paid">Payé</span></div>
+      </div>
+    </div>
+
+    <!-- PRICING -->
+    <div id="page-pricing" class="page">
+      <div class="ph"><h1 data-t="pricing">Pricing IA</h1><p data-t="pricingSub">Ton tarif juste selon tes métriques réelles</p></div>
+      <div class="two-col">
+        <div class="card">
+          <div class="ch"><span class="ct" data-t="yourMetrics">Tes métriques</span></div>
+          <label class="fl" data-t="subscribers">Abonnés</label>
+          <input type="range" min="1000" max="500000" value="45000" id="sr" step="1000" oninput="upP()">
+          <div style="font-size:14px;font-weight:600;color:var(--accent);margin-bottom:8px" id="sv">45 000</div>
+          <label class="fl" data-t="engagementPct">Engagement (%)</label>
+          <input type="range" min="0.5" max="15" value="4.8" id="er" step="0.1" oninput="upP()">
+          <div style="font-size:14px;font-weight:600;color:var(--accent);margin-bottom:8px" id="ev">4.8%</div>
+          <label class="fl" data-t="avgViews">Vues moyennes</label>
+          <input type="range" min="500" max="200000" value="18000" id="vr" step="500" oninput="upP()">
+          <div style="font-size:14px;font-weight:600;color:var(--accent);margin-bottom:8px" id="vv">18 000</div>
+          <label class="fl" data-t="niche">Niche</label>
+          <select id="ns" onchange="upP()">
+            <option value="2.0" data-t="nicheTech">Tech & Software</option>
+            <option value="1.8" data-t="nicheFinance">Finance</option>
+            <option value="1.5" data-t="nicheLifestyle">Lifestyle</option>
+            <option value="1.2" data-t="nicheGaming">Gaming</option>
+          </select>
+        </div>
+        <div class="card">
+          <div class="ch"><span class="ct" data-t="recommendedRates">Tarifs recommandés</span></div>
+          <div class="ai-b"><div class="ai-bh"><i class="ti ti-sparkles" style="font-size:13px"></i> <span data-t="aiAnalysis">Analyse IA</span></div><div class="ai-bt" id="pa" data-t="aiAnalysisText">Profil solide. Engagement 2× la moyenne = premium justifié.</div></div>
+          <div style="margin-bottom:14px"><div style="font-size:11px;color:var(--text3);margin-bottom:4px" data-t="integration">Intégration (30–60s)</div><div style="font-size:22px;font-weight:700;color:var(--accent)" id="pi">450 – 750 €</div></div>
+          <div style="margin-bottom:14px"><div style="font-size:11px;color:var(--text3);margin-bottom:4px" data-t="dedicatedVideo">Vidéo dédiée</div><div style="font-size:22px;font-weight:700;color:var(--accent)" id="pd">1 400 – 2 200 €</div></div>
+          <div><div style="font-size:11px;color:var(--text3);margin-bottom:4px" data-t="videoSeries">Série (3 vidéos)</div><div style="font-size:22px;font-weight:700;color:var(--accent)" id="ps">3 200 – 5 500 €</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PITCH -->
+    <div id="page-pitch" class="page">
+      <div class="ph"><h1 data-t="pitch">Pitch builder</h1><p data-t="pitchSub">Email de prospection pro en 30 secondes</p></div>
+      <div class="two-col">
+        <div class="card pf">
+          <div class="ch"><span class="ct" data-t="params">Paramètres</span></div>
+          <label class="fl" data-t="brand">Marque</label><input type="text" id="bn" value="Raycast">
+          <label class="fl" data-t="format">Format</label>
+          <select id="ct2">
+            <option data-t="optIntegration">Intégration vidéo (30–60s)</option>
+            <option data-t="optDedicated">Vidéo dédiée</option>
+            <option data-t="optSeries">Série de vidéos</option>
+          </select>
+          <label class="fl" data-t="keyArg">Argument clé</label>
+          <textarea id="ka" data-t="keyArgDefault">Audience tech 25-35 ans, 4.8% engagement.</textarea>
+          <button class="btn-p" id="gen-pitch-btn" style="width:100%;margin-top:6px;justify-content:center" onclick="handleGenPitch(this)"><i class="ti ti-sparkles"></i> <span data-t="generatePitch">Générer le pitch IA</span></button>
+        </div>
+        <div class="card">
+          <div class="ch"><span class="ct" data-t="generatedEmail">Email généré</span><span class="ca" id="cpb" onclick="cpPitch()"><i class="ti ti-copy"></i> <span data-t="copy">Copier</span></span></div>
+          <div id="po" style="font-size:12px;line-height:1.8;color:var(--text);white-space:pre-wrap;min-height:200px"><span style="color:var(--text3);font-style:italic;font-size:12px" data-t="pitchPlaceholder">Remplis le formulaire et génère ton pitch...</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEDIA KIT -->
+    <div id="page-mediakit" class="page">
+      <div class="ph"><h1 data-t="mediakit">Media kit</h1><p data-t="mediakitSub">Kit de présentation auto-généré</p></div>
+      <div class="two-col">
+        <div class="card">
+          <div class="ch"><span class="ct" data-t="preview">Aperçu</span></div>
+          <div class="mk-preview">
+            <div class="mk-head"><div style="font-size:15px;font-weight:700;font-family:var(--font-display)">Alex Martin — Tech Creator</div><div style="font-size:11px;opacity:.75;margin-top:2px">YouTube · 45K · Tech & Productivité</div></div>
+            <div class="mk-stats">
+              <div class="mk-stat"><div class="mk-val" id="mk-subs">—</div><div class="mk-lbl" data-t="subscribers">Abonnés</div></div>
+              <div class="mk-stat"><div class="mk-val" id="mk-eng">—</div><div class="mk-lbl" data-t="engagement">Engagement</div></div>
+              <div class="mk-stat"><div class="mk-val" id="mk-views">—</div><div class="mk-lbl" data-t="avgViews">Vues moy.</div></div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn-p" style="flex:1;justify-content:center"><i class="ti ti-download"></i> PDF</button>
+            <button class="btn-g" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px"><i class="ti ti-link"></i> <span data-t="publicLink">Lien public</span></button>
+          </div>
+        </div>
+        <div class="card pf">
+          <div class="ch"><span class="ct" data-t="customize">Personnalisation</span></div>
+          <label class="fl" data-t="nameSlogan">Nom & slogan</label><input type="text" id="mk-name-input" value="Alex Martin — Tech Creator">
+          <label class="fl" data-t="niche">Niche</label>
+          <select id="mk-niche-select">
+            <option>Tech & Productivité</option>
+            <option>Finance</option>
+            <option>Lifestyle</option>
+          </select>
+          <label class="fl" data-t="primaryColor">Couleur principale</label>
+          <input type="color" id="mk-color-input" value="#7f6fff" style="height:36px;cursor:pointer">
+        </div>
+      </div>
+    </div>
+
+    <!-- SPONSORS IA -->
+    <div id="page-sponsors" class="page">
+      <div class="ph">
+        <h1 data-t="sponsorFinderTitle">Trouver des sponsors</h1>
+        <p data-t="sponsorFinderSub">L'IA analyse ton profil réel et trouve les marques les plus pertinentes pour toi</p>
+      </div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="ai-b">
+          <div class="ai-bh"><i class="ti ti-sparkles" style="font-size:13px"></i> <span data-t="howItWorks">Comment ça marche</span></div>
+          <div class="ai-bt" data-t="sponsorFinderExplain">L'IA croise ta niche, tes abonnés, ton engagement et tes deals passés avec une base de marques actives en sponsoring, puis classe les meilleurs matchs avec un tarif suggéré et un argument de pitch.</div>
+        </div>
+        <button class="btn-p" id="scan-sponsors-btn" style="width:100%;justify-content:center;margin-top:4px" onclick="scanSponsors(this)"><i class="ti ti-radar-2"></i> <span data-t="scanSponsors">Lancer la recherche IA</span></button>
+      </div>
+      <div id="sponsor-matches-list"></div>
+      <div id="sponsor-empty-state" style="display:none;text-align:center;padding:40px 20px;color:var(--text3)">
+        <i class="ti ti-target-arrow" style="font-size:32px;margin-bottom:8px;display:block"></i>
+        <p data-t="noSponsorMatches">Aucun sponsor trouvé pour le moment. Lance une recherche pour commencer.</p>
+      </div>
+    </div>
+
+    <!-- AUTOMATISATIONS -->
+    <div id="page-automations" class="page">
+      <div class="ph">
+        <h1 data-t="automationsTitle">Automatisations</h1>
+        <p data-t="automationsSub">Active uniquement ce qui t'est utile — tout est désactivable à tout moment</p>
+      </div>
+      <div id="automations-list" class="card"></div>
+      <div class="card" style="margin-top:14px">
+        <div class="ch"><span class="ct" data-t="automationLogs">Activité récente</span></div>
+        <div id="automation-logs-list" style="font-size:11.5px;color:var(--text3)" data-t="noAutomationLogs">Aucune automatisation exécutée pour le moment.</div>
+      </div>
+    </div>
+
+    <div id="page-notifs" class="page">
+      <div class="ph"><h1 data-t="alerts">Alertes</h1><p data-t="alertsSub">SponsorKit surveille le marché pour toi</p></div>
+      <!-- Alertes IA contextuelles générées dynamiquement -->
+      <div id="ai-alerts-container" style="margin-bottom:14px"></div>
+      <div class="card" id="notifs-card">
+        <div class="dr"><div class="notif-dot" style="background:var(--accent)"></div><div class="di"><div class="dn2" data-t="notif1Title">Nouvelle opportunité — Figma</div><div class="ds">Deal estimé : 800–1 500 €. <span style="color:var(--accent);cursor:pointer" data-t="see">Voir →</span></div></div><span class="pill pp" data-t="new">Nouveau</span></div>
+        <div class="dr"><div class="notif-dot" style="background:var(--green)"></div><div class="di"><div class="dn2">NordLayer — <span data-t="paymentReceived">paiement reçu</span></div><div class="ds">1 800 € confirmé le 1 juin</div></div><span class="pill pg" data-t="paid">Payé</span></div>
+        <div class="dr"><div class="notif-dot" style="background:var(--orange)"></div><div class="di"><div class="dn2" data-t="notif3Title">Relance — Fiverr Pro</div><div class="ds" data-t="notif3Sub">Sans nouvelles depuis 12j. <span style="color:var(--accent);cursor:pointer" data-t="sendFollowUp">Envoyer relance →</span></div></div><span class="pill pa" data-t="action">Action</span></div>
+      </div>
+    </div>
+
+    <!-- CHAT -->
+    <div id="page-chat" class="page" style="padding:28px 28px 0">
+      <div class="ph"><h1><span data-t="aiAssistant">Assistant IA</span> <span class="pro-badge">Pro</span></h1><p data-t="chatSub">Pose toutes tes questions sur tes deals, chiffres et stratégie</p></div>
+      <div class="card" style="padding:0">
+        <div class="chat-wrap">
+          <div class="chat-header">
+            <div class="chat-avatar"><i class="ti ti-sparkles"></i></div>
+            <div><div class="chat-title">SponsorKit IA</div><div class="chat-sub" data-t="chatExpert">Expert en monétisation créateur</div></div>
+            <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+              <span id="msg-counter" style="font-size:10px;color:var(--text3);background:var(--bg3);padding:2px 8px;border-radius:20px;display:none">0 msgs</span>
+              <button onclick="clearChat()" title="Vider la conversation" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:16px;padding:4px;transition:color .15s" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text3)'"><i class="ti ti-trash"></i></button>
+            </div>
+            <div class="chat-status" title="En ligne"></div>
+          </div>
+          <div class="chat-msgs" id="chat-msgs">
+            <div class="msg ai">
+              <div class="msg-avatar ai"><i class="ti ti-sparkles" style="font-size:12px"></i></div>
+              <div>
+                <div class="msg-bubble" data-t="aiWelcome">Bonjour Alex ! Je suis ton assistant IA SponsorKit. Je connais tous tes deals, tes métriques et les tendances du marché. Que veux-tu savoir ?</div>
+                <span class="msg-time" data-t="now">Maintenant</span>
+              </div>
+            </div>
+          </div>
+          <div class="agent-selector" id="agent-selector">
+            <div class="agent-chip active" data-agent="" onclick="selectAgent(this,'')"><i class="ti ti-sparkles" style="font-size:11px"></i> <span data-t="agentGeneral">Général</span></div>
+            <div class="agent-chip" data-agent="prospector" onclick="selectAgent(this,'prospector')"><i class="ti ti-target-arrow" style="font-size:11px"></i> <span data-t="agentProspector">Prospection</span></div>
+            <div class="agent-chip" data-agent="negotiator" onclick="selectAgent(this,'negotiator')"><i class="ti ti-scale" style="font-size:11px"></i> <span data-t="agentNegotiator">Négociation</span></div>
+            <div class="agent-chip" data-agent="analyst" onclick="selectAgent(this,'analyst')"><i class="ti ti-chart-bar" style="font-size:11px"></i> <span data-t="agentAnalyst">Analyse</span></div>
+            <div class="agent-chip" data-agent="followup" onclick="selectAgent(this,'followup')"><i class="ti ti-send" style="font-size:11px"></i> <span data-t="agentFollowup">Relances</span></div>
+          </div>
+          <div id="quick-actions" style="padding:8px 18px 0;border-top:1px solid var(--border);display:flex;gap:6px;flex-wrap:wrap">
+            <button class="sugg" style="background:var(--purple-bg);border-color:var(--accent);color:var(--accent)" onclick="runAutoTask('followup')"><i class="ti ti-send" style="font-size:11px"></i> <span data-t="qaFollowup">Relancer les ghosts</span></button>
+            <button class="sugg" onclick="runAutoTask('analyze')"><i class="ti ti-chart-bar" style="font-size:11px"></i> <span data-t="qaAnalyze">Analyser mon portefeuille</span></button>
+            <button class="sugg" onclick="runAutoTask('brands')"><i class="ti ti-search" style="font-size:11px"></i> <span data-t="qaBrands">Trouver des marques</span></button>
+            <button class="sugg" onclick="runAutoTask('rates')"><i class="ti ti-currency-euro" style="font-size:11px"></i> <span data-t="qaRates">Optimiser mes tarifs</span></button>
+          </div>
+          <div class="chat-suggestions" id="suggestions">
+            <div class="sugg" onclick="askSugg(this)" data-t="sugg1">Quel est mon meilleur deal ce mois ?</div>
+            <div class="sugg" onclick="askSugg(this)" data-t="sugg2">Comment négocier avec Agoda ?</div>
+            <div class="sugg" onclick="askSugg(this)" data-t="sugg3">Combien facturer pour une intégration ?</div>
+            <div class="sugg" onclick="askSugg(this)" data-t="sugg4">Améliore mon taux de réponse</div>
+          </div>
+          <div class="chat-input-row">
+            <textarea id="chat-input" data-t-placeholder="chatPlaceholder" placeholder="Ex: comment relancer Fiverr Pro ?" onkeydown="handleKey(event)" rows="1" oninput="autoResize(this)"></textarea>
+            <button class="send-btn" id="send-btn" onclick="sendMsg(selectedAgent||undefined)" aria-label="Envoyer"><i class="ti ti-arrow-up"></i></button>
+          </div>
+          <div style="padding:0 18px 10px;text-align:center">
+            <span style="font-size:9.5px;color:var(--text3)" data-t="aiDisclosure">Réponses générées par IA, à vérifier. <a href="legal.html?tab=priv" style="color:var(--text3);text-decoration:underline">Confidentialité</a></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- INTEGRATIONS PAGE -->
+    <div id="page-integrations" class="page">
+      <div class="ph"><h1>⚡ Intégrations</h1><p>Connecte tes emails et paiements pour une mise à jour automatique des deals</p></div>
+
+      <!-- RÉSEAUX SOCIAUX — VÉRIFICATION -->
+      <div class="card" style="margin-bottom:14px">
+        <div class="ch">
+          <span class="ct" style="font-size:15px">✓ Vérification des réseaux sociaux</span>
+          <span class="ca" onclick="syncAllSocial(this)" id="syncAllSocialBtn"><i class="ti ti-refresh" style="font-size:12px"></i> Tout resynchroniser</span>
+        </div>
+        <p style="font-size:12px;color:var(--text2);margin-bottom:16px;line-height:1.6">
+          Connecte tes comptes pour remplacer tes chiffres déclarés par des statistiques réelles et vérifiées. Un profil vérifié obtient un badge ✓ visible des marques et améliore la précision du pricing IA et du matching de sponsors.
+        </p>
+        <div id="socialConnections" style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn-p" style="background:linear-gradient(135deg,#ff0000,#cc0000)" onclick="connectSocial('youtube')"><i class="ti ti-brand-youtube"></i> YouTube</button>
+          <button class="btn-p" style="background:linear-gradient(135deg,#f09433,#dc2743,#bc1888)" onclick="connectSocial('instagram')"><i class="ti ti-brand-instagram"></i> Instagram</button>
+          <button class="btn-p" style="background:linear-gradient(135deg,#000000,#333333)" onclick="connectSocial('tiktok')"><i class="ti ti-brand-tiktok"></i> TikTok</button>
+        </div>
+        <div id="socialUnavailableNote" style="display:none;margin-top:12px;padding:10px 12px;background:rgba(245,158,75,.08);border:1px solid rgba(245,158,75,.25);border-radius:8px;font-size:11.5px;color:var(--text2);line-height:1.6"></div>
+      </div>
+
+      <!-- EMAIL SECTION -->
+      <div class="card" style="margin-bottom:14px">
+        <div class="ch"><span class="ct" style="font-size:15px">📧 Connexion Email</span></div>
+        <p style="font-size:12px;color:var(--text2);margin-bottom:16px;line-height:1.6">
+          SponsorKit lit tes emails liés aux marques et met à jour les statuts de tes deals automatiquement grâce à l'IA.
+          Synchronisation automatique toutes les 2 heures.
+        </p>
+        <div id="emailConnections" style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn-p" onclick="connectEmail('gmail')"><i class="ti ti-brand-google"></i> Gmail</button>
+          <button class="btn-p" style="background:linear-gradient(135deg,#0078d4,#005a9e)" onclick="connectEmail('outlook')"><i class="ti ti-brand-windows"></i> Outlook</button>
+          <button class="btn-g" onclick="showImapForm()"><i class="ti ti-mail"></i> Autre (IMAP)</button>
+        </div>
+        <div id="imapForm" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+            <div><label class="fl">Serveur IMAP</label><input type="text" id="imapHost" placeholder="imap.gmail.com"></div>
+            <div><label class="fl">Port</label><input type="number" id="imapPort" value="993"></div>
+          </div>
+          <div style="margin-bottom:10px"><label class="fl">Email</label><input type="email" id="imapEmail" placeholder="toi@exemple.com"></div>
+          <div style="margin-bottom:10px"><label class="fl">Mot de passe app</label><input type="password" id="imapPass" placeholder="••••••••••••"></div>
+          <button class="btn-p" onclick="connectImap()"><i class="ti ti-check"></i> Connecter</button>
+        </div>
+      </div>
+
+      <!-- SYNC STATUS -->
+      <div class="card" style="margin-bottom:14px">
+        <div class="ch"><span class="ct">🔄 Dernière synchronisation</span><button class="btn-g" style="font-size:12px;padding:6px 12px" onclick="manualSync()"><i class="ti ti-refresh"></i> Syncer maintenant</button></div>
+        <div id="syncStatus" style="font-size:12px;color:var(--text3)">Aucune synchronisation encore effectuée.</div>
+        <div id="syncChanges" style="margin-top:10px"></div>
+      </div>
+
+      <!-- STRIPE -->
+      <div class="card" style="margin-bottom:14px">
+        <div class="ch"><span class="ct" style="font-size:15px">💳 Stripe — Détection paiements</span></div>
+        <p style="font-size:12px;color:var(--text2);margin-bottom:14px;line-height:1.6">
+          Quand une marque te paye via Stripe, le deal passe automatiquement à <strong style="color:var(--green)">Payé</strong>. Configure le webhook Stripe pour activer cette fonctionnalité.
+        </p>
+        <div class="ai-b" style="margin-bottom:14px">
+          <div class="ai-bh"><i class="ti ti-link" style="font-size:13px"></i> URL du webhook Stripe</div>
+          <div style="font-family:var(--font-mono);font-size:12px;color:var(--text);word-break:break-all" id="stripeWebhookUrl">Chargement...</div>
+          <button onclick="copyWebhook('stripe')" style="margin-top:8px;background:none;border:1px solid var(--border2);border-radius:6px;padding:4px 10px;font-size:11px;color:var(--text2);cursor:pointer"><i class="ti ti-copy"></i> Copier</button>
+        </div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.7">
+          <strong style="color:var(--text)">Comment configurer :</strong><br>
+          1. Va sur <a href="https://dashboard.stripe.com/webhooks" target="_blank" style="color:var(--accent)">dashboard.stripe.com/webhooks</a><br>
+          2. Clique "Add endpoint" → colle l'URL ci-dessus<br>
+          3. Sélectionne les événements : <code style="color:var(--accent)">payment_intent.succeeded</code><br>
+          4. Copie le "Signing secret" → ajoute-le dans Vercel comme <code style="color:var(--accent)">STRIPE_WEBHOOK_SECRET</code>
+        </div>
+      </div>
+
+      <!-- PAYPAL -->
+      <div class="card">
+        <div class="ch"><span class="ct" style="font-size:15px">🔵 PayPal — Détection paiements</span></div>
+        <p style="font-size:12px;color:var(--text2);margin-bottom:14px;line-height:1.6">
+          Même chose pour PayPal. Le deal passe automatiquement à <strong style="color:var(--green)">Payé</strong> dès réception du paiement.
+        </p>
+        <div class="ai-b" style="margin-bottom:14px">
+          <div class="ai-bh"><i class="ti ti-link" style="font-size:13px"></i> URL du webhook PayPal</div>
+          <div style="font-family:var(--font-mono);font-size:12px;color:var(--text);word-break:break-all" id="paypalWebhookUrl">Chargement...</div>
+          <button onclick="copyWebhook('paypal')" style="margin-top:8px;background:none;border:1px solid var(--border2);border-radius:6px;padding:4px 10px;font-size:11px;color:var(--text2);cursor:pointer"><i class="ti ti-copy"></i> Copier</button>
+        </div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.7">
+          <strong style="color:var(--text)">Comment configurer :</strong><br>
+          1. Va sur <a href="https://developer.paypal.com/dashboard/webhooks" target="_blank" style="color:var(--accent)">developer.paypal.com</a><br>
+          2. Créé une app → Webhooks → "Add Webhook"<br>
+          3. URL : colle l'URL ci-dessus<br>
+          4. Événements : <code style="color:var(--accent)">PAYMENT.CAPTURE.COMPLETED</code><br>
+          5. Ajoute <code style="color:var(--accent)">PAYPAL_CLIENT_ID</code>, <code style="color:var(--accent)">PAYPAL_CLIENT_SECRET</code>, <code style="color:var(--accent)">PAYPAL_WEBHOOK_ID</code> dans Vercel
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MOBILE BOTTOM NAV -->
+<div class="mobile-nav">
+  <div class="mobile-nav-items" style="overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch">
+    <div class="mob-item active" onclick="sw('dashboard',null);setMobActive(this)"><i class="ti ti-layout-dashboard"></i><span data-t="dashboard">Home</span></div>
+    <div class="mob-item" onclick="sw('deals',null);setMobActive(this)"><i class="ti ti-briefcase"></i><span data-t="deals">Deals</span><div class="mob-bdg"></div></div>
+    <div class="mob-item" onclick="sw('sponsors',null);setMobActive(this)"><i class="ti ti-target-arrow"></i><span data-t="sponsorFinder">Sponsors</span></div>
+    <div class="mob-item" onclick="sw('chat',null);setMobActive(this)"><i class="ti ti-message-circle"></i><span data-t="aiAssistant">IA</span></div>
+    <div class="mob-item" onclick="sw('pricing',null);setMobActive(this)"><i class="ti ti-sparkles"></i><span data-t="pricing">Pricing</span></div>
+    <div class="mob-item" onclick="sw('notifs',null);setMobActive(this)"><i class="ti ti-bell"></i><span data-t="alerts">Alertes</span></div>
+    <div class="mob-item" onclick="sw('automations',null);setMobActive(this)"><i class="ti ti-robot"></i><span data-t="automations">Auto</span></div>
+    <div class="mob-item" onclick="sw('integrations',null);setMobActive(this)"><i class="ti ti-plug"></i><span>Connect</span></div>
+  </div>
+</div>
+
+<script>
+// ── I18N ──────────────────────────────────────────────────────────────────────
+const LANG = {
+  fr: {
+    dashboard:'Dashboard', deals:'Mes deals', pricing:'Pricing IA',
+    pitch:'Pitch builder', mediakit:'Media kit', aiAssistant:'Assistant IA',
+    alerts:'Alertes', dashTitle:'Bonjour, Alex 👋', dashSub:'Résumé de tes deals et opportunités',
+    monthRevenue:'Revenus ce mois', activeDeals:'Deals actifs', engagement:'Engagement',
+    responseTime:'Délai réponse', inNego:'2 en négo', recentDeals:'Deals récents',
+    seeAll:'Voir tout →', signed:'Signé', ongoing:'En cours', negotiation:'Négociation',
+    paid:'Payé', aiInsight:'Insight IA', askAI:'Demander à l\'IA →',
+    aiReco:'Recommandation du jour', aiRecoText:'Ton engagement (4.8%) est 2× la moyenne. Tu peux augmenter tes tarifs de 25–40%.',
+    marketScore:'Score marché', dealsSub:'Suivi de toutes tes collaborations',
+    newDeal:'Nouveau deal', filter:'Filtrer', noReply12:'Sans réponse depuis 12j',
+    newsletterDone:'Newsletter · terminé', pricingSub:'Ton tarif juste selon tes métriques réelles',
+    yourMetrics:'Tes métriques', subscribers:'Abonnés', engagementPct:'Engagement (%)',
+    avgViews:'Vues moyennes', niche:'Niche', nicheTech:'Tech & Software',
+    nicheFinance:'Finance', nicheLifestyle:'Lifestyle', nicheGaming:'Gaming',
+    recommendedRates:'Tarifs recommandés', aiAnalysis:'Analyse IA',
+    aiAnalysisText:'Profil solide. Engagement 2× la moyenne = premium justifié.',
+    integration:'Intégration (30–60s)', dedicatedVideo:'Vidéo dédiée', videoSeries:'Série (3 vidéos)',
+    pitchSub:'Email de prospection pro en 30 secondes', params:'Paramètres', brand:'Marque',
+    format:'Format', keyArg:'Argument clé', keyArgDefault:'Audience tech 25-35 ans, 4.8% engagement.',
+    optIntegration:'Intégration vidéo (30–60s)', optDedicated:'Vidéo dédiée', optSeries:'Série de vidéos',
+    generatePitch:'Générer le pitch IA', generatedEmail:'Email généré', copy:'Copier',
+    pitchPlaceholder:'Remplis le formulaire et génère ton pitch...',
+    mediakitSub:'Kit de présentation auto-généré', preview:'Aperçu', publicLink:'Lien public',
+    customize:'Personnalisation', nameSlogan:'Nom & slogan', primaryColor:'Couleur principale',
+    alertsSub:'SponsorKit surveille le marché pour toi',
+    notif1Title:'Nouvelle opportunité — Figma', see:'Voir →', new:'Nouveau',
+    paymentReceived:'paiement reçu', notif3Title:'Relance — Fiverr Pro',
+    notif3Sub:'Sans nouvelles depuis 12j.', sendFollowUp:'Envoyer relance →', action:'Action',
+    chatSub:'Pose toutes tes questions sur tes deals, chiffres et stratégie',
+    chatExpert:'Expert en monétisation créateur', now:'Maintenant',
+    aiWelcome:'Bonjour Alex ! Je suis ton assistant IA SponsorKit. Je connais tous tes deals, tes métriques et les tendances du marché. Que veux-tu savoir ?',
+    sugg1:'Quel est mon meilleur deal ce mois ?', sugg2:'Comment négocier avec Agoda ?',
+    sugg3:'Combien facturer pour une intégration ?', sugg4:'Améliore mon taux de réponse',
+    chatPlaceholder:'Ex: comment relancer Fiverr Pro ?',
+    cTitle:'Cookies & Confidentialité',
+    cText:'SponsorKit utilise des cookies pour améliorer votre expérience, analyser l\'usage du site et personnaliser l\'interface. Choisissez les cookies que vous acceptez ci-dessous.',
+    cNec:'Essentiels', cNecSub:'Requis pour le fonctionnement du site',
+    cAna:'Analytiques', cAnaSub:'Statistiques anonymes d\'usage',
+    cMkt:'Marketing', cMktSub:'Publicités personnalisées',
+    cRefuse:'Refuser tout', cCustom:'Personnaliser', cAccept:'Tout accepter',
+    navMain:'Principal', navAI:'Outils IA', navAccount:'Compte',
+    planDesc:'IA illimitée · Deals · Templates',
+    aiLang:'fr', aiPromptLang:'Réponds toujours en français.',
+    qaFollowup:'Relancer les ghosts', qaAnalyze:'Analyser mon portefeuille', qaBrands:'Trouver des marques', qaRates:'Optimiser mes tarifs',
+    sponsorFinder:'Trouver des sponsors', sponsorFinderTitle:'Trouver des sponsors', sponsorFinderSub:"L'IA analyse ton profil réel et trouve les marques les plus pertinentes pour toi",
+    howItWorks:'Comment ça marche', sponsorFinderExplain:"L'IA croise ta niche, tes abonnés, ton engagement et tes deals passés avec une base de marques actives en sponsoring, puis classe les meilleurs matchs avec un tarif suggéré et un argument de pitch.",
+    scanSponsors:'Lancer la recherche IA', scanning:'Recherche en cours...', scanError:'Erreur lors de la recherche. Réessaie dans un instant.',
+    noSponsorMatches:'Aucun sponsor trouvé pour le moment. Lance une recherche pour commencer.',
+    whyThisMatch:'Pourquoi ce match', suggestedRate:'Tarif suggéré', generatePitchFor:'Générer le pitch', markContacted:'Marquer contacté', dismiss:'Écarter',
+    automations:'Automatisations', automationsTitle:'Automatisations', automationsSub:"Active uniquement ce qui t'est utile — tout est désactivable à tout moment",
+    automationLogs:'Activité récente', noAutomationLogs:'Aucune automatisation exécutée pour le moment.', loadError:'Impossible de charger les automatisations.',
+    agentProspector:'Prospection', agentNegotiator:'Négociation', agentAnalyst:'Analyse', agentFollowup:'Relances', agentGeneral:'Général',
+    legalLink:'CGU & confidentialité', aiDisclosure:'Réponses générées par IA, à vérifier.', verifiedLabel:'Vérifié'
+  },
+  en: {
+    dashboard:'Dashboard', deals:'My Deals', pricing:'AI Pricing',
+    pitch:'Pitch Builder', mediakit:'Media Kit', aiAssistant:'AI Assistant',
+    alerts:'Alerts', dashTitle:'Hello, Alex 👋', dashSub:'Summary of your deals and opportunities',
+    monthRevenue:'Revenue this month', activeDeals:'Active deals', engagement:'Engagement',
+    responseTime:'Response time', inNego:'2 in negotiation', recentDeals:'Recent deals',
+    seeAll:'See all →', signed:'Signed', ongoing:'In progress', negotiation:'Negotiating',
+    paid:'Paid', aiInsight:'AI Insight', askAI:'Ask AI →',
+    aiReco:'Today\'s recommendation', aiRecoText:'Your engagement (4.8%) is 2× the average. You can raise your rates by 25–40%.',
+    marketScore:'Market score', dealsSub:'Track all your collaborations',
+    newDeal:'New deal', filter:'Filter', noReply12:'No reply for 12d',
+    newsletterDone:'Newsletter · completed', pricingSub:'Fair pricing based on your real metrics',
+    yourMetrics:'Your metrics', subscribers:'Subscribers', engagementPct:'Engagement (%)',
+    avgViews:'Average views', niche:'Niche', nicheTech:'Tech & Software',
+    nicheFinance:'Finance', nicheLifestyle:'Lifestyle', nicheGaming:'Gaming',
+    recommendedRates:'Recommended rates', aiAnalysis:'AI Analysis',
+    aiAnalysisText:'Solid profile. Engagement 2× average = premium justified.',
+    integration:'Integration (30–60s)', dedicatedVideo:'Dedicated video', videoSeries:'Series (3 videos)',
+    pitchSub:'Professional prospecting email in 30 seconds', params:'Parameters', brand:'Brand',
+    format:'Format', keyArg:'Key argument', keyArgDefault:'Tech audience 25-35, 4.8% engagement.',
+    optIntegration:'Video integration (30–60s)', optDedicated:'Dedicated video', optSeries:'Video series',
+    generatePitch:'Generate AI pitch', generatedEmail:'Generated email', copy:'Copy',
+    pitchPlaceholder:'Fill the form and generate your pitch...',
+    mediakitSub:'Auto-generated presentation kit', preview:'Preview', publicLink:'Public link',
+    customize:'Customize', nameSlogan:'Name & tagline', primaryColor:'Primary color',
+    alertsSub:'SponsorKit monitors the market for you',
+    notif1Title:'New opportunity — Figma', see:'View →', new:'New',
+    paymentReceived:'payment received', notif3Title:'Follow-up — Fiverr Pro',
+    notif3Sub:'No news for 12d.', sendFollowUp:'Send follow-up →', action:'Action',
+    chatSub:'Ask anything about your deals, stats and strategy',
+    chatExpert:'Creator monetization expert', now:'Now',
+    aiWelcome:'Hello Alex! I\'m your SponsorKit AI assistant. I know all your deals, metrics and market trends. What do you want to know?',
+    sugg1:'What\'s my best deal this month?', sugg2:'How to negotiate with Agoda?',
+    sugg3:'How much to charge for an integration?', sugg4:'Improve my response rate',
+    chatPlaceholder:'E.g. how to follow up with Fiverr Pro?',
+    cTitle:'Cookies & Privacy',
+    cText:'SponsorKit uses cookies to improve your experience, analyze site usage and personalize the interface. Choose which cookies you accept below.',
+    cNec:'Essential', cNecSub:'Required for the site to work',
+    cAna:'Analytics', cAnaSub:'Anonymous usage statistics',
+    cMkt:'Marketing', cMktSub:'Personalized advertising',
+    cRefuse:'Reject all', cCustom:'Customize', cAccept:'Accept all',
+    navMain:'Main', navAI:'AI Tools', navAccount:'Account',
+    planDesc:'Unlimited AI · Deals · Templates',
+    aiLang:'en', aiPromptLang:'Always respond in English.',
+    qaFollowup:'Follow up ghosts', qaAnalyze:'Analyze my portfolio', qaBrands:'Find brands', qaRates:'Optimize my rates',
+    sponsorFinder:'Find sponsors', sponsorFinderTitle:'Find sponsors', sponsorFinderSub:"AI analyzes your real profile and finds the most relevant brands for you",
+    howItWorks:'How it works', sponsorFinderExplain:"AI cross-references your niche, subscribers, engagement and past deals with a database of active sponsors, then ranks the best matches with a suggested rate and pitch angle.",
+    scanSponsors:'Run AI search', scanning:'Searching...', scanError:'Search error. Try again in a moment.',
+    noSponsorMatches:'No sponsors found yet. Run a search to get started.',
+    whyThisMatch:'Why this match', suggestedRate:'Suggested rate', generatePitchFor:'Generate pitch', markContacted:'Mark contacted', dismiss:'Dismiss',
+    automations:'Automations', automationsTitle:'Automations', automationsSub:"Enable only what's useful to you — everything can be turned off anytime",
+    automationLogs:'Recent activity', noAutomationLogs:'No automation has run yet.', loadError:'Could not load automations.',
+    agentProspector:'Prospecting', agentNegotiator:'Negotiation', agentAnalyst:'Analytics', agentFollowup:'Follow-ups', agentGeneral:'General',
+    legalLink:'Terms & privacy', aiDisclosure:'AI-generated responses, please verify.', verifiedLabel:'Verified'
+  },
+  es: {
+    dashboard:'Panel', deals:'Mis acuerdos', pricing:'Precios IA',
+    pitch:'Generador de pitch', mediakit:'Media kit', aiAssistant:'Asistente IA',
+    alerts:'Alertas', dashTitle:'Hola, Alex 👋', dashSub:'Resumen de tus acuerdos y oportunidades',
+    monthRevenue:'Ingresos este mes', activeDeals:'Acuerdos activos', engagement:'Engagement',
+    responseTime:'Tiempo de respuesta', inNego:'2 en negociación', recentDeals:'Acuerdos recientes',
+    seeAll:'Ver todo →', signed:'Firmado', ongoing:'En curso', negotiation:'Negociando',
+    paid:'Pagado', aiInsight:'Perspectiva IA', askAI:'Preguntar a la IA →',
+    aiReco:'Recomendación del día', aiRecoText:'Tu engagement (4.8%) es 2× el promedio. Puedes subir tus tarifas un 25–40%.',
+    marketScore:'Puntuación mercado', dealsSub:'Seguimiento de todas tus colaboraciones',
+    newDeal:'Nuevo acuerdo', filter:'Filtrar', noReply12:'Sin respuesta desde hace 12d',
+    newsletterDone:'Newsletter · completado', pricingSub:'Precio justo según tus métricas reales',
+    yourMetrics:'Tus métricas', subscribers:'Suscriptores', engagementPct:'Engagement (%)',
+    avgViews:'Vistas promedio', niche:'Nicho', nicheTech:'Tech & Software',
+    nicheFinance:'Finanzas', nicheLifestyle:'Lifestyle', nicheGaming:'Gaming',
+    recommendedRates:'Tarifas recomendadas', aiAnalysis:'Análisis IA',
+    aiAnalysisText:'Perfil sólido. Engagement 2× el promedio = premium justificado.',
+    integration:'Integración (30–60s)', dedicatedVideo:'Vídeo dedicado', videoSeries:'Serie (3 vídeos)',
+    pitchSub:'Email de prospección profesional en 30 segundos', params:'Parámetros', brand:'Marca',
+    format:'Formato', keyArg:'Argumento clave', keyArgDefault:'Audiencia tech 25-35 años, 4.8% engagement.',
+    optIntegration:'Integración vídeo (30–60s)', optDedicated:'Vídeo dedicado', optSeries:'Serie de vídeos',
+    generatePitch:'Generar pitch IA', generatedEmail:'Email generado', copy:'Copiar',
+    pitchPlaceholder:'Rellena el formulario y genera tu pitch...',
+    mediakitSub:'Kit de presentación autogenerado', preview:'Vista previa', publicLink:'Enlace público',
+    customize:'Personalizar', nameSlogan:'Nombre & eslogan', primaryColor:'Color principal',
+    alertsSub:'SponsorKit monitoriza el mercado por ti',
+    notif1Title:'Nueva oportunidad — Figma', see:'Ver →', new:'Nuevo',
+    paymentReceived:'pago recibido', notif3Title:'Seguimiento — Fiverr Pro',
+    notif3Sub:'Sin noticias desde hace 12d.', sendFollowUp:'Enviar seguimiento →', action:'Acción',
+    chatSub:'Pregunta sobre tus acuerdos, cifras y estrategia',
+    chatExpert:'Experto en monetización de creadores', now:'Ahora',
+    aiWelcome:'¡Hola Alex! Soy tu asistente IA de SponsorKit. Conozco todos tus acuerdos, métricas y tendencias del mercado. ¿Qué quieres saber?',
+    sugg1:'¿Cuál es mi mejor acuerdo este mes?', sugg2:'¿Cómo negociar con Agoda?',
+    sugg3:'¿Cuánto cobrar por una integración?', sugg4:'Mejora mi tasa de respuesta',
+    chatPlaceholder:'Ej: cómo hacer seguimiento a Fiverr Pro...',
+    cTitle:'Cookies y privacidad', cText:'SponsorKit usa cookies para mejorar tu experiencia. Elige qué cookies aceptas.',
+    cNec:'Esenciales', cNecSub:'Necesarias para el funcionamiento',
+    cAna:'Analíticas', cAnaSub:'Estadísticas anónimas de uso',
+    cMkt:'Marketing', cMktSub:'Publicidad personalizada',
+    cRefuse:'Rechazar todo', cCustom:'Personalizar', cAccept:'Aceptar todo',
+    navMain:'Principal', navAI:'Herramientas IA', navAccount:'Cuenta',
+    planDesc:'IA ilimitada · Acuerdos · Plantillas',
+    aiLang:'es', aiPromptLang:'Responde siempre en español.',
+    qaFollowup:'Relanzar ghosts', qaAnalyze:'Analizar mi cartera', qaBrands:'Encontrar marcas', qaRates:'Optimizar mis tarifas',
+    sponsorFinder:'Buscar sponsors', sponsorFinderTitle:'Buscar sponsors', sponsorFinderSub:"La IA analiza tu perfil real y encuentra las marcas más relevantes para ti",
+    howItWorks:'Cómo funciona', sponsorFinderExplain:"La IA cruza tu nicho, suscriptores, engagement y deals pasados con una base de marcas activas, y clasifica los mejores matches con tarifa sugerida y ángulo de pitch.",
+    scanSponsors:'Buscar con IA', scanning:'Buscando...', scanError:'Error en la búsqueda. Inténtalo de nuevo.',
+    noSponsorMatches:'Aún no se encontraron sponsors. Inicia una búsqueda.',
+    whyThisMatch:'Por qué este match', suggestedRate:'Tarifa sugerida', generatePitchFor:'Generar pitch', markContacted:'Marcar contactado', dismiss:'Descartar',
+    automations:'Automatizaciones', automationsTitle:'Automatizaciones', automationsSub:"Activa solo lo que te sea útil — todo se puede desactivar",
+    automationLogs:'Actividad reciente', noAutomationLogs:'Ninguna automatización ejecutada aún.', loadError:'No se pudieron cargar las automatizaciones.',
+    agentProspector:'Prospección', agentNegotiator:'Negociación', agentAnalyst:'Análisis', agentFollowup:'Seguimientos', agentGeneral:'General',
+    legalLink:'Términos y privacidad', aiDisclosure:'Respuestas generadas por IA, verifícalas.', verifiedLabel:'Verificado'
+  },
+  de: {
+    dashboard:'Dashboard', deals:'Meine Deals', pricing:'KI-Preisgestaltung',
+    pitch:'Pitch Builder', mediakit:'Media Kit', aiAssistant:'KI-Assistent',
+    alerts:'Benachrichtigungen', dashTitle:'Hallo, Alex 👋', dashSub:'Übersicht deiner Deals und Chancen',
+    monthRevenue:'Einnahmen diesen Monat', activeDeals:'Aktive Deals', engagement:'Engagement',
+    responseTime:'Antwortzeit', inNego:'2 in Verhandlung', recentDeals:'Aktuelle Deals',
+    seeAll:'Alle anzeigen →', signed:'Unterzeichnet', ongoing:'Laufend', negotiation:'Verhandlung',
+    paid:'Bezahlt', aiInsight:'KI-Einblick', askAI:'KI fragen →',
+    aiReco:'Heutige Empfehlung', aiRecoText:'Dein Engagement (4.8%) ist 2× der Durchschnitt. Erhöhe deine Preise um 25–40%.',
+    marketScore:'Marktbewertung', dealsSub:'Verfolge alle deine Kooperationen',
+    newDeal:'Neuer Deal', filter:'Filtern', noReply12:'Keine Antwort seit 12d',
+    newsletterDone:'Newsletter · abgeschlossen', pricingSub:'Fairer Preis nach deinen echten Metriken',
+    yourMetrics:'Deine Metriken', subscribers:'Abonnenten', engagementPct:'Engagement (%)',
+    avgViews:'Durchschnittliche Aufrufe', niche:'Nische', nicheTech:'Tech & Software',
+    nicheFinance:'Finanzen', nicheLifestyle:'Lifestyle', nicheGaming:'Gaming',
+    recommendedRates:'Empfohlene Preise', aiAnalysis:'KI-Analyse',
+    aiAnalysisText:'Solides Profil. Engagement 2× Durchschnitt = Premium gerechtfertigt.',
+    integration:'Integration (30–60s)', dedicatedVideo:'Dediziertes Video', videoSeries:'Serie (3 Videos)',
+    pitchSub:'Professionelle Akquisitions-E-Mail in 30 Sekunden', params:'Parameter', brand:'Marke',
+    format:'Format', keyArg:'Hauptargument', keyArgDefault:'Tech-Zielgruppe 25-35 Jahre, 4.8% Engagement.',
+    optIntegration:'Video-Integration (30–60s)', optDedicated:'Dediziertes Video', optSeries:'Video-Serie',
+    generatePitch:'KI-Pitch generieren', generatedEmail:'Generierte E-Mail', copy:'Kopieren',
+    pitchPlaceholder:'Fülle das Formular aus und generiere deinen Pitch...',
+    mediakitSub:'Automatisch generiertes Präsentationskit', preview:'Vorschau', publicLink:'Öffentlicher Link',
+    customize:'Anpassen', nameSlogan:'Name & Slogan', primaryColor:'Hauptfarbe',
+    alertsSub:'SponsorKit überwacht den Markt für dich',
+    notif1Title:'Neue Möglichkeit — Figma', see:'Ansehen →', new:'Neu',
+    paymentReceived:'Zahlung erhalten', notif3Title:'Nachfassen — Fiverr Pro',
+    notif3Sub:'Keine Neuigkeiten seit 12d.', sendFollowUp:'Nachfassen senden →', action:'Aktion',
+    chatSub:'Stelle alle Fragen zu deinen Deals, Zahlen und Strategie',
+    chatExpert:'Creator-Monetarisierungsexperte', now:'Jetzt',
+    aiWelcome:'Hallo Alex! Ich bin dein SponsorKit KI-Assistent. Ich kenne all deine Deals, Metriken und Markttrends. Was möchtest du wissen?',
+    sugg1:'Was ist mein bester Deal diesen Monat?', sugg2:'Wie mit Agoda verhandeln?',
+    sugg3:'Wie viel für eine Integration verlangen?', sugg4:'Verbessere meine Antwortrate',
+    chatPlaceholder:'Wie z.B. Fiverr Pro nachfassen?',
+    cTitle:'Cookies & Datenschutz', cText:'SponsorKit verwendet Cookies zur Verbesserung Ihrer Erfahrung.',
+    cNec:'Notwendige', cNecSub:'Für die Funktion der Website erforderlich',
+    cAna:'Analytische', cAnaSub:'Anonyme Nutzungsstatistiken',
+    cMkt:'Marketing', cMktSub:'Personalisierte Werbung',
+    cRefuse:'Alle ablehnen', cCustom:'Anpassen', cAccept:'Alle akzeptieren',
+    navMain:'Hauptmenü', navAI:'KI-Tools', navAccount:'Konto',
+    planDesc:'Unbegrenztes KI · Deals · Vorlagen',
+    aiLang:'de', aiPromptLang:'Antworte immer auf Deutsch.',
+    qaFollowup:'Ghosts nachfassen', qaAnalyze:'Portfolio analysieren', qaBrands:'Marken finden', qaRates:'Tarife optimieren',
+    sponsorFinder:'Sponsoren finden', sponsorFinderTitle:'Sponsoren finden', sponsorFinderSub:"Die KI analysiert dein echtes Profil und findet die relevantesten Marken für dich",
+    howItWorks:'So funktioniert es', sponsorFinderExplain:"Die KI verknüpft deine Nische, Abonnenten, Engagement und vergangene Deals mit einer Datenbank aktiver Sponsoren und sortiert die besten Matches mit Tarifvorschlag und Pitch-Ansatz.",
+    scanSponsors:'KI-Suche starten', scanning:'Suche läuft...', scanError:'Fehler bei der Suche. Versuch es gleich noch einmal.',
+    noSponsorMatches:'Noch keine Sponsoren gefunden. Starte eine Suche.',
+    whyThisMatch:'Warum dieser Match', suggestedRate:'Empfohlener Tarif', generatePitchFor:'Pitch generieren', markContacted:'Als kontaktiert markieren', dismiss:'Verwerfen',
+    automations:'Automatisierungen', automationsTitle:'Automatisierungen', automationsSub:"Aktiviere nur, was für dich nützlich ist — alles jederzeit abschaltbar",
+    automationLogs:'Letzte Aktivität', noAutomationLogs:'Noch keine Automatisierung ausgeführt.', loadError:'Automatisierungen konnten nicht geladen werden.',
+    agentProspector:'Akquise', agentNegotiator:'Verhandlung', agentAnalyst:'Analyse', agentFollowup:'Nachfassen', agentGeneral:'Allgemein',
+    legalLink:'AGB & Datenschutz', aiDisclosure:'KI-generierte Antworten, bitte überprüfen.', verifiedLabel:'Verifiziert'
+  }
+};
+
+// detect language from browser/location
+function detectLang() {
+  const nav = navigator.language || 'fr';
+  const code = nav.slice(0,2).toLowerCase();
+  return LANG[code] ? code : 'fr';
+}
+
+let currentLang = detectLang();
+let T = LANG[currentLang];
+
+function applyTranslations() {
+  T = LANG[currentLang];
+  document.documentElement.lang = currentLang;
+  // text nodes
+  document.querySelectorAll('[data-t]').forEach(el => {
+    const key = el.getAttribute('data-t');
+    if (T[key]) el.textContent = T[key];
+  });
+  // placeholders
+  document.querySelectorAll('[data-t-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-t-placeholder');
+    if (T[key]) el.placeholder = T[key];
+  });
+  // IDs
+  ['cTitle','cText','cNec','cNecSub','cAna','cAnaSub','cMkt','cMktSub',
+   'cRefuse','cCustom','cAccept','navMain','navAI','navAccount','planDesc',
+   'dashTitle','dashSub'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && T[id]) el.textContent = T[id];
+  });
+  // AI chat welcome — personalized with real user data if available
+  const wb = document.querySelector('#chat-msgs .msg-bubble');
+  if (wb) {
+    const uname = userProfile?.first_name || userProfile?.channel_name || null;
+    const activeCount = userDeals ? userDeals.filter(d => ['signed','ongoing','negotiation','in_progress'].includes(d.status)).length : 0;
+    const ghostCount = userDeals ? userDeals.filter(d => d.status === 'ghost').length : 0;
+
+    const welcomes = {
+      fr: uname
+        ? `Bonjour ${uname} ! Je connais ton profil, tes ${userDeals?.length||0} deals${ghostCount > 0 ? ` (dont ${ghostCount} fantôme${ghostCount>1?'s':''} à relancer)` : ''} et les tendances du marché. Que veux-tu optimiser ?`
+        : (T.aiWelcome || 'Bonjour ! Je suis ton assistant IA SponsorKit. Que veux-tu savoir ?'),
+      en: uname
+        ? `Hey ${uname}! I have your full profile, ${userDeals?.length||0} deals${ghostCount > 0 ? ` (${ghostCount} ghost${ghostCount>1?'s':''} to follow up)` : ''} and market data loaded. What do you want to improve?`
+        : (T.aiWelcome || 'Hello! I\'m your SponsorKit AI assistant. What do you want to know?'),
+      es: uname
+        ? `¡Hola ${uname}! Tengo tu perfil, ${userDeals?.length||0} acuerdos${ghostCount > 0 ? ` (${ghostCount} sin respuesta)` : ''} y datos del mercado. ¿Qué quieres mejorar?`
+        : (T.aiWelcome || ''),
+      de: uname
+        ? `Hallo ${uname}! Ich habe dein Profil, ${userDeals?.length||0} Deals${ghostCount > 0 ? ` (${ghostCount} ohne Antwort)` : ''} und Marktdaten geladen. Was möchtest du optimieren?`
+        : (T.aiWelcome || '')
+    };
+    wb.textContent = welcomes[currentLang] || welcomes.fr;
+  }
+  // AI context
+  updateAIContext();
+}
+
+// geo detection via timezone
+function geoDetect() {
+  try {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+    if (/America\//.test(tz) || /US/.test(tz)) { if (!LANG[navigator.language?.slice(0,2)]) currentLang = 'en'; }
+    else if (/Europe\/Madrid|Europe\/Lisbon/.test(tz)) currentLang = 'es';
+    else if (/Europe\/Berlin|Europe\/Vienna|Europe\/Zurich/.test(tz)) currentLang = 'de';
+    else if (/Europe\/Paris|Europe\/Brussels/.test(tz)) currentLang = 'fr';
+  } catch(e) {}
+  applyTranslations();
+}
+
+// ── COOKIE CONSENT ─────────────────────────────────────────────────────────
+function acceptAll() {
+  const consent = {essential:true,analytics:true,marketing:true,ts:Date.now()};
+  localStorage.setItem('ck', JSON.stringify(consent));
+  hideCookie();
+  fetch(API_BASE + '/api/events', {method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({type:'consent',data:{action:'accept_all',analytics:true,marketing:true}})
+  }).catch(()=>{});
+}
+function rejectCookies() {
+  const consent = {essential:true,analytics:false,marketing:false,ts:Date.now()};
+  localStorage.setItem('ck', JSON.stringify(consent));
+  hideCookie();
+  fetch(API_BASE + '/api/events', {method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({type:'consent',data:{action:'reject',analytics:false,marketing:false}})
+  }).catch(()=>{});
+}
+function saveCookies() {
+  const ana = document.getElementById('cookieAna').checked;
+  const mkt = document.getElementById('cookieMkt').checked;
+  localStorage.setItem('ck', JSON.stringify({essential:true,analytics:ana,marketing:mkt,ts:Date.now()}));
+  hideCookie();
+  fetch(API_BASE + '/api/events', {method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({type:'consent',data:{action:'custom',analytics:ana,marketing:mkt}})
+  }).catch(()=>{});
+}
+function hideCookie() {
+  document.getElementById('cookieOverlay').style.display='none';
+}
+// ── API BASE (auto-détecte prod vs local) ─────────────────────────────────
+const API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:3000' : '';
+
+function trackEvent(cat, action, extra) {
+  // Stocker localement (fallback)
+  const events = JSON.parse(localStorage.getItem('sk_events') || '[]');
+  events.push({cat,action,ts:Date.now(),page:currentPage,lang:currentLang});
+  if (events.length > 500) events.splice(0, events.length-500);
+  localStorage.setItem('sk_events', JSON.stringify(events));
+  const views = JSON.parse(localStorage.getItem('sk_views') || '{}');
+  if (!views[currentPage]) views[currentPage] = 0;
+  views[currentPage]++;
+  localStorage.setItem('sk_views', JSON.stringify(views));
+
+  // Envoyer au serveur (fire & forget, non bloquant)
+  const ck = JSON.parse(localStorage.getItem('ck') || 'null');
+  if (ck?.analytics !== false) {
+    fetch(API_BASE + '/api/events', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        type: cat,
+        data: { action, page: currentPage, lang: currentLang, ...extra }
+      })
+    }).catch(() => {}); // silencieux si pas de réseau
+  }
+}
+
+// ── NAV ────────────────────────────────────────────────────────────────────
+let currentPage = 'dashboard';
+function sw(name, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  if (el) el.classList.add('active');
+  currentPage = name;
+  closeSidebar();
+  trackEvent('nav', name);
+  if (name === 'integrations') { loadEmailConnections(); loadSocialConnections(); checkSocialReturn(); }
+  if (name === 'notifs') loadNotifications();
+  if (name === 'sponsors') loadSponsorMatches();
+  if (name === 'automations') loadAutomationSettings();
+}
+function setMobActive(el) {
+  document.querySelectorAll('.mob-item').forEach(m => m.classList.remove('active'));
+  el.classList.add('active');
+}
+function openSidebar() {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebarOverlay').classList.add('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+}
+
+// ── PRICING ────────────────────────────────────────────────────────────────
+function upP() {
+  const s=parseInt(document.getElementById('sr').value);
+  const e=parseFloat(document.getElementById('er').value);
+  const v=parseInt(document.getElementById('vr').value);
+  const n=parseFloat(document.getElementById('ns').value);
+  document.getElementById('sv').textContent=s.toLocaleString(currentLang);
+  document.getElementById('ev').textContent=e.toFixed(1)+'%';
+  document.getElementById('vv').textContent=v.toLocaleString(currentLang);
+  const b=(v/1000)*8*n*(1+(e-2)*0.15);
+  document.getElementById('pi').textContent=(Math.round(b*0.5/50)*50).toLocaleString(currentLang)+' – '+(Math.round(b*0.8/50)*50).toLocaleString(currentLang)+' €';
+  document.getElementById('pd').textContent=(Math.round(b*1.5/50)*50).toLocaleString(currentLang)+' – '+(Math.round(b*2.5/50)*50).toLocaleString(currentLang)+' €';
+  document.getElementById('ps').textContent=(Math.round(b*3.5/100)*100).toLocaleString(currentLang)+' – '+(Math.round(b*6/100)*100).toLocaleString(currentLang)+' €';
+  const msgs={
+    fr:['Profil solide. Mets en avant ton engagement dans tes pitchs.','Excellent engagement ! Tu peux viser les marques premium.','Audience en croissance. Idéal pour des deals de série.'],
+    en:['Solid profile. Highlight your engagement in your pitches.','Excellent engagement! You can target premium brands.','Growing audience. Ideal for series deals.'],
+    es:['Perfil sólido. Destaca tu engagement en tus pitches.','¡Excelente engagement! Puedes apuntar a marcas premium.','Audiencia en crecimiento. Ideal para deals en serie.'],
+    de:['Solides Profil. Hebe dein Engagement in deinen Pitches hervor.','Ausgezeichnetes Engagement! Du kannst Premium-Marken ansprechen.','Wachsendes Publikum. Ideal für Serie-Deals.']
+  };
+  const arr=msgs[currentLang]||msgs.fr;
+  // Dynamic insight based on actual engagement level
+  let insightIdx = 0;
+  if (e >= 7) insightIdx = 1;
+  else if (s < 10000) insightIdx = 2;
+  document.getElementById('pa').textContent=arr[insightIdx];
+
+  // Trigger AI pricing insight if user has real data (debounced)
+  clearTimeout(upP._aiTimer);
+  upP._aiTimer = setTimeout(() => generatePricingInsight(s, e, v, n), 1200);
+}
+
+let _pricingInsightActive = false;
+async function generatePricingInsight(subs, eng, views, nicheM) {
+  const paEl = document.getElementById('pa');
+  if (!paEl || _pricingInsightActive) return;
+  _pricingInsightActive = true;
+  const niche = userProfile?.niche || document.getElementById('ns')?.selectedOptions?.[0]?.text || 'général';
+  const paidCount = userDeals ? userDeals.filter(d => d.status === 'paid').length : 0;
+  const avgDeal = paidCount > 0 ? Math.round(userDeals.filter(d=>d.status==='paid').reduce((s,d)=>s+(d.amount||0),0) / paidCount) : 0;
+  const contextLine = avgDeal > 0 ? `Deals signés passés : ${paidCount}, montant moyen : ${avgDeal}€. ` : '';
+
+  const prompt = `Créateur ${niche} — ${subs.toLocaleString()} abonnés, ${eng}% engagement, ${views.toLocaleString()} vues/vidéo. ${contextLine}En 1 phrase courte et percutante, donne le conseil de pricing le plus important pour ce profil. Sois direct, pas de formules génériques. Réponds UNIQUEMENT avec la phrase.`;
+  try {
+    const res = await fetch(API_BASE + '/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: `Expert en négociation de sponsoring. ${T.aiPromptLang||'Réponds en français.'}`, messages: [{ role:'user', content: prompt }] })
+    });
+    const data = await res.json();
+    const insight = data.content?.[0]?.text?.trim();
+    if (insight && paEl) paEl.textContent = insight;
+  } catch(e) { /* keep static message */ }
+  finally { _pricingInsightActive = false; }
+}
+
+
+async function handleGenPitch(btn) {
+  const orig = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader-2" style="animation:spin 1s linear infinite"></i> Génération...';
+  try { await genPitch(); } finally {
+    btn.disabled = false;
+    btn.innerHTML = orig;
+  }
+}
+async function genPitch() {
+  const b = document.getElementById('bn').value || 'la marque';
+  const c = document.getElementById('ct2').value;
+  const a = document.getElementById('ka').value;
+
+  // Real creator data
+  const name = userProfile?.first_name || userProfile?.channel_name || 'Alex Martin';
+  const subs = userProfile?.subscribers ? userProfile.subscribers.toLocaleString() : '45 000';
+  const eng = userProfile?.engagement_rate ? userProfile.engagement_rate + '%' : '4,8%';
+  const niche = userProfile?.niche || 'Tech & Productivité';
+  const platform = userProfile?.platform || 'YouTube';
+  const views = userProfile?.avg_views ? userProfile.avg_views.toLocaleString() : '18 000';
+
+  // Stats on past deals for credibility angle
+  const paidDeals = userDeals ? userDeals.filter(d => d.status === 'paid').length : 0;
+  const dealCredibility = paidDeals > 0 ? `\n- Past brand partnerships: ${paidDeals} completed successfully` : '';
+
+  const po = document.getElementById('po');
+  po.textContent = '...';
+  trackEvent('pitch','generate');
+
+  const langInstructions = {
+    fr: 'Rédige en français. Objet de l\'email en français.',
+    en: 'Write in English.',
+    es: 'Escribe en español.',
+    de: 'Schreibe auf Deutsch.'
+  };
+
+  const prompt = `${langInstructions[currentLang] || langInstructions.fr}
+
+Tu es un expert en négociation de sponsoring pour créateurs de contenu. Rédige un email de prospection professionnel et percutant.
+
+Créateur : ${name}
+Plateforme : ${platform}
+Abonnés : ${subs}
+Vues moyennes : ${views}/vidéo
+Engagement : ${eng}
+Niche : ${niche}${dealCredibility}
+
+Marque cible : ${b}
+Type de deal souhaité : ${c}
+Argument clé / valeur ajoutée : ${a || 'partenariat naturel avec la niche'}
+
+Instructions :
+- L'email doit faire 150–200 mots maximum
+- Commence par "Objet : ..." puis l'email
+- Personnalise pour ${b} spécifiquement (pourquoi CETTE marque avec ce créateur)
+- Mentionne les vrais chiffres (abonnés, engagement, vues)
+- Termine par un call-to-action clair (appel 15min, réponse, etc.)
+- Ton : professionnel mais humain, pas de formules creuses
+- Signe avec le nom du créateur
+
+Réponds UNIQUEMENT avec l'email (objet + corps), sans introduction ni explication.`;
+
+  try {
+    const res = await fetch(API_BASE + '/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        system: `Tu es un expert en sponsoring pour créateurs. Tu génères des emails de pitch percutants et personnalisés. ${langInstructions[currentLang] || langInstructions.fr}`,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || '';
+    po.textContent = reply;
+  } catch(e) {
+    // Fallback to template if API fails
+    const fallback = {
+      fr: `Objet : Collaboration ${b} × ${name}\n\nBonjour,\n\nJe crée du contenu ${niche} pour ${subs} abonnés sur ${platform} avec ${eng} d'engagement.\n\n${a || `Un partenariat avec ${b} aurait beaucoup de sens pour mon audience.`}\n\nUne ${c} avec ${b} serait une belle opportunité. Disponible pour un échange de 15 minutes ?\n\n${name}`,
+      en: `Subject: Collaboration ${b} × ${name}\n\nHello,\n\nI create ${niche} content for ${subs} subscribers on ${platform} with ${eng} engagement.\n\n${a || `A partnership with ${b} would resonate strongly with my audience.`}\n\nA ${c} with ${b} would make a lot of sense. Available for a 15-minute chat?\n\n${name}`
+    };
+    po.textContent = fallback[currentLang] || fallback.fr;
+  }
+}
+function cpPitch() {
+  navigator.clipboard.writeText(document.getElementById('po').textContent).then(()=>{
+    const btn=document.getElementById('cpb');
+    const saved=btn.innerHTML;
+    btn.innerHTML='<i class="ti ti-check"></i> ✓';
+    setTimeout(()=>{btn.innerHTML=saved;},2000);
+  });
+  trackEvent('pitch','copy');
+}
+
+// ── CHAT ───────────────────────────────────────────────────────────────────
+let CONTEXT='';
+function updateAIContext() {
+  // Build dynamic context from real user data when available
+  const name = userProfile?.first_name || userProfile?.channel_name || 'Créateur';
+  const platform = userProfile?.platform || 'YouTube';
+  const subs = userProfile?.subscribers ? userProfile.subscribers.toLocaleString() : '?';
+  const eng = userProfile?.engagement_rate ? userProfile.engagement_rate + '%' : '?';
+  const views = userProfile?.avg_views ? userProfile.avg_views.toLocaleString() : '?';
+  const niche = userProfile?.niche || '?';
+  const bio = userProfile?.bio ? `\n- Bio: ${userProfile.bio}` : '';
+  const location = userProfile?.location ? `\n- Location: ${userProfile.location}` : '';
+
+  // Build deals section from real deals or fallback
+  let dealsSection = '';
+  if (userDeals && userDeals.length > 0) {
+    const totalRevenue = userDeals.reduce((s, d) => s + (d.amount || 0), 0);
+    const paidRevenue = userDeals.filter(d => d.status === 'paid').reduce((s, d) => s + (d.amount || 0), 0);
+    const activeDeals = userDeals.filter(d => ['signed','ongoing','negotiation','in_progress'].includes(d.status));
+    const ghostDeals = userDeals.filter(d => d.status === 'ghost');
+    dealsSection = `\nRevenue portfolio: ${totalRevenue.toLocaleString()}€ total · ${paidRevenue.toLocaleString()}€ paid\nActive deals: ${activeDeals.length} · Ghosted: ${ghostDeals.length}\n\nCurrent deals:\n` +
+      userDeals.slice(0, 8).map((d, i) => {
+        const contact = d.contact_email ? ` (contact: ${d.contact_email})` : '';
+        const deadline = d.deadline ? ` · deadline ${d.deadline}` : '';
+        const days = d.last_contact_days ? ` · no reply ${d.last_contact_days}d` : '';
+        return `${i+1}. ${d.brand_name || d.brand || 'Brand'} — ${(d.amount||0).toLocaleString()}€ — ${d.format || d.type || 'deal'} — Status: ${d.status}${deadline}${days}${contact}`;
+      }).join('\n');
+  } else {
+    dealsSection = `\nCurrent deals: none yet — help the creator land their first sponsors.`;
+  }
+
+  // Compute recommended rates dynamically
+  const subsNum = userProfile?.subscribers || 45000;
+  const engNum = userProfile?.engagement_rate || 4.8;
+  const viewsNum = userProfile?.avg_views || 18000;
+  const nicheMultiplier = parseFloat(document.getElementById('ns')?.value || '1.1');
+  const base = (viewsNum / 1000) * 8 * nicheMultiplier * (1 + (engNum - 2) * 0.15);
+  const rateInteg = `${Math.round(base*0.5/50)*50}–${Math.round(base*0.8/50)*50}€`;
+  const rateDedic = `${Math.round(base*1.5/50)*50}–${Math.round(base*2.5/50)*50}€`;
+  const rateSeries = `${Math.round(base*3.5/100)*100}–${Math.round(base*6/100)*100}€`;
+
+  CONTEXT = `You are the AI assistant integrated into SponsorKit, a sponsorship management platform for content creators. ${T.aiPromptLang||'Always respond in French.'}
+
+Creator profile — ${name}:
+- Platform: ${platform}
+- Subscribers: ${subs}
+- Engagement rate: ${eng}
+- Average views per video: ${views}
+- Niche: ${niche}${bio}${location}
+
+${dealsSection}
+
+Recommended rates (based on real metrics):
+- Integration 30–60s: ${rateInteg}
+- Dedicated video: ${rateDedic}
+- Series (3 videos): ${rateSeries}
+
+Your role: expert sponsorship coach for this specific creator. Give advice tailored to their real numbers and current deals.
+- For ghosted deals: suggest follow-up strategies with concrete timelines
+- For active negotiations: help optimize deal value and terms
+- For prospecting: suggest brands that match their niche and audience size
+- Always be concise and actionable. Max 4 sentences unless a structured list adds clarity.
+- Never invent data not listed above. If data is missing (?), acknowledge it and ask the creator.`;
+}
+
+// Persistent conversation history (session only)
+const HIST_KEY = 'sk_chat_history';
+let history = (() => { try { return JSON.parse(sessionStorage.getItem(HIST_KEY)) || []; } catch(e) { return []; } })();
+let isLoading=false;
+let selectedAgent='';
+
+function autoResize(el){el.style.height='40px';el.style.height=Math.min(el.scrollHeight,100)+'px'}
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg(selectedAgent||undefined)}}
+function askSugg(el){document.getElementById('chat-input').value=el.textContent;sendMsg(selectedAgent||undefined)}
+function selectAgent(el, agent){
+  selectedAgent = agent;
+  document.querySelectorAll('#agent-selector .agent-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function saveHistory() {
+  try { sessionStorage.setItem(HIST_KEY, JSON.stringify(history.slice(-40))); } catch(e) {}
+}
+
+function updateMsgCounter() {
+  const el = document.getElementById('msg-counter');
+  if (!el) return;
+  const userMsgs = history.filter(m => m.role === 'user').length;
+  if (userMsgs > 0) { el.style.display = 'inline'; el.textContent = userMsgs + ' msg' + (userMsgs > 1 ? 's' : ''); }
+  else { el.style.display = 'none'; }
+}
+
+function clearChat() {
+  if (!confirm(currentLang === 'fr' ? 'Effacer la conversation ?' : 'Clear the conversation?')) return;
+  history = [];
+  saveHistory();
+  const msgs = document.getElementById('chat-msgs');
+  msgs.innerHTML = `<div class="msg ai"><div class="msg-avatar ai"><i class="ti ti-sparkles" style="font-size:12px"></i></div><div><div class="msg-bubble">—</div><span class="msg-time">${new Date().toLocaleTimeString(currentLang,{hour:'2-digit',minute:'2-digit'})}</span></div></div>`;
+  updateChatWelcome();
+  updateMsgCounter();
+  document.getElementById('suggestions').style.display = 'flex';
+  const qa = document.getElementById('quick-actions');
+  if (qa) qa.style.display = 'flex';
+}
+
+async function runAutoTask(type) {
+  const tasks = {
+    followup: () => {
+      const ghosts = userDeals ? userDeals.filter(d => d.status === 'ghost') : [];
+      if (ghosts.length === 0) return currentLang === 'fr' ? 'Tu n\'as aucun deal ghost pour le moment 🎉' : 'No ghost deals right now 🎉';
+      const list = ghosts.map(d => `- ${d.brand||d.brand_name} (${(d.amount||0).toLocaleString()}€, ${d.format||'deal'})`).join('\n');
+      return currentLang === 'fr'
+        ? `Génère un email de relance court et percutant pour chacun de ces deals sans réponse. Adapte le ton selon le délai (plus urgent si > 14 jours) :\n${list}`
+        : `Generate a short, punchy follow-up email for each of these ghost deals. Adjust tone by delay (more urgent if > 14 days):\n${list}`;
+    },
+    analyze: () => {
+      const total = userDeals ? userDeals.reduce((s,d)=>s+(d.amount||0),0) : 0;
+      const paid = userDeals ? userDeals.filter(d=>d.status==='paid').reduce((s,d)=>s+(d.amount||0),0) : 0;
+      const byStatus = {};
+      if (userDeals) userDeals.forEach(d => { byStatus[d.status] = (byStatus[d.status]||0) + 1; });
+      return currentLang === 'fr'
+        ? `Analyse complète de mon portefeuille de deals :\n- Total pipeline : ${total.toLocaleString()}€\n- Déjà perçu : ${paid.toLocaleString()}€\n- Répartition : ${Object.entries(byStatus).map(([k,v])=>v+' '+k).join(', ')}\n- Métriques : ${userProfile?.subscribers?.toLocaleString()||'?'} abonnés, ${userProfile?.engagement_rate||'?'}% engagement\n\nQue penses-tu de mes performances ? Quels sont mes points forts et axes d'amélioration ?`
+        : `Full portfolio analysis:\n- Pipeline: ${total.toLocaleString()}€\n- Collected: ${paid.toLocaleString()}€\n- By status: ${Object.entries(byStatus).map(([k,v])=>v+' '+k).join(', ')}\n\nWhat do you think of my performance? Strengths and areas to improve?`;
+    },
+    brands: () => {
+      const niche = userProfile?.niche || 'Tech';
+      const subs = userProfile?.subscribers || 0;
+      const existingBrands = userDeals ? userDeals.map(d=>d.brand||d.brand_name).join(', ') : 'aucun encore';
+      return currentLang === 'fr'
+        ? `Je cherche des marques à prospecter. Mon profil : niche ${niche}, ${subs.toLocaleString()} abonnés. Marques déjà contactées ou partenaires : ${existingBrands}.\n\nPropose-moi 8 marques pertinentes que je n'ai pas encore contactées, avec pour chacune : le format idéal, le tarif estimé, et un argument pour les approcher.`
+        : `I'm looking for brands to pitch. My profile: ${niche} niche, ${subs.toLocaleString()} subscribers. Already worked with: ${existingBrands}.\n\nSuggest 8 relevant brands I haven't contacted yet, with: ideal format, estimated rate, and key pitch angle.`;
+    },
+    rates: () => {
+      const subs = userProfile?.subscribers || 0;
+      const eng = userProfile?.engagement_rate || 0;
+      const views = userProfile?.avg_views || 0;
+      const avgDeal = userDeals && userDeals.length > 0 ? Math.round(userDeals.reduce((s,d)=>s+(d.amount||0),0)/userDeals.length) : 0;
+      return currentLang === 'fr'
+        ? `Optimise mes tarifs. Mes stats : ${subs.toLocaleString()} abonnés, ${eng}% engagement, ${views.toLocaleString()} vues/vidéo. Mon deal moyen actuel : ${avgDeal.toLocaleString()}€.\n\nDonne-moi des tarifs précis et justifiés pour : intégration 30s, intégration 60s, vidéo dédiée, série 3 vidéos, mention newsletter. Est-ce que je sous-facture ?`
+        : `Optimize my rates. Stats: ${subs.toLocaleString()} subscribers, ${eng}% engagement, ${views.toLocaleString()} avg views. Current avg deal: ${avgDeal.toLocaleString()}€.\n\nGive me precise, justified rates for: 30s integration, 60s integration, dedicated video, 3-video series, newsletter mention. Am I undercharging?`;
+    }
+  };
+  const msg = tasks[type]?.();
+  if (!msg) return;
+  const agentMap = { followup: 'followup', analyze: 'analyst', brands: 'prospector', rates: 'analyst' };
+  sw('chat', document.querySelectorAll('.nav-item')[6]);
+  setTimeout(() => {
+    document.getElementById('chat-input').value = msg;
+    sendMsg(agentMap[type]);
+  }, 150);
+}
+
+
+
+function updateChatSuggestions() {
+  const el = document.getElementById('suggestions');
+  if (!el) return;
+  const suggs = [];
+
+  // Contextual suggestions based on real deals
+  const ghostDeals = userDeals ? userDeals.filter(d => d.status === 'ghost') : [];
+  const negDeals = userDeals ? userDeals.filter(d => d.status === 'negotiation') : [];
+  const activeDeals = userDeals ? userDeals.filter(d => ['signed','in_progress','ongoing'].includes(d.status)) : [];
+
+  const labels = { fr:{}, en:{}, es:{}, de:{} };
+  if (ghostDeals.length > 0) {
+    const brand = ghostDeals[0].brand_name || ghostDeals[0].brand || 'ce sponsor';
+    labels.fr.ghost = `Comment relancer ${brand} ?`;
+    labels.en.ghost = `How to follow up with ${brand}?`;
+    labels.es.ghost = `¿Cómo retomar contacto con ${brand}?`;
+    labels.de.ghost = `Wie ${brand} nachfassen?`;
+  }
+  if (negDeals.length > 0) {
+    const brand = negDeals[0].brand_name || negDeals[0].brand || 'ce deal';
+    const amt = negDeals[0].amount ? ` (${negDeals[0].amount.toLocaleString()}€)` : '';
+    labels.fr.neg = `Comment négocier ${brand}${amt} ?`;
+    labels.en.neg = `How to negotiate with ${brand}${amt}?`;
+    labels.es.neg = `¿Cómo negociar con ${brand}${amt}?`;
+    labels.de.neg = `Wie mit ${brand}${amt} verhandeln?`;
+  }
+
+  const lang = currentLang in labels ? currentLang : 'fr';
+  const staticSuggs = {
+    fr: ['Quel tarif pour une intégration 60s ?', 'Trouve-moi des marques à prospecter', 'Analyse mon profil sponsor', 'Comment améliorer mon pitch ?'],
+    en: ['What rate for a 60s integration?', 'Find brands I should pitch', 'Analyse my sponsor profile', 'How to improve my pitch?'],
+    es: ['¿Qué tarifa para una integración de 60s?', 'Encuentra marcas para prospectar', 'Analiza mi perfil de sponsor', '¿Cómo mejorar mi pitch?'],
+    de: ['Welcher Preis für 60s-Integration?', 'Finde Marken zum Ansprechen', 'Analysiere mein Sponsor-Profil', 'Wie verbessere ich meinen Pitch?']
+  };
+
+  const pool = [];
+  if (labels[lang].ghost) pool.push(labels[lang].ghost);
+  if (labels[lang].neg) pool.push(labels[lang].neg);
+  const statics = staticSuggs[lang] || staticSuggs.fr;
+  pool.push(...statics);
+
+  el.innerHTML = pool.slice(0, 4).map(s => `<div class="sugg" onclick="askSugg(this)">${s}</div>`).join('');
+}
+
+
+function addMsg(role,text,agentLabel){
+  const msgs=document.getElementById('chat-msgs');
+  const isUser=role==='user';
+  const div=document.createElement('div');
+  div.className='msg '+(isUser?'user':'ai');
+  const now=new Date().toLocaleTimeString(currentLang,{hour:'2-digit',minute:'2-digit'});
+  const badge = (!isUser && agentLabel) ? `<span class="agent-badge">${agentLabel}</span>` : '';
+  div.innerHTML=`<div class="msg-avatar ${isUser?'usr':'ai'}">${isUser?'AM':'<i class="ti ti-sparkles" style="font-size:12px"></i>'}</div><div>${badge}<div class="msg-bubble">${text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>')}</div><span class="msg-time">${now}</span></div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+function showTyping(){
+  const msgs=document.getElementById('chat-msgs');
+  const div=document.createElement('div');
+  div.className='msg ai';div.id='typing-indicator';
+  div.innerHTML=`<div class="msg-avatar ai"><i class="ti ti-sparkles" style="font-size:12px"></i></div><div><div class="msg-bubble" style="padding:8px 12px"><div class="typing"><span></span><span></span><span></span></div></div></div>`;
+  msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
+}
+function removeTyping(){const t=document.getElementById('typing-indicator');if(t)t.remove()}
+
+async function sendMsg(forcedAgent){
+  if(isLoading)return;
+  const input=document.getElementById('chat-input');
+  const text=input.value.trim();
+  if(!text)return;
+  isLoading=true;input.value='';input.style.height='40px';
+  document.getElementById('send-btn').disabled=true;
+  document.getElementById('suggestions').style.display='none';
+  const qa = document.getElementById('quick-actions');
+  if (qa) qa.style.display = 'none';
+  addMsg('user',text);
+  history.push({role:'user',content:text});
+  saveHistory();
+  updateMsgCounter();
+  showTyping();
+  trackEvent('chat','message');
+  try {
+    // Endpoint multi-agents : mémoire long-terme + historique persistant gérés
+    // côté serveur (Supabase). On envoie le contexte de base (profil/deals).
+    const res=await fetch(API_BASE+'/api/ai/agent-chat',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+(userToken||'')},
+      body:JSON.stringify({ message:text, lang:currentLang, baseContext:CONTEXT, forcedAgent })
+    });
+    const data=await res.json();
+    removeTyping();
+    if (data.error) throw new Error(data.error);
+    const reply=data.reply||(currentLang==='fr'?'Désolé, je n\'ai pas pu répondre.':'Sorry, I could not respond.');
+    const agentLabel = T['agent'+(data.agent ? data.agent.charAt(0).toUpperCase()+data.agent.slice(1) : 'General')] || data.agentLabel;
+    history.push({role:'assistant',content:reply});
+    saveHistory();
+    addMsg('ai',reply,agentLabel);
+    updateMsgCounter();
+  } catch(e){
+    removeTyping();
+    // Fallback : endpoint simple sans mémoire/multi-agents si l'utilisateur n'est pas connecté
+    try {
+      const res2=await fetch(API_BASE+'/api/chat',{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({system:CONTEXT,messages:history.slice(-30)})
+      });
+      const data2=await res2.json();
+      const reply2=data2.content?.[0]?.text||(currentLang==='fr'?'Désolé, je n\'ai pas pu répondre.':'Sorry, I could not respond.');
+      history.push({role:'assistant',content:reply2});
+      saveHistory();
+      addMsg('ai',reply2);
+      updateMsgCounter();
+    } catch(e2){
+      addMsg('ai', currentLang==='fr'?'Erreur de connexion. Vérifie ta connexion et réessaie.':'Connection error. Check your connection and try again.');
+    }
+  }
+  isLoading=false;
+  document.getElementById('send-btn').disabled=false;
+  input.focus();
+}
+
+// Restore previous chat messages from session if any
+function restoreChatHistory() {
+  if (history.length === 0) return;
+  const msgs = document.getElementById('chat-msgs');
+  // Clear welcome and re-render all messages
+  msgs.innerHTML = '';
+  history.forEach(m => addMsg(m.role === 'user' ? 'user' : 'ai', m.content));
+  updateMsgCounter();
+  document.getElementById('suggestions').style.display = 'none';
+  const qa = document.getElementById('quick-actions');
+  if (qa) qa.style.display = 'none';
+}
+
+// ── SUPABASE + AUTH + REAL DATA ───────────────────────────────────────────
+const SUPABASE_URL = window.ENV_SUPABASE_URL || 'REMPLACE_PAR_TON_URL_SUPABASE';
+const SUPABASE_ANON = window.ENV_SUPABASE_ANON || 'REMPLACE_PAR_TA_CLE_ANON';
+const sb = supabase.createClient('https://uinynydhksabcnrglevx.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVpbnlueWRoa3NhYmNucmdsZXZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwNjczOTYsImV4cCI6MjA5NzY0MzM5Nn0.-hNQc9__c9llxvBe8XJZ-0erse6dl-ZXXA47SkY4ukw');let currentUser = null;
+let userProfile = null;
+let userDeals = [];
+let userToken = null;
+
+// Charge le profil et les deals depuis l'API
+async function loadUserData() {
+  try {
+    const [profRes, dealsRes] = await Promise.all([
+      fetch(API_BASE + '/api/profile', { headers: { Authorization: 'Bearer ' + userToken } }),
+      fetch(API_BASE + '/api/deals',   { headers: { Authorization: 'Bearer ' + userToken } })
+    ]);
+    if (profRes.ok)  { const d = await profRes.json();  userProfile = d.profile; }
+    if (dealsRes.ok) { const d = await dealsRes.json(); userDeals = d.deals || []; }
+    renderUserData();
+  } catch(e) { console.warn('Erreur chargement données:', e); }
+}
+
+// Met à jour l'interface avec les vraies données utilisateur
+function renderUserData() {
+  if (!userProfile) return;
+  const name = userProfile.first_name || userProfile.channel_name || currentUser?.email?.split('@')[0] || 'Créateur';
+  // Si des stats vérifiées via OAuth existent, elles priment sur les chiffres déclarés
+  const isVerified = !!userProfile.verified_provider;
+  const subs = userProfile.verified_subscribers ?? userProfile.subscribers ?? 0;
+  const eng = userProfile.verified_engagement_rate ?? userProfile.engagement_rate ?? 0;
+  const views = userProfile.verified_avg_views ?? userProfile.avg_views ?? 0;
+  const niche = userProfile.niche || 'Général';
+  const platform = userProfile.platform || 'YouTube';
+
+  // GREETING
+  const greet = {fr:`Bonjour, ${name} 👋`,en:`Hello, ${name} 👋`,es:`Hola, ${name} 👋`,de:`Hallo, ${name} 👋`};
+  const dh = document.getElementById('dashTitle');
+  if (dh) dh.textContent = greet[currentLang] || greet.fr;
+
+  // Badge "vérifié" dans la sidebar / sous le titre du dashboard
+  const verifiedBadgeEl = document.getElementById('verifiedBadge');
+  if (verifiedBadgeEl) {
+    if (isVerified) {
+      const label = SOCIAL_META?.[userProfile.verified_provider]?.label || userProfile.verified_provider;
+      verifiedBadgeEl.style.display = 'inline-flex';
+      verifiedBadgeEl.title = `Statistiques vérifiées via ${label}`;
+    } else {
+      verifiedBadgeEl.style.display = 'none';
+    }
+  }
+
+  // KPI DASHBOARD
+  if (userDeals && userDeals.length > 0) {
+    const total = userDeals.reduce((s, d) => s + (d.amount || 0), 0);
+    const paid = userDeals.filter(d => d.status === 'paid').reduce((s, d) => s + (d.amount || 0), 0);
+    const active = userDeals.filter(d => ['signed','ongoing','in_progress'].includes(d.status)).length;
+    const nego = userDeals.filter(d => d.status === 'negotiation').length;
+    const ghost = userDeals.filter(d => d.status === 'ghost').length;
+    const revEl = document.getElementById('kpi-revenue');
+    if (revEl) revEl.textContent = total.toLocaleString(currentLang) + ' €';
+    const revTrend = document.getElementById('kpi-revenue-trend');
+    if (revTrend && paid > 0) {
+      revTrend.className = 'sc-d up';
+      revTrend.innerHTML = `<i class="ti ti-check" style="font-size:10px"></i> ${paid.toLocaleString(currentLang)}€ perçus`;
+    }
+    const activeEl = document.getElementById('kpi-active');
+    if (activeEl) activeEl.textContent = active + nego;
+    const negoTxt = document.getElementById('kpi-nego-txt');
+    if (negoTxt) {
+      const labels = {fr:`${nego} en négo${ghost>0?' · '+ghost+' ghost':''}`, en:`${nego} negotiating${ghost>0?' · '+ghost+' ghost':''}`, es:`${nego} negociando`, de:`${nego} in Verhandlung`};
+      negoTxt.textContent = labels[currentLang] || labels.fr;
+    }
+  }
+
+  // ENGAGEMENT KPI
+  const engEl = document.getElementById('kpi-engagement');
+  if (engEl && eng > 0) {
+    engEl.textContent = eng.toFixed(1) + '%';
+    const engTrend = document.getElementById('kpi-eng-trend');
+    const engVs = document.getElementById('kpi-eng-vs');
+    if (engTrend && engVs) {
+      const mult = (eng / 2.5).toFixed(1);
+      if (eng > 3.75) { engTrend.className='sc-d up'; engTrend.querySelector('i').className='ti ti-arrow-up'; engVs.textContent=`${mult}× la moyenne`; }
+      else if (eng < 2.5) { engTrend.className='sc-d dn'; engTrend.querySelector('i').className='ti ti-arrow-down'; engVs.textContent='sous la moyenne'; }
+      else { engTrend.className='sc-d up'; engTrend.querySelector('i').className='ti ti-minus'; engVs.textContent='proche de la moyenne'; }
+    }
+  }
+  const dashEngEl = document.getElementById('dash-eng-val');
+  if (dashEngEl) dashEngEl.textContent = eng > 0 ? eng.toFixed(1) + '% ↑' : '—';
+
+  // SCORE SPONSOR
+  const scoreEl = document.getElementById('kpi-score');
+  if (scoreEl) {
+    let score = 50;
+    if (subs > 100000) score += 20; else if (subs > 10000) score += 10;
+    if (eng > 5) score += 20; else if (eng > 2.5) score += 10;
+    if (views > 10000) score += 10;
+    const dealsDone = userDeals ? userDeals.filter(d => d.status === 'paid').length : 0;
+    score += Math.min(dealsDone * 5, 20);
+    score = Math.min(score, 99);
+    scoreEl.textContent = score + '/100';
+    const scoreTxt = document.getElementById('kpi-score-txt');
+    const scoreInfo = document.getElementById('kpi-score-sub');
+    if (scoreTxt && scoreInfo) {
+      if (score >= 80) { scoreInfo.className='sc-d up'; scoreTxt.textContent='Profil premium'; }
+      else if (score >= 60) { scoreInfo.className='sc-d up'; scoreTxt.textContent='Bon profil'; }
+      else { scoreInfo.className='sc-d'; scoreTxt.textContent='En développement'; }
+    }
+    const msEl = document.getElementById('dash-market-score');
+    if (msEl) msEl.textContent = score + '/100';
+  }
+
+  // CPM ESTIMÉ
+  const cpmEl = document.getElementById('dash-cpm-val');
+  if (cpmEl && views > 0 && eng > 0) {
+    const cpmBase = 8 + (eng - 2) * 1.5;
+    cpmEl.textContent = Math.round(cpmBase) + '–' + Math.round(cpmBase * 1.4) + ' €';
+  }
+
+  // PRICING SLIDERS
+  if (subs > 0 && document.getElementById('sr')) { document.getElementById('sr').value = subs; document.getElementById('sv').textContent = subs.toLocaleString(currentLang); }
+  if (eng > 0 && document.getElementById('er')) { document.getElementById('er').value = eng; document.getElementById('ev').textContent = eng.toFixed(1) + '%'; }
+  if (views > 0 && document.getElementById('vr')) { document.getElementById('vr').value = views; document.getElementById('vv').textContent = views.toLocaleString(currentLang); }
+  const nsEl = document.getElementById('ns');
+  if (nsEl && niche) {
+    const nicheMap = {'tech':2.0,'software':2.0,'finance':1.8,'crypto':1.8,'lifestyle':1.5,'gaming':1.2,'voyage':1.3,'travel':1.3,'food':1.2,'fitness':1.4,'health':1.4,'beauty':1.3};
+    const key = niche.toLowerCase().split(' ')[0];
+    const val = nicheMap[key];
+    if (val) { for (let opt of nsEl.options) { if (parseFloat(opt.value) === val) { opt.selected = true; break; } } }
+  }
+  upP();
+
+  // MEDIA KIT
+  const mkCh = document.querySelector('.mk-head div:first-child');
+  if (mkCh) mkCh.textContent = (userProfile.channel_name || name) + ' — ' + niche;
+  const mkNameInput = document.getElementById('mk-name-input');
+  if (mkNameInput) mkNameInput.value = (userProfile.channel_name || name) + ' — ' + niche;
+  const mkSubsEl = document.getElementById('mk-subs');
+  if (mkSubsEl) mkSubsEl.textContent = subs >= 1000 ? Math.round(subs/1000) + 'K' : (subs || '—');
+  const mkEngEl = document.getElementById('mk-eng');
+  if (mkEngEl) mkEngEl.textContent = eng > 0 ? eng.toFixed(1) + '%' : '—';
+  const mkViewsEl = document.getElementById('mk-views');
+  if (mkViewsEl) mkViewsEl.textContent = views >= 1000 ? Math.round(views/1000) + 'K' : (views || '—');
+
+  // PITCH — pré-remplir l'argument clé
+  const kaEl = document.getElementById('ka');
+  if (kaEl && subs > 0) {
+    const engStr = eng > 0 ? `${eng.toFixed(1)}% d'engagement${eng > 4 ? ' (2× la moyenne)' : ''}` : '';
+    const subsStr = subs >= 1000 ? `${Math.round(subs/1000)}K abonnés` : `${subs} abonnés`;
+    const viewsStr = views > 0 ? `, ${views >= 1000 ? Math.round(views/1000)+'K' : views} vues/vidéo` : '';
+    kaEl.value = `Audience ${niche.toLowerCase()} ${subsStr}${viewsStr}${engStr ? ', ' + engStr : ''}.`;
+  }
+
+  // SIDEBAR
+  document.getElementById('planDesc').textContent = (userProfile.channel_name || name) + ' · ' + platform;
+
+  // IA CONTEXT + SUGGESTIONS + WELCOME
+  updateAIContext();
+  updateChatSuggestions();
+  updateChatWelcome();
+
+  // ALERTES CONTEXTUELLES
+  renderContextualAlerts();
+
+  // DEALS
+  if (userDeals.length > 0) renderDeals();
+
+  // DASHBOARD IA RECO (async)
+  generateDashboardReco();
+}
+
+function updateChatWelcome() {
+  const wb = document.querySelector('#chat-msgs .msg-bubble');
+  if (!wb || history.length > 0) return;
+  const name = userProfile?.first_name || userProfile?.channel_name || null;
+  const ghostCount = userDeals ? userDeals.filter(d => d.status === 'ghost').length : 0;
+  const negoDeals = userDeals ? userDeals.filter(d => d.status === 'negotiation') : [];
+  const totalDeals = userDeals ? userDeals.length : 0;
+  const contextHint = ghostCount > 0
+    ? (currentLang === 'fr' ? ` J'ai repéré ${ghostCount} deal${ghostCount>1?'s':''} fantôme${ghostCount>1?'s':''} à relancer.` : ` I spotted ${ghostCount} ghost deal${ghostCount>1?'s':''} to follow up.`)
+    : negoDeals.length > 0
+    ? (currentLang === 'fr' ? ` Tu as ${negoDeals.length} deal${negoDeals.length>1?'s':''} en cours de négociation.` : ` You have ${negoDeals.length} deal${negoDeals.length>1?'s':''} in negotiation.`)
+    : '';
+  const msgs = {
+    fr: name ? `Bonjour ${name} ! Je connais tes ${totalDeals} deals, tes métriques réelles et les tendances du marché.${contextHint} Par quoi on commence ?` : `Bonjour ! Je suis ton assistant IA SponsorKit. Que veux-tu savoir ?`,
+    en: name ? `Hey ${name}! I have your ${totalDeals} deals, real metrics and market data loaded.${contextHint} Where do you want to start?` : `Hello! I'm your SponsorKit AI. What do you want to know?`,
+    es: name ? `¡Hola ${name}! Tengo tus ${totalDeals} deals y métricas.${contextHint} ¿Por dónde empezamos?` : '',
+    de: name ? `Hallo ${name}! Ich habe deine ${totalDeals} Deals geladen.${contextHint} Womit fangen wir an?` : ''
+  };
+  wb.textContent = msgs[currentLang] || msgs.fr;
+}
+
+function renderContextualAlerts() {
+  const container = document.getElementById('ai-alerts-container');
+  if (!container || !userDeals) return;
+  const alerts = [];
+  const ghostDeals = userDeals.filter(d => d.status === 'ghost');
+  const nearDeadline = userDeals.filter(d => {
+    if (!d.deadline) return false;
+    const days = Math.ceil((new Date(d.deadline) - new Date()) / 86400000);
+    return days >= 0 && days <= 7;
+  });
+  const highValueNego = userDeals.filter(d => d.status === 'negotiation' && d.amount >= 1000);
+  if (ghostDeals.length > 0) {
+    const names = ghostDeals.map(d => d.brand || d.brand_name).join(', ');
+    alerts.push({ color:'var(--orange)', icon:'ti-ghost', pill:'pa',
+      title: currentLang==='fr' ? `${ghostDeals.length} deal${ghostDeals.length>1?'s':''} sans réponse` : `${ghostDeals.length} ghost deal${ghostDeals.length>1?'s':''}`,
+      sub: `${names} — <span style="color:var(--accent);cursor:pointer" onclick="runAutoTask('followup')">${currentLang==='fr'?'Générer les relances →':'Generate follow-ups →'}</span>`,
+      badge: currentLang==='fr' ? 'Action' : 'Action' });
+  }
+  nearDeadline.forEach(d => {
+    const days = Math.ceil((new Date(d.deadline) - new Date()) / 86400000);
+    alerts.push({ color:'var(--red)', icon:'ti-clock', pill:'pr',
+      title: `${currentLang==='fr'?'Deadline proche':'Deadline soon'} — ${d.brand||d.brand_name}`,
+      sub: currentLang==='fr' ? `Dans ${days} jour${days>1?'s':''}` : `In ${days} day${days>1?'s':''}`,
+      badge: currentLang==='fr' ? 'Urgent' : 'Urgent' });
+  });
+  highValueNego.forEach(d => {
+    alerts.push({ color:'var(--accent)', icon:'ti-currency-euro', pill:'pp',
+      title: `${currentLang==='fr'?'Négociation':'Negotiation'} — ${d.brand||d.brand_name}`,
+      sub: `${(d.amount||0).toLocaleString()}€ — <span style="color:var(--accent);cursor:pointer" onclick="document.getElementById('chat-input').value='Aide-moi à négocier avec ${(d.brand||d.brand_name).replace(/'/g,'\'')} pour ${d.amount||0}€';sw('chat',document.querySelectorAll('.nav-item')[6]);setTimeout(()=>sendMsg('negotiator'),100)">${currentLang==='fr'?'Stratégie IA →':'AI strategy →'}</span>`,
+      badge: 'Négo' });
+  });
+  if (alerts.length === 0) { container.innerHTML = ''; return; }
+  container.innerHTML = `<div class="card">${alerts.map(a => `<div class="dr"><div class="notif-dot" style="background:${a.color}"></div><div class="di"><div class="dn2"><i class="ti ${a.icon}" style="font-size:12px;margin-right:4px"></i>${a.title}</div><div class="ds">${a.sub}</div></div><span class="pill ${a.pill}">${a.badge}</span></div>`).join('')}</div>`;
+}
+
+let _dashRecoGenerated = false;
+async function generateDashboardReco() {
+  if (_dashRecoGenerated) return;
+  _dashRecoGenerated = true;
+  const el = document.getElementById('dash-ai-reco');
+  if (!el || !userProfile) return;
+  const subs = userProfile.subscribers || 0;
+  const eng = userProfile.engagement_rate || 0;
+  const ghostCount = userDeals ? userDeals.filter(d => d.status === 'ghost').length : 0;
+  const totalRev = userDeals ? userDeals.reduce((s,d) => s+(d.amount||0), 0) : 0;
+  const negoVal = userDeals ? userDeals.filter(d=>d.status==='negotiation').reduce((s,d)=>s+(d.amount||0),0) : 0;
+  const prompt = `Créateur ${userProfile.niche||'contenu'} — ${subs.toLocaleString()} abonnés, ${eng}% engagement, ${totalRev.toLocaleString()}€ de deals, ${ghostCount} ghost${ghostCount>1?'s':''}${negoVal>0?', '+negoVal.toLocaleString()+'€ en négociation':''}.
+En 1-2 phrases max, donne LA recommandation la plus prioritaire et actionnable pour aujourd'hui. Commence directement par le conseil, pas de préambule.`;
+  try {
+    const res = await fetch(API_BASE + '/api/chat', { method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ system: `Expert sponsoring créateur. ${T.aiPromptLang||'Réponds en français.'}`, messages: [{role:'user',content:prompt}] }) });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text?.trim();
+    if (reply && el) el.textContent = reply;
+  } catch(e) {
+    if (el) el.textContent = eng > 3 ? `Ton engagement de ${eng}% est au-dessus de la moyenne — augmente tes tarifs sur ta prochaine proposition.` : `Relance les ${ghostCount} marques sans réponse : un suivi simple convertit 30% du temps.`;
+  }
+}
+
+// Affiche les vrais deals dans l'interface
+function renderDeals() {
+  const total = userDeals.reduce((s, d) => s + (d.amount || 0), 0);
+  const active = userDeals.filter(d => ['signed','ongoing','negotiation'].includes(d.status)).length;
+
+  // KPIs dashboard
+  const kpiRev = document.querySelector('.sc-val');
+  if (kpiRev && total > 0) kpiRev.textContent = total.toLocaleString(currentLang) + ' €';
+  const kpiActive = document.querySelectorAll('.sc-val')[1];
+  if (kpiActive && active > 0) kpiActive.textContent = active;
+
+  const statusMap = {
+    prospect:'pp',signed:'pg',ongoing:'pa',negotiation:'pp',ghost:'pgy',paid:'pg',cancelled:'pr'
+  };
+  const statusLabel = {
+    fr:{prospect:'Prospect',signed:'Signé',ongoing:'En cours',negotiation:'Négo',ghost:'Ghost',paid:'Payé',cancelled:'Annulé'},
+    en:{prospect:'Prospect',signed:'Signed',ongoing:'Ongoing',negotiation:'Negotiating',ghost:'Ghost',paid:'Paid',cancelled:'Cancelled'},
+    es:{prospect:'Prospecto',signed:'Firmado',ongoing:'En curso',negotiation:'Negociando',ghost:'Ghost',paid:'Pagado',cancelled:'Cancelado'},
+    de:{prospect:'Interessent',signed:'Unterzeichnet',ongoing:'Laufend',negotiation:'Verhandlung',ghost:'Ghost',paid:'Bezahlt',cancelled:'Storniert'}
+  };
+
+  const colors = ['rgba(127,111,255,.15)','rgba(46,216,168,.1)','rgba(245,158,75,.1)','rgba(240,94,94,.1)','rgba(96,165,250,.1)'];
+  const textColors = ['#7f6fff','#2ed8a8','#f59e4b','#f05e5e','#60a5fa'];
+
+  // Deals page list
+  const dealsCard = document.querySelector('#page-deals .card');
+  if (dealsCard && userDeals.length > 0) {
+    dealsCard.innerHTML = userDeals.map((d, i) => {
+      const initials = d.brand.slice(0,2).toUpperCase();
+      const ci = i % colors.length;
+      const sl = (statusLabel[currentLang] || statusLabel.fr)[d.status] || d.status;
+      const sc = statusMap[d.status] || 'pgy';
+      return `<div class="dr">
+        <div class="bl" style="background:${colors[ci]};color:${textColors[ci]}">${initials}</div>
+        <div class="di">
+          <div class="dn2">${d.brand}</div>
+          <div class="ds">${d.contact_email || '—'} · ${d.format || 'Intégration'}${d.deadline ? ' · ' + new Date(d.deadline).toLocaleDateString(currentLang) : ''}</div>
+        </div>
+        <div class="da">${d.amount ? d.amount.toLocaleString(currentLang) + ' €' : '—'}</div>
+        <span class="pill ${sc}">${sl}</span>
+        <button onclick="editDeal('${d.id}')" style="background:none;border:none;cursor:pointer;color:var(--text3);margin-left:4px;font-size:13px" title="Modifier"><i class="ti ti-edit"></i></button>
+        <button onclick="deleteDeal('${d.id}')" style="background:none;border:none;cursor:pointer;color:var(--red);font-size:13px" title="Supprimer"><i class="ti ti-trash"></i></button>
+      </div>`;
+    }).join('') + `<div style="padding:12px 0;border-top:1px solid var(--border);margin-top:4px">
+      <button class="btn-p" onclick="openAddDeal()" style="width:100%;justify-content:center"><i class="ti ti-plus"></i> <span>Ajouter un deal</span></button>
+    </div>`;
+  } else if (dealsCard) {
+    dealsCard.innerHTML = `<div style="text-align:center;padding:32px;color:var(--text3)">
+      <i class="ti ti-briefcase" style="font-size:32px;display:block;margin-bottom:10px;opacity:.4"></i>
+      <div style="margin-bottom:14px">Aucun deal pour l'instant</div>
+      <button class="btn-p" onclick="openAddDeal()" style="margin:0 auto;display:flex"><i class="ti ti-plus"></i> Ajouter mon premier deal</button>
+    </div>`;
+  }
+
+  // Deals récents (dashboard)
+  const recentCard = document.querySelector('#page-dashboard .card:first-child');
+  if (recentCard) {
+    const recent = userDeals.slice(0, 3);
+    if (recent.length > 0) {
+      const rows = recent.map((d, i) => {
+        const ci = i % colors.length;
+        const sl = (statusLabel[currentLang] || statusLabel.fr)[d.status] || d.status;
+        const sc = statusMap[d.status] || 'pgy';
+        return `<div class="dr">
+          <div class="bl" style="background:${colors[ci]};color:${textColors[ci]}">${d.brand.slice(0,2).toUpperCase()}</div>
+          <div class="di"><div class="dn2">${d.brand}</div><div class="ds">${d.format || 'Deal'}</div></div>
+          <div class="da">${d.amount ? d.amount.toLocaleString(currentLang) + ' €' : '—'}</div>
+          <span class="pill ${sc}">${sl}</span>
+        </div>`;
+      }).join('');
+      const ch = recentCard.querySelector('.ch');
+      const existing = recentCard.querySelectorAll('.dr');
+      existing.forEach(e => e.remove());
+      recentCard.insertAdjacentHTML('beforeend', rows);
+    }
+  }
+}
+
+// ── MODAL AJOUT/EDIT DEAL ───────────────────────────────────────────────
+function openAddDeal(dealId) {
+  const deal = dealId ? userDeals.find(d => d.id === dealId) : null;
+  const title = deal ? 'Modifier le deal' : 'Nouveau deal';
+  const modal = document.createElement('div');
+  modal.id = 'dealModal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);z-index:9998;display:flex;align-items:center;justify-content:center;padding:20px';
+  modal.innerHTML = `
+    <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:28px;width:100%;max-width:460px;box-shadow:0 20px 60px rgba(0,0,0,.6)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <div style="font-family:var(--font-display);font-size:17px;font-weight:700">${title}</div>
+        <button onclick="document.getElementById('dealModal').remove()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:20px"><i class="ti ti-x"></i></button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div style="grid-column:1/-1"><label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">MARQUE *</label>
+          <input id="dm_brand" type="text" value="${deal?.brand||''}" placeholder="NordLayer, Squarespace..."></div>
+        <div><label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">MONTANT (€)</label>
+          <input id="dm_amount" type="number" value="${deal?.amount||''}" placeholder="1200"></div>
+        <div><label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">STATUT</label>
+          <select id="dm_status" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:8px 12px;color:var(--text)">
+            ${['prospect','negotiation','signed','ongoing','paid','ghost','cancelled'].map(s =>
+              `<option value="${s}" ${deal?.status===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`).join('')}
+          </select></div>
+        <div style="grid-column:1/-1"><label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">FORMAT</label>
+          <select id="dm_format" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:8px 12px;color:var(--text)">
+            ${['Intégration 30-60s','Vidéo dédiée','Série de vidéos','Newsletter','Post Instagram','Stories','Podcast mention'].map(f =>
+              `<option ${deal?.format===f?'selected':''}>${f}</option>`).join('')}
+          </select></div>
+        <div><label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">EMAIL CONTACT</label>
+          <input id="dm_email" type="email" value="${deal?.contact_email||''}" placeholder="contact@marque.com"></div>
+        <div><label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">DEADLINE</label>
+          <input id="dm_deadline" type="date" value="${deal?.deadline?.slice(0,10)||''}"></div>
+        <div style="grid-column:1/-1"><label style="font-size:11px;color:var(--text3);display:block;margin-bottom:5px">NOTES</label>
+          <textarea id="dm_notes" style="height:60px;resize:vertical" placeholder="Notes internes...">${deal?.notes||''}</textarea></div>
+      </div>
+      <div id="dm_err" style="font-size:12px;color:var(--red);margin:10px 0;display:none"></div>
+      <button id="dm_btn" onclick="saveDeal('${dealId||''}')" class="btn-p" style="width:100%;justify-content:center;margin-top:14px">
+        <i class="ti ti-check"></i> ${deal ? 'Enregistrer' : 'Créer le deal'}
+      </button>
+    </div>`;
+  document.body.appendChild(modal);
+  modal.addEventListener('click', e => { if(e.target===modal) modal.remove(); });
+}
+
+function editDeal(id) { openAddDeal(id); }
+
+async function saveDeal(dealId) {
+  const btn = document.getElementById('dm_btn');
+  const err = document.getElementById('dm_err');
+  const brand = document.getElementById('dm_brand').value.trim();
+  if (!brand) { err.textContent='Nom de marque requis.'; err.style.display='block'; return; }
+  err.style.display='none';
+  btn.disabled = true;
+  btn.innerHTML = '<div style="width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;margin:0 auto"></div>';
+
+  const payload = {
+    brand,
+    amount: parseFloat(document.getElementById('dm_amount').value)||0,
+    status: document.getElementById('dm_status').value,
+    format: document.getElementById('dm_format').value,
+    contact_email: document.getElementById('dm_email').value.trim()||null,
+    deadline: document.getElementById('dm_deadline').value||null,
+    notes: document.getElementById('dm_notes').value.trim()||null
+  };
+
+  const method = dealId ? 'PUT' : 'POST';
+  const body = dealId ? { id: dealId, ...payload } : payload;
+
+  try {
+    const res = await fetch(API_BASE + '/api/deals', {
+      method, headers: { 'Content-Type':'application/json', Authorization: 'Bearer '+userToken },
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+    document.getElementById('dealModal').remove();
+    await loadUserData();
+  } catch(e) {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-check"></i> Enregistrer';
+    err.textContent = e.message; err.style.display='block';
+  }
+}
+
+async function deleteDeal(id) {
+  if (!confirm('Supprimer ce deal ?')) return;
+  await fetch(API_BASE + '/api/deals?id='+id, {
+    method:'DELETE', headers: { Authorization: 'Bearer '+userToken }
+  });
+  await loadUserData();
+}
+
+// ── BUTTON "Nouveau deal" dans nav ─────────────────────────────────────
+const origSw = sw;
+
+// ── INIT PRINCIPAL ─────────────────────────────────────────────────────
+(async function init() {
+  // 1. Auth guard — redirige vers login si pas connecté
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) {
+    window.location.href = '/login.html';
+    return;
+  }
+  currentUser = session.user;
+  userToken = session.access_token;
+
+  // Refresh token automatique
+  sb.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_OUT') { window.location.href = '/login.html'; return; }
+    if (session) userToken = session.access_token;
+  });
+
+  // 2. Cookie banner
+  const ck = localStorage.getItem('ck');
+  if (ck) document.getElementById('cookieOverlay').style.display = 'none';
+
+  // 3. Langue
+  geoDetect();
+
+  // 4. Charger les données réelles
+  await loadUserData();
+  restoreChatHistory();
+  loadNotifications();
+  setInterval(loadNotifications, 60000); // refresh toutes les minutes
+
+  // 5. Pricing init
+  upP();
+
+  // 6. Analytics
+  setTimeout(() => trackEvent('pageview', 'dashboard'), 500);
+
+  // 7. Logout button dans sidebar
+  const planBox = document.querySelector('.plan-box');
+  if (planBox) {
+    planBox.insertAdjacentHTML('afterend', `
+      <div style="padding:8px 10px 10px">
+        <button onclick="doLogout()" style="width:100%;background:transparent;border:1px solid var(--border);border-radius:var(--radius);padding:8px;color:var(--text3);font-size:12px;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s" onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text3)'">
+          <i class="ti ti-logout"></i> Déconnexion
+        </button>
+      </div>`);
+  }
+})();
+
+// ── INTÉGRATIONS EMAIL ─────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════
+// RÉSEAUX SOCIAUX — vérification OAuth (YouTube / Instagram / TikTok)
+// ════════════════════════════════════════════════════════════════════
+const SOCIAL_META = {
+  youtube:   { label: 'YouTube',   icon: 'ti-brand-youtube',   color: '#ff0000' },
+  instagram: { label: 'Instagram', icon: 'ti-brand-instagram', color: '#dc2743' },
+  tiktok:    { label: 'TikTok',    icon: 'ti-brand-tiktok',    color: '#000000' }
+};
+
+async function loadSocialConnections() {
+  const el = document.getElementById('socialConnections');
+  if (!el) return;
+  try {
+    const res = await fetch(API_BASE + '/api/social/connect', {
+      headers: { 'Authorization': 'Bearer ' + userToken }
+    });
+    const data = await res.json();
+    renderSocialConnections(data.connections || []);
+  } catch (e) {
+    el.innerHTML = `<div style="font-size:11.5px;color:var(--text3)">Impossible de charger les connexions sociales.</div>`;
+  }
+}
+
+function renderSocialConnections(connections) {
+  const el = document.getElementById('socialConnections');
+  if (!connections || connections.length === 0) {
+    el.innerHTML = `<div style="font-size:11.5px;color:var(--text3);padding:4px 0">Aucun réseau social vérifié pour l'instant. Tes chiffres affichés sont actuellement déclarés manuellement.</div>`;
+    return;
+  }
+  el.innerHTML = connections.map(c => {
+    const meta = SOCIAL_META[c.provider] || { label: c.provider, icon: 'ti-link', color: 'var(--accent)' };
+    const isError = c.last_sync_status === 'error';
+    const lastSync = c.last_sync ? new Date(c.last_sync).toLocaleString(currentLang) : 'jamais';
+    return `
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg3);border-radius:8px;border:1px solid var(--border)">
+      <div style="width:32px;height:32px;border-radius:8px;background:${meta.color}22;color:${meta.color};display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <i class="ti ${meta.icon}" style="font-size:16px"></i>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12.5px;font-weight:500;color:var(--text);display:flex;align-items:center;gap:5px">
+          ${meta.label}${c.handle ? ' — ' + escapeHtml(c.handle) : ''}
+          <i class="ti ti-rosette-discount-check" style="color:var(--green);font-size:13px" title="Vérifié"></i>
+        </div>
+        <div style="font-size:10px;color:${isError ? 'var(--red)' : 'var(--text3)'}">
+          ${isError ? 'Erreur de synchro — ' + escapeHtml(c.last_sync_error || '') : 'Dernière synchro : ' + lastSync}
+        </div>
+      </div>
+      <button class="btn-g" style="font-size:10.5px;padding:5px 9px" onclick="syncOneSocial('${c.provider}',this)"><i class="ti ti-refresh" style="font-size:11px"></i></button>
+      <button class="btn-g" style="font-size:10.5px;padding:5px 9px;color:var(--red)" onclick="disconnectSocial('${c.provider}')"><i class="ti ti-x" style="font-size:11px"></i></button>
+    </div>`;
+  }).join('');
+}
+
+async function connectSocial(provider) {
+  const noteEl = document.getElementById('socialUnavailableNote');
+  try {
+    const res = await fetch(API_BASE + '/api/social/connect?provider=' + provider, {
+      headers: { 'Authorization': 'Bearer ' + userToken }
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      if (noteEl) {
+        noteEl.style.display = 'block';
+        noteEl.innerHTML = `<i class="ti ti-alert-triangle" style="color:var(--orange)"></i> ${escapeHtml(data.error || 'Cette intégration n\'est pas encore configurée côté serveur.')}`;
+      }
+      return;
+    }
+    if (data.note && noteEl) {
+      noteEl.style.display = 'block';
+      noteEl.innerHTML = `<i class="ti ti-info-circle" style="color:var(--accent)"></i> ${escapeHtml(data.note)}`;
+    }
+    window.location.href = data.url;
+  } catch (e) {
+    if (noteEl) { noteEl.style.display = 'block'; noteEl.textContent = 'Erreur de connexion. Réessaie dans un instant.'; }
+  }
+}
+
+async function disconnectSocial(provider) {
+  if (!confirm(currentLang === 'fr' ? `Déconnecter ${SOCIAL_META[provider]?.label} ? Tes chiffres repasseront en mode déclaratif.` : `Disconnect ${SOCIAL_META[provider]?.label}? Your stats will revert to manually declared.`)) return;
+  try {
+    await fetch(API_BASE + '/api/social/disconnect', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + userToken, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ provider })
+    });
+    loadSocialConnections();
+    loadUserData(); // rafraîchit le dashboard avec les chiffres redevenus déclaratifs
+  } catch (e) {}
+}
+
+async function syncOneSocial(provider, btn) {
+  const icon = btn?.querySelector('i');
+  if (icon) icon.style.animation = 'spin 1s linear infinite';
+  try {
+    await fetch(API_BASE + '/api/social/sync?provider=' + provider, {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + userToken }
+    });
+    await loadSocialConnections();
+    await loadUserData(); // les nouveaux chiffres vérifiés se propagent au dashboard/pricing
+  } catch (e) {
+  } finally {
+    if (icon) icon.style.animation = '';
+  }
+}
+
+async function syncAllSocial(el) {
+  const orig = el.innerHTML;
+  el.innerHTML = '<i class="ti ti-loader-2" style="font-size:12px;animation:spin 1s linear infinite"></i> Synchro...';
+  try {
+    await fetch(API_BASE + '/api/social/sync', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + userToken }
+    });
+    await loadSocialConnections();
+    await loadUserData();
+  } catch (e) {
+  } finally {
+    el.innerHTML = orig;
+  }
+}
+
+// Affiche un message après le retour de redirection OAuth (api/social/callback.js
+// redirige vers index.html?social_connect=success|error&provider=...)
+function checkSocialReturn() {
+  const params = new URLSearchParams(window.location.search);
+  const status = params.get('social_connect');
+  if (!status) return;
+  const provider = params.get('provider');
+  const meta = SOCIAL_META[provider] || { label: provider };
+  if (status === 'success') {
+    alert(`✅ ${meta.label} connecté et vérifié avec succès !`);
+  } else {
+    const msg = params.get('msg') || '';
+    alert(`❌ Échec de connexion ${meta.label}.${msg ? ' (' + msg + ')' : ''}`);
+  }
+  // Nettoie l'URL pour éviter de re-déclencher l'alerte au refresh
+  window.history.replaceState({}, '', window.location.pathname);
+}
+
+async function loadEmailConnections() {
+  try {
+    const res = await fetch(API_BASE + '/api/email/connect', {
+      headers: { Authorization: 'Bearer ' + userToken }
+    });
+    if (!res.ok) return;
+    const { connections } = await res.json();
+    const el = document.getElementById('emailConnections');
+    if (!el) return;
+    if (!connections || connections.length === 0) {
+      el.innerHTML = '<div style="font-size:12px;color:var(--text3);padding:8px 0">Aucun email connecté.</div>';
+      return;
+    }
+    el.innerHTML = connections.map(c => `
+      <div style="display:flex;align-items:center;gap:10px;background:var(--bg3);border-radius:var(--radius);padding:10px 14px">
+        <div style="font-size:20px">${{gmail:'📧',outlook:'💼',imap:'📬'}[c.provider]||'📬'}</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:500;color:var(--text)">${c.email}</div>
+          <div style="font-size:11px;color:var(--text3)">
+            Connecté le ${new Date(c.connected_at).toLocaleDateString('fr')}
+            ${c.last_sync ? ' · Sync: ' + new Date(c.last_sync).toLocaleString('fr') : ' · Jamais synchronisé'}
+          </div>
+        </div>
+        <span class="pill pg">Actif</span>
+      </div>`).join('');
+
+    // Webhook URLs
+    const base = window.location.origin;
+    const su = document.getElementById('stripeWebhookUrl');
+    const pu = document.getElementById('paypalWebhookUrl');
+    if (su) su.textContent = base + '/api/payments/stripe';
+    if (pu) pu.textContent = base + '/api/payments/paypal';
+
+    // Sync status
+    const lastSync = connections.reduce((a, c) => c.last_sync && c.last_sync > (a||'') ? c.last_sync : a, null);
+    const ss = document.getElementById('syncStatus');
+    if (ss && lastSync) ss.textContent = 'Dernière sync : ' + new Date(lastSync).toLocaleString('fr');
+  } catch(e) {
+    console.warn('Email connections error:', e);
+  }
+}
+
+function connectEmail(provider) {
+  fetch(API_BASE + '/api/email/connect?provider=' + provider, {
+    headers: { Authorization: 'Bearer ' + userToken }
+  }).then(r => r.json()).then(data => {
+    if (data.url) window.open(data.url, '_blank', 'width=500,height=600');
+  }).catch(e => alert('Erreur : ' + e.message));
+}
+
+function showImapForm() {
+  const f = document.getElementById('imapForm');
+  if (f) f.style.display = f.style.display === 'none' ? 'block' : 'none';
+}
+
+async function connectImap() {
+  const host = document.getElementById('imapHost').value.trim();
+  const port = parseInt(document.getElementById('imapPort').value) || 993;
+  const email = document.getElementById('imapEmail').value.trim();
+  const password = document.getElementById('imapPass').value;
+  if (!host || !email || !password) return alert('Remplis tous les champs.');
+  const res = await fetch(API_BASE + '/api/email/connect', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + userToken },
+    body: JSON.stringify({ host, port, email, password })
+  });
+  const data = await res.json();
+  if (res.ok) { alert('✅ IMAP connecté !'); loadEmailConnections(); document.getElementById('imapForm').style.display='none'; }
+  else alert('Erreur : ' + data.error);
+}
+
+async function manualSync() {
+  const btn = event.target;
+  btn.disabled = true; btn.innerHTML = '<i class="ti ti-loader"></i> Synchronisation...';
+  try {
+    const res = await fetch(API_BASE + '/api/email/sync', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + userToken }
+    });
+    const data = await res.json();
+    const ss = document.getElementById('syncStatus');
+    if (ss) ss.textContent = 'Sync terminée : ' + new Date().toLocaleString('fr');
+    const sc = document.getElementById('syncChanges');
+    if (sc) {
+      if (data.changes && data.changes.length > 0) {
+        sc.innerHTML = data.changes.map(c =>
+          `<div class="ai-b" style="margin-top:8px"><div class="ai-bh"><i class="ti ti-sparkles" style="font-size:13px"></i> Deal mis à jour</div>
+          <div class="ai-bt"><strong>${c.brand}</strong> : ${c.old_status} → <strong style="color:var(--green)">${c.new_status}</strong><br><span style="color:var(--text3)">${c.reason}</span></div></div>`
+        ).join('');
+        await loadUserData(); // recharger les deals
+      } else {
+        sc.innerHTML = '<div style="font-size:12px;color:var(--text3);margin-top:8px">✅ Aucun changement de statut détecté.</div>';
+      }
+    }
+    await loadNotifications();
+  } catch(e) { alert('Erreur sync : ' + e.message); }
+  btn.disabled = false; btn.innerHTML = '<i class="ti ti-refresh"></i> Syncer maintenant';
+}
+
+function copyWebhook(type) {
+  const el = document.getElementById(type + 'WebhookUrl');
+  if (el) navigator.clipboard.writeText(el.textContent).then(() => alert('✅ URL copiée !'));
+}
+
+// ── NOTIFICATIONS TEMPS RÉEL ────────────────────────────────────────────────
+async function loadNotifications() {
+  try {
+    // On lit depuis Supabase directement (table notifications)
+    const { data, error } = await sb
+      .from('notifications')
+      .select('*')
+      .eq('user_id', currentUser.id)
+      .eq('read', false)
+      .order('created_at', { ascending: false })
+      .limit(10);
+    if (error || !data) return;
+
+    // Badge
+    const badge = document.getElementById('notifBadge');
+    if (badge) badge.textContent = data.length || '';
+
+    // Afficher dans la page alertes
+    const notifCard = document.querySelector('#page-notifs .card');
+    if (notifCard && data.length > 0) {
+      const typeIcons = { deal_status_change: 'ti-refresh', payment_received: 'ti-currency-euro' };
+      const typeColors = { deal_status_change: 'var(--accent)', payment_received: 'var(--green)' };
+      notifCard.innerHTML = data.map(n => `
+        <div class="dr" onclick="markRead('${n.id}')" style="cursor:pointer">
+          <div class="notif-dot" style="background:${typeColors[n.type]||'var(--accent)'}"></div>
+          <div class="di">
+            <div class="dn2">${n.title}</div>
+            <div class="ds">${n.message} · ${new Date(n.created_at).toLocaleString('fr')}</div>
+          </div>
+          <span class="pill pp">Nouveau</span>
+        </div>`).join('');
+    }
+  } catch(e) {}
+}
+
+// ════════════════════════════════════════════════════════════════════
+// SPONSORS IA — moteur de matching
+// ════════════════════════════════════════════════════════════════════
+async function loadSponsorMatches() {
+  const listEl = document.getElementById('sponsor-matches-list');
+  const emptyEl = document.getElementById('sponsor-empty-state');
+  if (!listEl) return;
+  try {
+    const res = await fetch(API_BASE + '/api/ai/sponsors', {
+      headers: { 'Authorization': 'Bearer ' + userToken }
+    });
+    const data = await res.json();
+    renderSponsorMatches(data.matches || []);
+  } catch (e) {
+    listEl.innerHTML = '';
+    if (emptyEl) emptyEl.style.display = 'block';
+  }
+}
+
+function renderSponsorMatches(matches) {
+  const listEl = document.getElementById('sponsor-matches-list');
+  const emptyEl = document.getElementById('sponsor-empty-state');
+  const badge = document.getElementById('sponsorBadge');
+  const active = matches.filter(m => m.status === 'new');
+
+  if (badge) {
+    if (active.length > 0) { badge.style.display = 'inline'; badge.textContent = active.length; }
+    else badge.style.display = 'none';
+  }
+
+  if (!matches || matches.length === 0) {
+    listEl.innerHTML = '';
+    if (emptyEl) emptyEl.style.display = 'block';
+    return;
+  }
+  if (emptyEl) emptyEl.style.display = 'none';
+
+  const statusLabels = {
+    new: { fr:'Nouveau', en:'New', es:'Nuevo', de:'Neu', cls:'pp' },
+    contacted: { fr:'Contacté', en:'Contacted', es:'Contactado', de:'Kontaktiert', cls:'pa' },
+    dismissed: { fr:'Écarté', en:'Dismissed', es:'Descartado', de:'Verworfen', cls:'pgy' },
+    converted: { fr:'Converti', en:'Converted', es:'Convertido', de:'Konvertiert', cls:'pg' }
+  };
+
+  listEl.innerHTML = matches.map(m => {
+    const sponsor = m.sponsor_database || {};
+    const st = statusLabels[m.status] || statusLabels.new;
+    const scoreColor = m.match_score >= 80 ? 'var(--green)' : m.match_score >= 60 ? 'var(--accent)' : 'var(--orange)';
+    return `
+    <div class="card" style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px">
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--text)">${escapeHtml(sponsor.brand_name || '?')}</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px">${escapeHtml(sponsor.sector || '')} · ${(sponsor.formats||[]).join(', ')}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div style="font-size:18px;font-weight:700;color:${scoreColor}">${m.match_score}/100</div>
+          <span class="pill ${st.cls}">${st[currentLang] || st.fr}</span>
+        </div>
+      </div>
+      <div class="ai-box" style="margin-bottom:10px">
+        <div class="ai-bh"><i class="ti ti-sparkles" style="font-size:11px"></i> ${T.whyThisMatch || 'Pourquoi ce match'}</div>
+        <div class="ai-bt">${escapeHtml(m.reasoning || '')}</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;margin-bottom:10px">
+        <span style="color:var(--text3)">${T.suggestedRate || 'Tarif suggéré'}</span>
+        <span style="font-weight:600;color:var(--text)">${(m.suggested_rate||0).toLocaleString(currentLang)} €</span>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn-p" style="font-size:11px;padding:6px 10px" onclick="pitchSponsor('${escapeHtml(sponsor.brand_name||'')}','${m.id}')"><i class="ti ti-sparkles" style="font-size:12px"></i> ${T.generatePitchFor || 'Générer le pitch'}</button>
+        ${m.status === 'new' ? `<button class="btn-g" style="font-size:11px;padding:6px 10px" onclick="updateSponsorStatus('${m.id}','contacted',this)"><i class="ti ti-check" style="font-size:12px"></i> ${T.markContacted || 'Marquer contacté'}</button>
+        <button class="btn-g" style="font-size:11px;padding:6px 10px" onclick="updateSponsorStatus('${m.id}','dismissed',this)"><i class="ti ti-x" style="font-size:12px"></i> ${T.dismiss || 'Écarter'}</button>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function scanSponsors(btn) {
+  const orig = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader-2" style="animation:spin 1s linear infinite"></i> ' + (T.scanning || 'Recherche en cours...');
+  try {
+    const res = await fetch(API_BASE + '/api/ai/sponsors', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + userToken, 'Content-Type': 'application/json' }
+    });
+    const data = await res.json();
+    renderSponsorMatches(data.matches || []);
+    trackEvent('sponsors', 'scan');
+  } catch (e) {
+    alert(T.scanError || 'Erreur lors de la recherche. Réessaie dans un instant.');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = orig;
+  }
+}
+
+async function updateSponsorStatus(matchId, status, btnEl) {
+  try {
+    await fetch(API_BASE + '/api/ai/sponsor-match-status', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + userToken, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ matchId, status })
+    });
+    loadSponsorMatches();
+  } catch (e) {}
+}
+
+function pitchSponsor(brandName, matchId) {
+  // Pré-remplit le pitch builder avec cette marque et bascule sur la page pitch
+  const bnEl = document.getElementById('bn');
+  if (bnEl) bnEl.value = brandName;
+  sw('pitch', document.querySelectorAll('.nav-item')[3]);
+  setTimeout(() => { const b = document.getElementById('gen-pitch-btn'); if (b) b.click(); }, 150);
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str || '';
+  return div.innerHTML;
+}
+
+// ════════════════════════════════════════════════════════════════════
+// AUTOMATISATIONS — toggles activables/désactivables par l'utilisateur
+// ════════════════════════════════════════════════════════════════════
+const AUTOMATION_DEFS = [
+  { key: 'auto_followup', icon: 'ti-send', titleKey: 'autoFollowupTitle', descKey: 'autoFollowupDesc', hasDelay: true },
+  { key: 'auto_pricing_alert', icon: 'ti-currency-euro', titleKey: 'autoPricingTitle', descKey: 'autoPricingDesc' },
+  { key: 'auto_sponsor_scan', icon: 'ti-target-arrow', titleKey: 'autoSponsorTitle', descKey: 'autoSponsorDesc' },
+  { key: 'auto_deal_detection', icon: 'ti-mail-opened', titleKey: 'autoDealTitle', descKey: 'autoDealDesc' },
+  { key: 'auto_payment_tracking', icon: 'ti-credit-card', titleKey: 'autoPaymentTitle', descKey: 'autoPaymentDesc' },
+  { key: 'auto_deadline_alerts', icon: 'ti-clock', titleKey: 'autoDeadlineTitle', descKey: 'autoDeadlineDesc' },
+  { key: 'auto_negotiation_tips', icon: 'ti-bulb', titleKey: 'autoNegoTitle', descKey: 'autoNegoDesc' },
+  { key: 'auto_weekly_report', icon: 'ti-file-report', titleKey: 'autoReportTitle', descKey: 'autoReportDesc' },
+  { key: 'auto_memory_learning', icon: 'ti-brain', titleKey: 'autoMemoryTitle', descKey: 'autoMemoryDesc' }
+];
+
+const AUTOMATION_LABELS = {
+  fr: {
+    autoFollowupTitle: 'Relances automatiques', autoFollowupDesc: "Génère un brouillon de relance pour chaque deal sans réponse depuis X jours.",
+    autoPricingTitle: 'Alerte tarifs sous le marché', autoPricingDesc: "Te prévient si un deal en négociation est en-dessous de ton tarif marché estimé.",
+    autoSponsorTitle: 'Veille sponsors quotidienne', autoSponsorDesc: "Recherche automatiquement de nouvelles marques compatibles avec ton profil.",
+    autoDealTitle: 'Détection de deals par email', autoDealDesc: "Lit tes emails connectés pour créer ou mettre à jour des deals automatiquement.",
+    autoPaymentTitle: 'Suivi des paiements', autoPaymentDesc: "Détecte les paiements reçus via Stripe/PayPal et met à jour le statut des deals.",
+    autoDeadlineTitle: 'Alertes deadlines', autoDeadlineDesc: "T'avertit quand un deal arrive à échéance dans moins de 3 jours.",
+    autoNegoTitle: 'Conseils de négociation proactifs', autoNegoDesc: "L'IA analyse tes négociations en cours et propose des conseils sans que tu demandes.",
+    autoReportTitle: 'Rapport hebdomadaire', autoReportDesc: "Un résumé IA de ta semaine généré chaque lundi, avec tes priorités.",
+    autoMemoryTitle: 'Mémoire IA continue', autoMemoryDesc: "L'IA retient tes préférences et habitudes pour des réponses plus personnalisées au fil du temps.",
+    delayLabel: 'Relancer après', days: 'jours', save: 'Enregistré', saving: 'Enregistrement...'
+  },
+  en: {
+    autoFollowupTitle: 'Automatic follow-ups', autoFollowupDesc: "Drafts a follow-up for each deal with no reply after X days.",
+    autoPricingTitle: 'Below-market rate alerts', autoPricingDesc: "Warns you if a deal in negotiation is below your estimated market rate.",
+    autoSponsorTitle: 'Daily sponsor scanning', autoSponsorDesc: "Automatically finds new brands matching your profile.",
+    autoDealTitle: 'Email deal detection', autoDealDesc: "Reads your connected emails to create or update deals automatically.",
+    autoPaymentTitle: 'Payment tracking', autoPaymentDesc: "Detects Stripe/PayPal payments and updates deal status.",
+    autoDeadlineTitle: 'Deadline alerts', autoDeadlineDesc: "Warns you when a deal is due in less than 3 days.",
+    autoNegoTitle: 'Proactive negotiation tips', autoNegoDesc: "AI analyzes ongoing negotiations and suggests tips unprompted.",
+    autoReportTitle: 'Weekly report', autoReportDesc: "An AI summary of your week, generated every Monday, with priorities.",
+    autoMemoryTitle: 'Continuous AI memory', autoMemoryDesc: "AI remembers your preferences and habits for more personalized answers over time.",
+    delayLabel: 'Follow up after', days: 'days', save: 'Saved', saving: 'Saving...'
+  }
+};
+AUTOMATION_LABELS.es = AUTOMATION_LABELS.en; AUTOMATION_LABELS.de = AUTOMATION_LABELS.en;
+
+let automationSettingsCache = null;
+
+async function loadAutomationSettings() {
+  const listEl = document.getElementById('automations-list');
+  if (!listEl) return;
+  try {
+    const res = await fetch(API_BASE + '/api/ai/automation-settings', {
+      headers: { 'Authorization': 'Bearer ' + userToken }
+    });
+    const data = await res.json();
+    automationSettingsCache = data.settings;
+    renderAutomationSettings();
+    loadAutomationLogs();
+  } catch (e) {
+    listEl.innerHTML = `<div style="padding:16px;text-align:center;color:var(--text3);font-size:12px">${T.loadError || 'Impossible de charger les automatisations.'}</div>`;
+  }
+}
+
+function renderAutomationSettings() {
+  const listEl = document.getElementById('automations-list');
+  const L = AUTOMATION_LABELS[currentLang] || AUTOMATION_LABELS.fr;
+  const s = automationSettingsCache || {};
+
+  listEl.innerHTML = AUTOMATION_DEFS.map(def => {
+    const checked = s[def.key] ? 'checked' : '';
+    const delayRow = def.hasDelay ? `
+      <div style="margin-top:8px;display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text3)">
+        <span>${L.delayLabel}</span>
+        <input type="number" min="1" max="60" value="${s.auto_followup_days || 7}" id="delay-${def.key}"
+          style="width:50px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:3px 6px;color:var(--text);font-size:11px"
+          onchange="updateAutomation('auto_followup_days', parseInt(this.value))">
+        <span>${L.days}</span>
+      </div>` : '';
+    return `
+    <div class="dr" style="align-items:flex-start">
+      <div class="bl" style="background:var(--purple-bg);color:var(--accent)"><i class="ti ${def.icon}" style="font-size:14px"></i></div>
+      <div class="di" style="white-space:normal">
+        <div class="dn2" style="white-space:normal">${L[def.titleKey]}</div>
+        <div class="ds" style="white-space:normal;overflow:visible;text-overflow:initial;line-height:1.5">${L[def.descKey]}</div>
+        ${delayRow}
+      </div>
+      <label class="switch" style="flex-shrink:0">
+        <input type="checkbox" ${checked} onchange="updateAutomation('${def.key}', this.checked)">
+        <span class="switch-slider"></span>
+      </label>
+    </div>`;
+  }).join('');
+}
+
+let automationSaveTimer = null;
+async function updateAutomation(key, value) {
+  if (!automationSettingsCache) automationSettingsCache = {};
+  automationSettingsCache[key] = value;
+  clearTimeout(automationSaveTimer);
+  automationSaveTimer = setTimeout(async () => {
+    try {
+      await fetch(API_BASE + '/api/ai/automation-settings', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + userToken, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ [key]: value })
+      });
+      trackEvent('automation', key + ':' + value);
+    } catch (e) {}
+  }, 400);
+}
+
+async function loadAutomationLogs() {
+  const el = document.getElementById('automation-logs-list');
+  if (!el) return;
+  try {
+    const { data, error } = await sb
+      .from('automation_logs')
+      .select('*')
+      .eq('user_id', currentUser.id)
+      .order('created_at', { ascending: false })
+      .limit(8);
+    if (error || !data || data.length === 0) return;
+
+    const taskLabels = AUTOMATION_LABELS[currentLang] || AUTOMATION_LABELS.fr;
+    const defByKey = Object.fromEntries(AUTOMATION_DEFS.map(d => [d.key, d]));
+
+    el.innerHTML = data.map(log => {
+      const def = defByKey[log.task];
+      const title = def ? taskLabels[def.titleKey] : log.task;
+      const statusColor = log.status === 'success' ? 'var(--green)' : log.status === 'error' ? 'var(--red)' : 'var(--text3)';
+      return `<div class="mr">
+        <span class="ml" style="color:var(--text2)">${title}</span>
+        <span class="mv" style="font-size:10.5px;color:${statusColor};font-weight:400;text-align:right;max-width:55%">${escapeHtml(log.summary || '')}</span>
+      </div>`;
+    }).join('');
+  } catch (e) {}
+}
+
+async function markRead(id) {
+  await sb.from('notifications').update({ read: true }).eq('id', id);
+  loadNotifications();
+}
+
+async function doLogout() {
+  await sb.auth.signOut();
+  localStorage.removeItem('sk_admin_secret');
+  window.location.href = '/login.html';
+}
+</script>
+</body>
+</html>

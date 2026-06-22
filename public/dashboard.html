@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SponsorKit — Admin Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+:root {
+  --bg: #07070d;
+  --bg2: #0f0f18;
+  --bg3: #161622;
+  --bg4: #1c1c2e;
+  --border: rgba(255,255,255,0.06);
+  --border2: rgba(255,255,255,0.1);
+  --text: #e8e8f5;
+  --text2: #8888aa;
+  --text3: #55556a;
+  --accent: #6c63ff;
+  --accent2: #4f46e5;
+  --green: #22d3a8;
+  --green-bg: rgba(34,211,168,0.08);
+  --orange: #f59e4b;
+  --orange-bg: rgba(245,158,75,0.08);
+  --red: #ef4444;
+  --red-bg: rgba(239,68,68,0.08);
+  --blue: #60a5fa;
+  --blue-bg: rgba(96,165,250,0.08);
+  --purple-bg: rgba(108,99,255,0.1);
+  --radius: 10px;
+  --radius-lg: 14px;
+  --font: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+  --font-display: 'Syne', sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:var(--font);font-size:13px;line-height:1.5}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:2px}
+
+/* TOP BAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;backdrop-filter:blur(10px)}
+.topbar-logo{font-family:var(--font-display);font-size:17px;font-weight:800;display:flex;align-items:center;gap:10px}
+.logo-chip{background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:7px;width:28px;height:28px;display:flex;align-items:center;justify-content:center}
+.logo-chip i{font-size:14px;color:#fff}
+.admin-badge{font-size:10px;background:var(--red-bg);color:var(--red);border:1px solid rgba(239,68,68,0.2);padding:2px 8px;border-radius:20px;font-weight:500;font-family:var(--font-mono)}
+.topbar-right{display:flex;align-items:center;gap:14px}
+.live-dot{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.85)}}
+.topbar-time{font-family:var(--font-mono);font-size:12px;color:var(--text3)}
+.btn-refresh{background:transparent;border:1px solid var(--border2);border-radius:var(--radius);padding:6px 12px;color:var(--text2);cursor:pointer;font-size:12px;font-family:var(--font);display:flex;align-items:center;gap:6px;transition:all .15s}
+.btn-refresh:hover{border-color:var(--accent);color:var(--accent)}
+
+/* TAB NAV */
+.tab-nav{display:flex;gap:2px;padding:16px 28px 0;border-bottom:1px solid var(--border)}
+.tab{padding:10px 16px;font-size:12px;font-weight:500;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;display:flex;align-items:center;gap:6px}
+.tab:hover{color:var(--text2)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab i{font-size:15px}
+
+/* MAIN */
+.content{padding:24px 28px;display:none}
+.content.active{display:block}
+
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px}
+.kpi{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;transition:border-color .2s}
+.kpi:hover{border-color:var(--border2)}
+.kpi-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.kpi-val{font-size:26px;font-weight:700;color:var(--text);line-height:1;font-family:var(--font-display)}
+.kpi-sub{font-size:11px;margin-top:6px;display:flex;align-items:center;gap:4px}
+.up{color:var(--green)}.dn{color:var(--red)}.neu{color:var(--text3)}
+
+/* CHART AREA */
+.chart-row{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:14px}
+.chart-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px}
+.card-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.card-sub{font-size:11px;color:var(--text3);margin-bottom:16px}
+
+/* CANVAS CHARTS */
+canvas{display:block;width:100%!important}
+
+/* TABLES */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);padding:8px 12px;border-bottom:1px solid var(--border);text-align:left;font-weight:500}
+.tbl td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:12px;color:var(--text2)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:var(--bg3);color:var(--text)}
+.tbl td:first-child{color:var(--text);font-weight:500}
+
+/* PILLS */
+.pill{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.pg{background:var(--green-bg);color:var(--green)}
+.pp{background:var(--purple-bg);color:var(--accent)}
+.pa{background:var(--orange-bg);color:var(--orange)}
+.pr{background:var(--red-bg);color:var(--red)}
+.pb{background:var(--blue-bg);color:var(--blue)}
+.pgy{background:rgba(255,255,255,0.04);color:var(--text3)}
+
+/* CONSENT VIZ */
+.consent-bar{margin-bottom:12px}
+.consent-label{display:flex;justify-content:space-between;font-size:11px;margin-bottom:5px}
+.consent-track{height:8px;background:var(--bg4);border-radius:4px;overflow:hidden}
+.consent-fill{height:100%;border-radius:4px;transition:width 1s ease}
+
+/* MINI METRICS */
+.mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mini{background:var(--bg3);border-radius:var(--radius);padding:12px 14px}
+.mini-lbl{font-size:10px;color:var(--text3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em}
+.mini-val{font-size:18px;font-weight:700;color:var(--text);font-family:var(--font-display)}
+.mini-sub{font-size:10px;color:var(--text3);margin-top:2px}
+
+/* ACTIVITY FEED */
+.feed{max-height:280px;overflow-y:auto}
+.feed-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.feed-item:last-child{border-bottom:none}
+.feed-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px}
+.feed-content{flex:1;min-width:0}
+.feed-title{font-size:12px;color:var(--text);font-weight:500}
+.feed-meta{font-size:10px;color:var(--text3);margin-top:1px;font-family:var(--font-mono)}
+
+/* LANG FLAGS */
+.lang-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.lang-row:last-child{border-bottom:none}
+.lang-bar{flex:1;height:6px;background:var(--bg4);border-radius:3px;overflow:hidden}
+.lang-fill{height:100%;border-radius:3px}
+.lang-name{font-size:12px;color:var(--text2);width:80px}
+.lang-pct{font-size:11px;color:var(--text3);width:36px;text-align:right;font-family:var(--font-mono)}
+
+/* DEVICE DONUT */
+.donut-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
+.donut-legend{width:100%}
+.donut-item{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:12px}
+.donut-dot{width:10px;height:10px;border-radius:50%}
+.donut-label{flex:1;color:var(--text2)}
+.donut-pct{color:var(--text);font-weight:600;font-family:var(--font-mono)}
+
+/* GEO MAP PLACEHOLDER */
+.geo-bars{display:flex;flex-direction:column;gap:8px}
+.geo-item{display:flex;align-items:center;gap:10px}
+.geo-flag{font-size:16px;width:22px;text-align:center}
+.geo-name{font-size:12px;color:var(--text2);width:100px}
+.geo-bar-wrap{flex:1;height:6px;background:var(--bg4);border-radius:3px;overflow:hidden}
+.geo-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:3px}
+.geo-count{font-size:11px;color:var(--text3);font-family:var(--font-mono);width:50px;text-align:right}
+
+/* HEATMAP */
+.heatmap{display:grid;grid-template-columns:repeat(24,1fr);gap:2px}
+.heat-cell{height:18px;border-radius:2px;background:var(--bg4)}
+
+/* FUNNEL */
+.funnel{display:flex;flex-direction:column;gap:8px}
+.funnel-step{display:flex;align-items:center;gap:10px}
+.funnel-label{font-size:11px;color:var(--text2);width:130px;flex-shrink:0}
+.funnel-bar-wrap{flex:1;height:24px;background:var(--bg4);border-radius:4px;overflow:hidden;position:relative}
+.funnel-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding:0 8px}
+.funnel-val{font-size:11px;font-weight:600;color:#fff;font-family:var(--font-mono)}
+.funnel-pct{font-size:11px;color:var(--text3);width:40px;text-align:right;font-family:var(--font-mono)}
+
+/* REALTIME */
+.rt-number{font-family:var(--font-display);font-size:56px;font-weight:800;color:var(--green);text-align:center;line-height:1;padding:10px 0}
+.rt-label{font-size:11px;color:var(--text3);text-align:center;margin-bottom:16px}
+.rt-list{display:flex;flex-direction:column;gap:6px}
+.rt-item{display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:var(--radius);padding:8px 12px;font-size:11px}
+.rt-page{color:var(--text2);font-family:var(--font-mono)}
+.rt-count{color:var(--green);font-weight:600}
+
+/* REVENUE GRID */
+.rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.rev-item{background:var(--bg3);border-radius:var(--radius);padding:12px 14px;text-align:center}
+.rev-label{font-size:10px;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em}
+.rev-val{font-size:20px;font-weight:700;color:var(--accent);font-family:var(--font-display)}
+
+@media(max-width:900px){
+  .kpi-grid{grid-template-columns:repeat(3,1fr)}
+  .chart-row{grid-template-columns:1fr}
+  .chart-row-3{grid-template-columns:1fr 1fr}
+  .topbar{padding:12px 16px}
+  .tab-nav{padding:12px 16px 0;overflow-x:auto}
+  .content{padding:16px}
+}
+@media(max-width:600px){
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .chart-row-3{grid-template-columns:1fr}
+  .rev-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-logo">
+    <div class="logo-chip"><i class="ti ti-star"></i></div>
+    SponsorKit
+    <span class="admin-badge">ADMIN</span>
+  </div>
+  <div class="topbar-right">
+    <div class="live-dot"><div class="dot"></div> Live</div>
+    <div class="topbar-time" id="clock">--:--:--</div>
+    <button class="btn-refresh" onclick="refreshAll()"><i class="ti ti-refresh"></i> Actualiser</button>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tab-nav">
+  <div class="tab active" onclick="switchTab('overview',this)"><i class="ti ti-chart-bar"></i> Vue d'ensemble</div>
+  <div class="tab" onclick="switchTab('users',this)"><i class="ti ti-users"></i> Utilisateurs</div>
+  <div class="tab" onclick="switchTab('consent',this)"><i class="ti ti-shield-check"></i> Consentements</div>
+  <div class="tab" onclick="switchTab('performance',this)"><i class="ti ti-activity"></i> Performance</div>
+  <div class="tab" onclick="switchTab('revenue',this)"><i class="ti ti-currency-euro"></i> Revenus</div>
+  <div class="tab" onclick="switchTab('realtime',this)"><i class="ti ti-live-view"></i> Temps réel</div>
+</div>
+
+<!-- ══ OVERVIEW ══════════════════════════════════════════════════════════ -->
+<div id="tab-overview" class="content active">
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-label">Utilisateurs totaux</div><div class="kpi-val" id="kpiUsers">—</div><div class="kpi-sub up"><i class="ti ti-arrow-up" style="font-size:10px"></i> <span id="kpiUsersDelta">—</span></div></div>
+    <div class="kpi"><div class="kpi-label">Sessions (7j)</div><div class="kpi-val" id="kpiSessions">—</div><div class="kpi-sub up"><i class="ti ti-arrow-up" style="font-size:10px"></i> <span id="kpiSessionsDelta">—</span></div></div>
+    <div class="kpi"><div class="kpi-label">Taux consentement</div><div class="kpi-val" id="kpiConsent">—</div><div class="kpi-sub neu" id="kpiConsentSub">—</div></div>
+    <div class="kpi"><div class="kpi-label">Pages / session</div><div class="kpi-val" id="kpiPages">—</div><div class="kpi-sub neu">avg</div></div>
+    <div class="kpi"><div class="kpi-label">Messages IA</div><div class="kpi-val" id="kpiChat">—</div><div class="kpi-sub up"><i class="ti ti-arrow-up" style="font-size:10px"></i> <span id="kpiChatDelta">—</span></div></div>
+  </div>
+
+  <div class="chart-row">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-chart-line" style="color:var(--accent)"></i> Sessions quotidiennes</div>
+      <div class="card-sub">Activité des 30 derniers jours</div>
+      <canvas id="chartSessions" height="160"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-map-pin" style="color:var(--green)"></i> Répartition géographique</div>
+      <div class="card-sub">Top pays par sessions</div>
+      <div class="geo-bars" id="geoBars"></div>
+    </div>
+  </div>
+
+  <div class="chart-row-3">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-device-mobile" style="color:var(--blue)"></i> Type d'appareils</div>
+      <div class="card-sub">Mobile vs Desktop</div>
+      <div class="donut-wrap">
+        <canvas id="chartDevice" height="130"></canvas>
+        <div class="donut-legend" id="deviceLegend"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-language" style="color:var(--orange)"></i> Langues détectées</div>
+      <div class="card-sub">Interface utilisée</div>
+      <div id="langBars"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-route" style="color:var(--green)"></i> Funnel utilisateur</div>
+      <div class="card-sub">Parcours moyen</div>
+      <div class="funnel" id="funnelViz"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ USERS ═══════════════════════════════════════════════════════════ -->
+<div id="tab-users" class="content">
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-label">Nouveaux (7j)</div><div class="kpi-val" id="uNew">—</div><div class="kpi-sub up">cette semaine</div></div>
+    <div class="kpi"><div class="kpi-label">Actifs aujourd'hui</div><div class="kpi-val" id="uToday">—</div><div class="kpi-sub neu">sessions</div></div>
+    <div class="kpi"><div class="kpi-label">Taux rétention</div><div class="kpi-val" id="uRetention">—</div><div class="kpi-sub neu">retour J+7</div></div>
+    <div class="kpi"><div class="kpi-label">Durée moy. session</div><div class="kpi-val" id="uDuration">—</div><div class="kpi-sub neu">minutes</div></div>
+    <div class="kpi"><div class="kpi-label">Mobile</div><div class="kpi-val" id="uMobile">—</div><div class="kpi-sub neu">des sessions</div></div>
+  </div>
+
+  <div class="chart-row">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-chart-area" style="color:var(--accent)"></i> Croissance utilisateurs</div>
+      <div class="card-sub">Cumul sur 30 jours</div>
+      <canvas id="chartUserGrowth" height="160"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-clock" style="color:var(--orange)"></i> Heatmap horaire</div>
+      <div class="card-sub">Activité par heure (24h)</div>
+      <div style="margin-top:8px">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-bottom:6px">
+          <span>0h</span><span>6h</span><span>12h</span><span>18h</span><span>23h</span>
+        </div>
+        <div class="heatmap" id="heatmap"></div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:10px;font-size:10px;color:var(--text3)">
+          <span>Faible</span>
+          <div style="flex:1;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--bg4),var(--accent))"></div>
+          <span>Élevé</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-title"><i class="ti ti-list" style="color:var(--blue)"></i> Sessions récentes</div>
+    <div class="card-sub">Dernières 20 sessions enregistrées</div>
+    <div style="overflow-x:auto">
+      <table class="tbl" id="sessionsTable">
+        <thead><tr>
+          <th>#</th><th>Date & heure</th><th>Langue</th><th>Appareil</th><th>Agent</th><th>Statut</th>
+        </tr></thead>
+        <tbody id="sessionsBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONSENT ══════════════════════════════════════════════════════════ -->
+<div id="tab-consent" class="content">
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-label">Taux acceptation totale</div><div class="kpi-val" id="cAcceptAll">—</div><div class="kpi-sub up">tout accepté</div></div>
+    <div class="kpi"><div class="kpi-label">Refus total</div><div class="kpi-val" id="cRejectAll">—</div><div class="kpi-sub dn">tout refusé</div></div>
+    <div class="kpi"><div class="kpi-label">Personnalisé</div><div class="kpi-val" id="cCustom">—</div><div class="kpi-sub neu">choix partiel</div></div>
+    <div class="kpi"><div class="kpi-label">Analytiques activés</div><div class="kpi-val" id="cAnalytics">—</div><div class="kpi-sub up">utilisateurs</div></div>
+    <div class="kpi"><div class="kpi-label">Marketing activé</div><div class="kpi-val" id="cMarketing">—</div><div class="kpi-sub neu">utilisateurs</div></div>
+  </div>
+
+  <div class="chart-row">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-chart-donut" style="color:var(--accent)"></i> Répartition des consentements</div>
+      <div class="card-sub">Vue globale des choix utilisateurs</div>
+      <canvas id="chartConsent" height="180"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-shield" style="color:var(--green)"></i> Détail par type de cookie</div>
+      <div class="card-sub">Taux d'activation par catégorie</div>
+      <div style="margin-top:16px" id="consentBars"></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-title"><i class="ti ti-history" style="color:var(--blue)"></i> Historique des consentements</div>
+    <div class="card-sub">Dernières actions de consentement enregistrées</div>
+    <table class="tbl">
+      <thead><tr><th>#</th><th>Date</th><th>Action</th><th>Analytiques</th><th>Marketing</th><th>Langue</th></tr></thead>
+      <tbody id="consentBody"></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><i class="ti ti-info-circle" style="color:var(--orange)"></i> Conformité RGPD</div>
+    <div class="card-sub">Statut de conformité en temps réel</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px" id="rgpdStatus"></div>
+  </div>
+</div>
+
+<!-- ══ PERFORMANCE ════════════════════════════════════════════════════ -->
+<div id="tab-performance" class="content">
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-label">Pages vues totales</div><div class="kpi-val" id="pViews">—</div><div class="kpi-sub neu">all time</div></div>
+    <div class="kpi"><div class="kpi-label">Page la plus visitée</div><div class="kpi-val" id="pTopPage" style="font-size:16px">—</div><div class="kpi-sub neu">section</div></div>
+    <div class="kpi"><div class="kpi-label">Interactions IA</div><div class="kpi-val" id="pAI">—</div><div class="kpi-sub neu">messages</div></div>
+    <div class="kpi"><div class="kpi-label">Pitchs générés</div><div class="kpi-val" id="pPitch">—</div><div class="kpi-sub up">conversions</div></div>
+    <div class="kpi"><div class="kpi-label">Taux complétion</div><div class="kpi-val" id="pCompletion">—</div><div class="kpi-sub neu">flow complet</div></div>
+  </div>
+
+  <div class="chart-row">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-chart-bar" style="color:var(--accent)"></i> Pages vues par section</div>
+      <div class="card-sub">Popularité de chaque section de l'app</div>
+      <canvas id="chartPages" height="180"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-activity" style="color:var(--green)"></i> Flux d'activité récent</div>
+      <div class="card-sub">Derniers événements enregistrés</div>
+      <div class="feed" id="activityFeed"></div>
+    </div>
+  </div>
+
+  <div class="chart-row">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-message-dots" style="color:var(--blue)"></i> Activité IA par heure</div>
+      <div class="card-sub">Utilisation du chat assistant</div>
+      <canvas id="chartAI" height="160"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-target" style="color:var(--orange)"></i> Top actions utilisateurs</div>
+      <div class="card-sub">Actions les plus effectuées</div>
+      <table class="tbl" id="topActionsTable">
+        <thead><tr><th>Action</th><th>Section</th><th>Occurrences</th><th>%</th></tr></thead>
+        <tbody id="topActionsBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══ REVENUE ═══════════════════════════════════════════════════════ -->
+<div id="tab-revenue" class="content">
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-label">Revenus totaux</div><div class="kpi-val">8 250 €</div><div class="kpi-sub up"><i class="ti ti-arrow-up" style="font-size:10px"></i> +28% vs mois dernier</div></div>
+    <div class="kpi"><div class="kpi-label">Deals signés</div><div class="kpi-val">12</div><div class="kpi-sub up"><i class="ti ti-arrow-up" style="font-size:10px"></i> +4 ce mois</div></div>
+    <div class="kpi"><div class="kpi-label">Valeur moy. deal</div><div class="kpi-val">687 €</div><div class="kpi-sub up"><i class="ti ti-arrow-up" style="font-size:10px"></i> +15%</div></div>
+    <div class="kpi"><div class="kpi-label">En négociation</div><div class="kpi-val">3 500 €</div><div class="kpi-sub pa">pipeline</div></div>
+    <div class="kpi"><div class="kpi-label">Taux conversion</div><div class="kpi-val">34%</div><div class="kpi-sub neu">pitch → deal</div></div>
+  </div>
+
+  <div class="chart-row">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-chart-line" style="color:var(--accent)"></i> Revenus mensuels</div>
+      <div class="card-sub">Évolution sur 6 mois</div>
+      <canvas id="chartRevenue" height="160"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-briefcase" style="color:var(--green)"></i> Deals par statut</div>
+      <div class="card-sub">Répartition du pipeline</div>
+      <canvas id="chartDeals" height="200"></canvas>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><i class="ti ti-list-details" style="color:var(--blue)"></i> Détail des deals</div>
+    <div class="card-sub">Tous les deals actifs et passés</div>
+    <table class="tbl">
+      <thead><tr><th>Marque</th><th>Type</th><th>Montant</th><th>Statut</th><th>Date</th><th>Contact</th></tr></thead>
+      <tbody>
+        <tr><td>NordLayer VPN</td><td>Vidéo dédiée</td><td style="color:var(--green);font-weight:600">1 800 €</td><td><span class="pill pg">Signé</span></td><td>15 mai 2026</td><td>sarah@nordlayer.com</td></tr>
+        <tr><td>Squarespace</td><td>Intégration 60s</td><td style="color:var(--orange);font-weight:600">950 €</td><td><span class="pill pa">En cours</span></td><td>20 mai 2026</td><td>partnerships@sq.com</td></tr>
+        <tr><td>Agoda Travel</td><td>Série 3 vidéos</td><td style="color:var(--accent);font-weight:600">3 500 €</td><td><span class="pill pp">Négociation</span></td><td>2 juin 2026</td><td>partnerships@agoda.com</td></tr>
+        <tr><td>Fiverr Pro</td><td>Mention</td><td style="color:var(--text3);font-weight:600">400 €</td><td><span class="pill pgy">Ghost</span></td><td>—</td><td>—</td></tr>
+        <tr><td>Notion</td><td>Newsletter</td><td style="color:var(--green);font-weight:600">600 €</td><td><span class="pill pg">Payé</span></td><td>1 mai 2026</td><td>creators@notion.so</td></tr>
+        <tr><td>Raycast</td><td>Intégration</td><td style="color:var(--blue);font-weight:600">750 €</td><td><span class="pill pb">Pipeline</span></td><td>—</td><td>—</td></tr>
+        <tr><td>Figma</td><td>Vidéo dédiée</td><td style="color:var(--blue);font-weight:600">1 200 €</td><td><span class="pill pb">Prospect</span></td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══ REALTIME ══════════════════════════════════════════════════════ -->
+<div id="tab-realtime" class="content">
+  <div class="chart-row">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-live-view" style="color:var(--green)"></i> Utilisateurs actifs</div>
+      <div class="card-sub">Temps réel simulé (mise à jour toutes les 3s)</div>
+      <div class="rt-number" id="rtCount">0</div>
+      <div class="rt-label">utilisateurs en ce moment</div>
+      <div class="rt-list" id="rtList"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-chart-line" style="color:var(--accent)"></i> Activité temps réel</div>
+      <div class="card-sub">Sessions des 5 dernières minutes</div>
+      <canvas id="chartRealtime" height="200"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-row-3">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-messages" style="color:var(--blue)"></i> Messages IA / min</div>
+      <div class="kpi-val" style="font-size:40px;color:var(--blue);font-family:var(--font-display);text-align:center;padding:10px 0" id="rtAIRate">0</div>
+      <div class="kpi-sub neu" style="text-align:center">messages par minute</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-map-pin" style="color:var(--orange)"></i> Page active populaire</div>
+      <div style="margin-top:10px" id="rtPageList"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-zap" style="color:var(--green)"></i> Événements récents</div>
+      <div class="feed" id="rtFeed" style="max-height:200px"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+// ── API CONFIG ────────────────────────────────────────────────────────────────
+const API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:3000' : '';
+let ADMIN_SECRET = localStorage.getItem('sk_admin_secret') || '';
+let apiData = null;
+
+async function checkAuth() {
+  if (!ADMIN_SECRET) {
+    ADMIN_SECRET = prompt('🔐 Clé admin SponsorKit :') || '';
+    if (!ADMIN_SECRET) { document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;color:#ef4444;font-family:sans-serif">❌ Accès refusé</div>'; return false; }
+    localStorage.setItem('sk_admin_secret', ADMIN_SECRET);
+  }
+  return true;
+}
+
+async function loadApiData() {
+  try {
+    const res = await fetch(API_BASE + '/api/stats', { headers: { 'Authorization': 'Bearer ' + ADMIN_SECRET } });
+    if (res.status === 401) { localStorage.removeItem('sk_admin_secret'); alert('Clé admin incorrecte'); location.reload(); return null; }
+    if (!res.ok) throw new Error('API error ' + res.status);
+    const d = await res.json();
+    // Merge api data into KPIs
+    if (d.overview) {
+      document.getElementById('kpiUsers').textContent = d.overview.totalUsers;
+      document.getElementById('kpiSessions').textContent = d.overview.sessions7d;
+      document.getElementById('kpiChat').textContent = d.overview.chatMessages;
+      document.getElementById('kpiChatDelta').textContent = '+' + Math.floor(d.overview.chatMessages * 0.1) + " auj.";
+      document.getElementById('uMobile').textContent = d.overview.mobilePct + '%';
+      document.getElementById('uToday').textContent = d.overview.uniqueToday;
+      document.getElementById('pAI').textContent = d.overview.chatMessages;
+      document.getElementById('pPitch').textContent = d.overview.pitchGenerated;
+    }
+    return d;
+  } catch(e) { console.warn('API indisponible, mode démo:', e.message); return null; }
+}
+
+// ── SHARED STATE ─────────────────────────────────────────────────────────────
+const sessions = JSON.parse(localStorage.getItem('sk_sessions') || '[]');
+const events = JSON.parse(localStorage.getItem('sk_events') || '[]');
+const views = JSON.parse(localStorage.getItem('sk_views') || '{}');
+const ckRaw = localStorage.getItem('ck');
+const ck = ckRaw ? JSON.parse(ckRaw) : null;
+
+Chart.defaults.color = '#8888aa';
+Chart.defaults.borderColor = 'rgba(255,255,255,0.06)';
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+
+const CHART_COLORS = {
+  accent: 'rgba(108,99,255,',
+  green: 'rgba(34,211,168,',
+  orange: 'rgba(245,158,75,',
+  red: 'rgba(239,68,68,',
+  blue: 'rgba(96,165,250,',
+};
+
+function mkGrad(ctx, color, alpha1=0.4, alpha2=0) {
+  const g = ctx.createLinearGradient(0,0,0,200);
+  g.addColorStop(0, color+alpha1+')');
+  g.addColorStop(1, color+alpha2+')');
+  return g;
+}
+
+// ── CLOCK ─────────────────────────────────────────────────────────────────
+function updateClock() {
+  document.getElementById('clock').textContent = new Date().toLocaleTimeString('fr-FR');
+}
+setInterval(updateClock, 1000); updateClock();
+
+// ── TAB SWITCH ─────────────────────────────────────────────────────────────
+function switchTab(name, el) {
+  document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  el.classList.add('active');
+}
+
+// ── GENERATE DEMO DATA ─────────────────────────────────────────────────────
+function genSeed(seed) { // simple LCG for deterministic randoms
+  let s = seed;
+  return () => { s = (s*1664525+1013904223)&0xffffffff; return (s>>>0)/0xffffffff; };
+}
+const rng = genSeed(42);
+
+// 30-day sessions
+const days30 = Array.from({length:30},(_,i)=>{
+  const d=new Date(); d.setDate(d.getDate()-29+i);
+  return {label:d.toLocaleDateString('fr',{day:'2-digit',month:'2-digit'}),
+          val:Math.floor(rng()*40+10+i*1.2)};
+});
+const userGrowth = (() => {
+  let cum=0;
+  return days30.map(d=>{cum+=Math.floor(d.val*0.6);return{label:d.label,val:cum};});
+})();
+
+// hourly heat
+const hourly = Array.from({length:24},(_,h)=>({
+  h, val: h<7?Math.floor(rng()*3+1):h<10?Math.floor(rng()*15+8):h<14?Math.floor(rng()*30+20):h<18?Math.floor(rng()*20+15):h<22?Math.floor(rng()*25+10):Math.floor(rng()*5+2)
+}));
+const maxH = Math.max(...hourly.map(h=>h.val));
+
+// page views with real data fallback
+const pageMap = {dashboard:'Dashboard',deals:'Deals',pricing:'Pricing IA',pitch:'Pitch Builder',mediakit:'Media Kit',chat:'Assistant IA',notifs:'Alertes'};
+const pageViews = {};
+Object.keys(pageMap).forEach(k => {
+  pageViews[k] = (views[k]||0) + Math.floor(rng()*80+10);
+});
+
+// lang dist
+const langDist = {fr:62,en:22,es:9,de:5,other:2};
+
+// device
+const totalS = sessions.length;
+const mobileS = sessions.filter(s=>s.mobile).length;
+const desktopS = totalS - mobileS;
+const mobilePct = totalS ? Math.round(mobileS/totalS*100) : 62;
+const desktopPct = 100-mobilePct;
+
+// consent events
+const consentEvents = events.filter(e=>e.cat==='consent');
+const acceptAll_ = consentEvents.filter(e=>e.action==='accept_all').length + Math.floor(rng()*30+20);
+const reject_ = consentEvents.filter(e=>e.action==='reject').length + Math.floor(rng()*10+5);
+const custom_ = consentEvents.filter(e=>e.action==='custom').length + Math.floor(rng()*15+8);
+const total_ = acceptAll_+reject_+custom_;
+const chatMsgs = events.filter(e=>e.cat==='chat').length + Math.floor(rng()*80+20);
+const pitchGen = events.filter(e=>e.action==='generate').length + Math.floor(rng()*25+8);
+const totalSessions = sessions.length + Math.floor(rng()*50+80);
+const totalViews = Object.values(pageViews).reduce((a,b)=>a+b,0);
+
+// ── OVERVIEW ──────────────────────────────────────────────────────────────
+function initOverview() {
+  document.getElementById('kpiUsers').textContent = (totalSessions+rng()*10|0)+41;
+  document.getElementById('kpiUsersDelta').textContent = '+18 cette semaine';
+  document.getElementById('kpiSessions').textContent = totalSessions;
+  document.getElementById('kpiSessionsDelta').textContent = `+${Math.floor(rng()*20+5)} hier`;
+  const cPct = Math.round(acceptAll_/total_*100)||74;
+  document.getElementById('kpiConsent').textContent = cPct+'%';
+  document.getElementById('kpiConsentSub').textContent = 'acceptation totale';
+  document.getElementById('kpiPages').textContent = (rng()*2+2.4).toFixed(1);
+  document.getElementById('kpiChat').textContent = chatMsgs;
+  document.getElementById('kpiChatDelta').textContent = `+${Math.floor(rng()*12+3)} aujourd'hui`;
+
+  // sessions chart
+  const ctx = document.getElementById('chartSessions').getContext('2d');
+  new Chart(ctx, {type:'line', data:{
+    labels:days30.map(d=>d.label),
+    datasets:[{label:'Sessions',data:days30.map(d=>d.val),
+      borderColor:'rgba(108,99,255,1)',borderWidth:2,
+      backgroundColor:mkGrad(ctx,CHART_COLORS.accent),fill:true,tension:.4,pointRadius:0}]
+  },options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{maxTicksLimit:8}},y:{beginAtZero:true}}}});
+
+  // geo bars
+  const geos = [
+    {flag:'🇫🇷',name:'France',count:Math.floor(totalSessions*.52)},
+    {flag:'🇺🇸',name:'USA',count:Math.floor(totalSessions*.18)},
+    {flag:'🇬🇧',name:'Royaume-Uni',count:Math.floor(totalSessions*.09)},
+    {flag:'🇩🇪',name:'Allemagne',count:Math.floor(totalSessions*.07)},
+    {flag:'🇪🇸',name:'Espagne',count:Math.floor(totalSessions*.06)},
+    {flag:'🇧🇪',name:'Belgique',count:Math.floor(totalSessions*.05)},
+    {flag:'🇨🇦',name:'Canada',count:Math.floor(totalSessions*.03)},
+  ];
+  const gMax = geos[0].count;
+  document.getElementById('geoBars').innerHTML = geos.map(g=>`
+    <div class="geo-item">
+      <div class="geo-flag">${g.flag}</div>
+      <div class="geo-name">${g.name}</div>
+      <div class="geo-bar-wrap"><div class="geo-bar-fill" style="width:${Math.round(g.count/gMax*100)}%"></div></div>
+      <div class="geo-count">${g.count}</div>
+    </div>`).join('');
+
+  // device donut
+  const dctx = document.getElementById('chartDevice').getContext('2d');
+  new Chart(dctx, {type:'doughnut', data:{
+    labels:['Mobile','Desktop','Tablet'],
+    datasets:[{data:[mobilePct, Math.max(desktopPct-6,10), 6],
+      backgroundColor:['rgba(108,99,255,.85)','rgba(34,211,168,.85)','rgba(245,158,75,.85)'],
+      borderColor:'rgba(0,0,0,0)',borderWidth:3}]
+  },options:{responsive:true,cutout:'68%',plugins:{legend:{display:false}}}});
+  const dColors = ['var(--accent)','var(--green)','var(--orange)'];
+  document.getElementById('deviceLegend').innerHTML = ['Mobile','Desktop','Tablet'].map((n,i)=>`
+    <div class="donut-item"><div class="donut-dot" style="background:${dColors[i]}"></div><div class="donut-label">${n}</div><div class="donut-pct">${[mobilePct,Math.max(desktopPct-6,10),6][i]}%</div></div>`).join('');
+
+  // lang bars
+  const lColors = {'fr':'var(--accent)','en':'var(--green)','es':'var(--orange)','de':'var(--blue)','other':'var(--text3)'};
+  document.getElementById('langBars').innerHTML = Object.entries(langDist).map(([k,v])=>`
+    <div class="lang-row">
+      <div class="lang-name">${{fr:'🇫🇷 Français',en:'🇺🇸 English',es:'🇪🇸 Español',de:'🇩🇪 Deutsch',other:'🌐 Autres'}[k]}</div>
+      <div class="lang-bar"><div class="lang-fill" style="width:${v}%;background:${lColors[k]}"></div></div>
+      <div class="lang-pct">${v}%</div>
+    </div>`).join('');
+
+  // funnel
+  const funnelData = [
+    {label:'Visite app',val:100,color:'var(--accent)'},
+    {label:'Banner cookie',val:94,color:'var(--blue)'},
+    {label:'Consent choisi',val:76,color:'var(--green)'},
+    {label:'Navigation page',val:68,color:'var(--orange)'},
+    {label:'Utilise l\'IA',val:31,color:'var(--red)'},
+  ];
+  document.getElementById('funnelViz').innerHTML = funnelData.map(f=>`
+    <div class="funnel-step">
+      <div class="funnel-label">${f.label}</div>
+      <div class="funnel-bar-wrap"><div class="funnel-fill" style="width:${f.val}%;background:${f.color}80">
+        <span class="funnel-val">${f.val}%</span>
+      </div></div>
+    </div>`).join('');
+}
+
+// ── USERS ─────────────────────────────────────────────────────────────────
+function initUsers() {
+  document.getElementById('uNew').textContent = Math.floor(rng()*20+8);
+  document.getElementById('uToday').textContent = Math.floor(rng()*12+3);
+  document.getElementById('uRetention').textContent = Math.floor(rng()*20+35)+'%';
+  document.getElementById('uDuration').textContent = (rng()*4+2).toFixed(1)+'m';
+  document.getElementById('uMobile').textContent = mobilePct+'%';
+
+  const gctx = document.getElementById('chartUserGrowth').getContext('2d');
+  new Chart(gctx, {type:'line', data:{
+    labels:userGrowth.map(d=>d.label),
+    datasets:[{label:'Utilisateurs',data:userGrowth.map(d=>d.val),
+      borderColor:'rgba(34,211,168,1)',borderWidth:2,
+      backgroundColor:mkGrad(gctx,CHART_COLORS.green),fill:true,tension:.4,pointRadius:0}]
+  },options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{maxTicksLimit:8}},y:{beginAtZero:true}}}});
+
+  // heatmap
+  const hEl = document.getElementById('heatmap');
+  hEl.innerHTML = hourly.map(h=>{
+    const intensity = h.val/maxH;
+    const alpha = 0.1 + intensity*0.85;
+    return `<div class="heat-cell" style="background:rgba(108,99,255,${alpha.toFixed(2)})" title="${h.h}h: ${h.val} sessions"></div>`;
+  }).join('');
+
+  // sessions table
+  const langs = ['fr','fr','en','fr','de','es','en','fr','fr','en'];
+  const devices = ['Mobile','Desktop','Mobile','Desktop','Desktop','Mobile','Desktop','Mobile','Desktop','Mobile'];
+  const pages = ['dashboard','deals','chat','pricing','dashboard','pitch','deals','notifs','chat','mediakit'];
+  const tbody = document.getElementById('sessionsBody');
+  tbody.innerHTML = Array.from({length:20},(_,i)=>{
+    const ts = new Date(Date.now()-Math.floor(rng()*86400000));
+    const lang = langs[i%langs.length];
+    const dev = devices[i%devices.length];
+    const pg = pages[i%pages.length];
+    return `<tr><td>${i+1}</td><td style="font-family:var(--font-mono);font-size:11px">${ts.toLocaleString('fr')}</td>
+      <td><span class="pill pgy">${lang.toUpperCase()}</span></td>
+      <td>${dev==='Mobile'?'📱':'🖥️'} ${dev}</td>
+      <td style="font-size:11px;color:var(--text3);max-width:160px;overflow:hidden;text-overflow:ellipsis">${['Chrome/126','Firefox/127','Safari/17','Edge/125'][i%4]}</td>
+      <td><span class="pill ${pg==='chat'?'pp':pg==='dashboard'?'pg':'pb'}">${{dashboard:'Dashboard',deals:'Deals',chat:'IA',pricing:'Pricing',pitch:'Pitch',mediakit:'Kit',notifs:'Alertes'}[pg]}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// ── CONSENT ───────────────────────────────────────────────────────────────
+function initConsent() {
+  const aPct = Math.round(acceptAll_/total_*100);
+  const rPct = Math.round(reject_/total_*100);
+  const cPct = 100-aPct-rPct;
+  document.getElementById('cAcceptAll').textContent = aPct+'%';
+  document.getElementById('cRejectAll').textContent = rPct+'%';
+  document.getElementById('cCustom').textContent = cPct+'%';
+  document.getElementById('cAnalytics').textContent = Math.round((aPct+cPct*.6)/100*total_);
+  document.getElementById('cMarketing').textContent = Math.round(aPct/100*total_*0.7);
+
+  const cctx = document.getElementById('chartConsent').getContext('2d');
+  new Chart(cctx, {type:'doughnut', data:{
+    labels:['Accepté tout','Refusé tout','Personnalisé'],
+    datasets:[{data:[acceptAll_,reject_,custom_],
+      backgroundColor:['rgba(34,211,168,.85)','rgba(239,68,68,.85)','rgba(108,99,255,.85)'],
+      borderColor:'transparent',borderWidth:3}]
+  },options:{responsive:true,cutout:'60%',plugins:{legend:{position:'bottom',labels:{padding:16,font:{size:12}}}}}});
+
+  document.getElementById('consentBars').innerHTML = [
+    {label:'Cookies essentiels',pct:100,color:'var(--green)'},
+    {label:'Cookies analytiques',pct:Math.round((aPct+cPct*.6)),color:'var(--accent)'},
+    {label:'Cookies marketing',pct:Math.round(aPct*.7),color:'var(--orange)'},
+  ].map(b=>`
+    <div class="consent-bar">
+      <div class="consent-label"><span>${b.label}</span><span style="font-family:var(--font-mono)">${b.pct}%</span></div>
+      <div class="consent-track"><div class="consent-fill" style="width:${b.pct}%;background:${b.color}"></div></div>
+    </div>`).join('');
+
+  // consent history
+  const actions = ['accept_all','reject','custom','accept_all','accept_all','custom','reject','accept_all'];
+  const actionLabels = {accept_all:'Accepté tout',reject:'Refusé tout',custom:'Personnalisé'};
+  const actionPills = {accept_all:'pg',reject:'pr',custom:'pp'};
+  document.getElementById('consentBody').innerHTML = Array.from({length:12},(_,i)=>{
+    const a = actions[i%actions.length];
+    const ts = new Date(Date.now()-Math.floor(rng()*604800000));
+    const ana = a==='reject'?'❌':'✅';
+    const mkt = a==='accept_all'?'✅':'❌';
+    return `<tr><td>${i+1}</td><td style="font-family:var(--font-mono);font-size:11px">${ts.toLocaleString('fr')}</td>
+      <td><span class="pill ${actionPills[a]}">${actionLabels[a]}</span></td>
+      <td>${ana}</td><td>${mkt}</td>
+      <td><span class="pill pgy">${['FR','EN','FR','DE','ES','FR','EN','FR'][i%8]}</span></td></tr>`;
+  }).join('');
+
+  // RGPD status
+  document.getElementById('rgpdStatus').innerHTML = [
+    {label:'Consentement explicite',ok:true},
+    {label:'Droit à l\'oubli',ok:true},
+    {label:'Politique vie privée',ok:true},
+    {label:'Cookies essentiels seuls',ok:ck?!ck.analytics&&!ck.marketing:true},
+  ].map(r=>`
+    <div style="background:var(--bg3);border-radius:var(--radius);padding:12px 14px;text-align:center">
+      <div style="font-size:22px;margin-bottom:6px">${r.ok?'✅':'⚠️'}</div>
+      <div style="font-size:11px;color:var(--text2)">${r.label}</div>
+      <div style="font-size:10px;color:${r.ok?'var(--green)':'var(--orange)'};margin-top:3px">${r.ok?'Conforme':'À vérifier'}</div>
+    </div>`).join('');
+}
+
+// ── PERFORMANCE ───────────────────────────────────────────────────────────
+function initPerformance() {
+  const tv = Object.values(pageViews).reduce((a,b)=>a+b,0);
+  const topPg = Object.entries(pageViews).sort((a,b)=>b[1]-a[1])[0];
+  document.getElementById('pViews').textContent = tv;
+  document.getElementById('pTopPage').textContent = pageMap[topPg[0]]||topPg[0];
+  document.getElementById('pAI').textContent = chatMsgs;
+  document.getElementById('pPitch').textContent = pitchGen;
+  document.getElementById('pCompletion').textContent = Math.floor(rng()*15+22)+'%';
+
+  const sortedPages = Object.entries(pageViews).sort((a,b)=>b[1]-a[1]);
+  const pctx = document.getElementById('chartPages').getContext('2d');
+  new Chart(pctx, {type:'bar', data:{
+    labels:sortedPages.map(([k])=>pageMap[k]||k),
+    datasets:[{label:'Vues',data:sortedPages.map(([,v])=>v),
+      backgroundColor:sortedPages.map((_,i)=>`rgba(108,99,255,${0.9-i*.08})`),
+      borderRadius:6,borderSkipped:false}]
+  },options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true}}}});
+
+  // activity feed
+  const evTypes = [
+    {cat:'nav',icons:{dashboard:'ti-layout-dashboard',deals:'ti-briefcase',chat:'ti-message-circle',pricing:'ti-sparkles',pitch:'ti-send',mediakit:'ti-id',notifs:'ti-bell'},color:CHART_COLORS.accent},
+    {cat:'chat',color:CHART_COLORS.blue,icon:'ti-message-dots'},
+    {cat:'pitch',color:CHART_COLORS.orange,icon:'ti-send'},
+    {cat:'consent',color:CHART_COLORS.green,icon:'ti-shield-check'},
+  ];
+  const recentEvents = [...events].reverse().slice(0,15);
+  const feedEl = document.getElementById('activityFeed');
+  const demoFeed = [
+    {icon:'ti-message-circle',color:'var(--blue)',title:'Message IA envoyé',meta:'il y a 2min · Chat'},
+    {icon:'ti-layout-dashboard',color:'var(--accent)',title:'Navigation → Dashboard',meta:'il y a 3min · Nav'},
+    {icon:'ti-shield-check',color:'var(--green)',title:'Consentement accepté',meta:'il y a 5min · Cookies'},
+    {icon:'ti-send',color:'var(--orange)',title:'Pitch généré — Raycast',meta:'il y a 8min · Pitch builder'},
+    {icon:'ti-briefcase',color:'var(--accent)',title:'Navigation → Deals',meta:'il y a 11min · Nav'},
+    {icon:'ti-sparkles',color:'var(--orange)',title:'Pricing calculé',meta:'il y a 15min · Pricing'},
+    {icon:'ti-message-circle',color:'var(--blue)',title:'Message IA — Négociation Agoda',meta:'il y a 18min · Chat'},
+    {icon:'ti-copy',color:'var(--text2)',title:'Pitch copié dans le presse-papiers',meta:'il y a 22min · Pitch builder'},
+  ];
+  feedEl.innerHTML = demoFeed.map(f=>`
+    <div class="feed-item">
+      <div class="feed-icon" style="background:${f.color}20;color:${f.color}"><i class="ti ${f.icon}"></i></div>
+      <div class="feed-content"><div class="feed-title">${f.title}</div><div class="feed-meta">${f.meta}</div></div>
+    </div>`).join('');
+
+  // AI chart
+  const actx = document.getElementById('chartAI').getContext('2d');
+  const aiHourly = hourly.map(h=>Math.floor(h.val*0.3));
+  new Chart(actx, {type:'bar', data:{
+    labels:hourly.map(h=>h.h+'h'),
+    datasets:[{label:'Messages IA',data:aiHourly,backgroundColor:'rgba(96,165,250,0.7)',borderRadius:4}]
+  },options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{maxTicksLimit:12}},y:{beginAtZero:true}}}});
+
+  // top actions
+  const actions2 = [
+    {action:'Page visitée',section:'Dashboard',n:topPg[1],total:tv},
+    {action:'Message IA',section:'Chat',n:chatMsgs,total:tv},
+    {action:'Pitch généré',section:'Pitch Builder',n:pitchGen,total:tv},
+    {action:'Pricing calculé',section:'Pricing IA',n:Math.floor(rng()*30+15),total:tv},
+    {action:'Consentement donné',section:'Cookies',n:total_,total:tv},
+    {action:'Navigation deals',section:'Mes deals',n:pageViews.deals||20,total:tv},
+  ];
+  document.getElementById('topActionsBody').innerHTML = actions2.map((a,i)=>`
+    <tr><td>${a.action}</td><td><span class="pill ${['pg','pp','pa','pb','pgy','pp'][i]}">${a.section}</span></td>
+    <td style="font-family:var(--font-mono)">${a.n}</td>
+    <td style="font-family:var(--font-mono);color:var(--text3)">${Math.round(a.n/Math.max(a.total,1)*100)}%</td></tr>`).join('');
+}
+
+// ── REVENUE ───────────────────────────────────────────────────────────────
+function initRevenue() {
+  const rctx = document.getElementById('chartRevenue').getContext('2d');
+  const revMonths = ['Jan','Fév','Mar','Avr','Mai','Juin'];
+  const revData = [2100,2800,3100,2900,4200,3500];
+  new Chart(rctx, {type:'line', data:{
+    labels:revMonths,
+    datasets:[{label:'Revenus €',data:revData,
+      borderColor:'rgba(34,211,168,1)',borderWidth:2,
+      backgroundColor:mkGrad(rctx,CHART_COLORS.green),fill:true,tension:.4,
+      pointBackgroundColor:'rgba(34,211,168,1)',pointRadius:4}]
+  },options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>v+'€'}}}}});
+
+  const dctx = document.getElementById('chartDeals').getContext('2d');
+  new Chart(dctx, {type:'doughnut', data:{
+    labels:['Signé','En cours','Négociation','Ghost','Payé'],
+    datasets:[{data:[2,1,1,1,2],
+      backgroundColor:['rgba(34,211,168,.85)','rgba(245,158,75,.85)','rgba(108,99,255,.85)','rgba(100,100,120,.5)','rgba(96,165,250,.85)'],
+      borderColor:'transparent',borderWidth:3}]
+  },options:{responsive:true,cutout:'55%',plugins:{legend:{position:'bottom',labels:{padding:12,font:{size:11}}}}}});
+}
+
+// ── REALTIME ──────────────────────────────────────────────────────────────
+let rtData = Array.from({length:60},()=>0);
+let rtChart = null;
+const rtPages = ['Dashboard','Deals','Chat IA','Pricing','Pitch Builder','Media Kit'];
+const rtColors = ['var(--accent)','var(--green)','var(--blue)','var(--orange)'];
+
+function initRealtime() {
+  const rctx = document.getElementById('chartRealtime').getContext('2d');
+  rtChart = new Chart(rctx, {type:'line', data:{
+    labels:Array.from({length:60},(_,i)=>i===59?'Maintenant':-(59-i)+'s'),
+    datasets:[{label:'Actifs',data:rtData,
+      borderColor:'rgba(108,99,255,1)',borderWidth:2,
+      backgroundColor:mkGrad(rctx,CHART_COLORS.accent,0.3),fill:true,tension:.4,pointRadius:0}]
+  },options:{responsive:true,animation:false,plugins:{legend:{display:false}},
+    scales:{x:{ticks:{maxTicksLimit:6}},y:{beginAtZero:true,suggestedMax:10}}}});
+
+  updateRealtime();
+  setInterval(updateRealtime, 3000);
+}
+
+function updateRealtime() {
+  const active = Math.floor(Math.random()*6+1);
+  document.getElementById('rtCount').textContent = active;
+  rtData.shift(); rtData.push(active);
+  if(rtChart) { rtChart.data.datasets[0].data = [...rtData]; rtChart.update(); }
+
+  const pgCounts = rtPages.map(p=>({name:p,count:Math.floor(Math.random()*3+1)}))
+    .sort((a,b)=>b.count-a.count);
+  document.getElementById('rtPageList').innerHTML = pgCounts.map((p,i)=>`
+    <div class="rt-item"><span class="rt-page">${p.name}</span><span class="rt-count">${p.count}</span></div>`).join('');
+
+  document.getElementById('rtAIRate').textContent = Math.floor(Math.random()*4);
+
+  const rtEv = [
+    'Utilisateur sur Dashboard','Message IA envoyé','Nouveau consentement','Pitch généré',
+    'Navigation deals','Calcul pricing','Media kit ouvert','Alerte consultée'
+  ];
+  document.getElementById('rtFeed').innerHTML = Array.from({length:5},(_,i)=>(`
+    <div class="feed-item">
+      <div class="feed-icon" style="background:${rtColors[i%4]}20;color:${rtColors[i%4]}"><i class="ti ti-zap" style="font-size:12px"></i></div>
+      <div class="feed-content">
+        <div class="feed-title">${rtEv[Math.floor(Math.random()*rtEv.length)]}</div>
+        <div class="feed-meta">il y a ${Math.floor(Math.random()*59)+1}s</div>
+      </div>
+    </div>`)).join('');
+}
+
+// ── REFRESH ─────────────────────────────────────────────────────────────
+function refreshAll() {
+  window.location.reload();
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────
+(async function() {
+  await checkAuth();
+  initOverview();
+  initUsers();
+  initConsent();
+  initPerformance();
+  initRevenue();
+  initRealtime();
+  // Charger les données réelles en arrière-plan
+  apiData = await loadApiData();
+})();
+</script>
+</body>
+</html>

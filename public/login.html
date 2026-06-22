@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SponsorKit — Connexion</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0b0b12;--bg2:#13131e;--bg3:#1a1a28;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --text:#eeeef8;--text2:#9090b0;--text3:#5a5a78;
+  --accent:#7c6fff;--accent2:#5a4fd4;
+  --green:#22d3a8;--red:#f05e5e;
+  --font:'DM Sans',sans-serif;--display:'Syne',sans-serif;
+}
+html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;display:flex;align-items:center;justify-content:center}
+
+/* BG GLOW */
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 50% -10%,rgba(124,111,255,0.15),transparent);pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 40% 30% at 80% 80%,rgba(34,211,168,0.05),transparent);pointer-events:none;z-index:0}
+
+.wrap{position:relative;z-index:1;width:100%;max-width:420px;padding:20px}
+
+/* LOGO */
+.logo-area{text-align:center;margin-bottom:36px}
+.logo-icon{width:52px;height:52px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:14px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:14px;box-shadow:0 0 40px rgba(124,111,255,0.3)}
+.logo-icon i{font-size:24px;color:#fff}
+.logo-name{font-family:var(--display);font-size:26px;font-weight:800;letter-spacing:-.02em}
+.logo-sub{font-size:13px;color:var(--text3);margin-top:4px}
+
+/* CARD */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:32px;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+
+/* TABS */
+.tabs{display:flex;background:var(--bg3);border-radius:10px;padding:4px;margin-bottom:28px}
+.tab{flex:1;text-align:center;padding:9px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text3);transition:all .2s}
+.tab.active{background:var(--bg2);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,0.3)}
+
+/* FORM */
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500;letter-spacing:.02em}
+.field input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:var(--font);outline:none;transition:border-color .2s}
+.field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,111,255,0.1)}
+.field input::placeholder{color:var(--text3)}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* INPUT ICON */
+.field-ic{position:relative}
+.field-ic i{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--text3);pointer-events:none}
+.field-ic input{padding-left:38px}
+
+/* NICHE SELECT */
+.niche-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.niche-opt{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 12px;cursor:pointer;font-size:12px;color:var(--text2);text-align:center;transition:all .15s;display:flex;align-items:center;gap:6px;justify-content:center}
+.niche-opt:hover{border-color:var(--border2);color:var(--text)}
+.niche-opt.selected{background:rgba(124,111,255,0.12);border-color:var(--accent);color:var(--accent)}
+
+/* BUTTON */
+.btn-main{width:100%;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:10px;padding:13px;color:#fff;font-size:14px;font-weight:600;font-family:var(--font);cursor:pointer;margin-top:8px;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-main:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(124,111,255,0.35)}
+.btn-main:active{transform:translateY(0)}
+.btn-main:disabled{opacity:.6;cursor:default;transform:none;box-shadow:none}
+
+/* DIVIDER */
+.divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--text3);font-size:12px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* SOCIAL BTN */
+.btn-social{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:11px;color:var(--text2);font-size:13px;font-family:var(--font);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-social:hover{border-color:var(--accent);color:var(--text)}
+
+/* ERROR / SUCCESS */
+.msg{padding:10px 14px;border-radius:8px;font-size:12px;margin-bottom:16px;display:none}
+.msg.error{background:rgba(240,94,94,0.1);border:1px solid rgba(240,94,94,0.25);color:var(--red)}
+.msg.success{background:rgba(34,211,168,0.1);border:1px solid rgba(34,211,168,0.25);color:var(--green)}
+.msg.show{display:flex;align-items:center;gap:8px}
+
+/* FOOTER */
+.foot{text-align:center;font-size:12px;color:var(--text3);margin-top:24px}
+.foot a{color:var(--text2);text-decoration:none}
+.foot a:hover{color:var(--accent)}
+
+/* STEP INDICATOR */
+.steps{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:24px}
+.step-dot{width:8px;height:8px;border-radius:50%;background:var(--border2);transition:all .2s}
+.step-dot.active{background:var(--accent);box-shadow:0 0 8px var(--accent)}
+.step-dot.done{background:var(--green)}
+
+/* SPINNER */
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
+
+/* SECTION LABEL */
+.sect-lbl{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;font-weight:500}
+
+@media(max-width:480px){
+  .wrap{padding:12px}
+  .card{padding:24px 20px;border-radius:14px}
+  .field-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo-area">
+    <div class="logo-icon"><i class="ti ti-star"></i></div>
+    <div class="logo-name">SponsorKit</div>
+    <div class="logo-sub">Gérez vos partenariats créateur</div>
+  </div>
+
+  <div class="card">
+    <div class="tabs">
+      <div class="tab active" id="tabLogin" onclick="showTab('login')">Se connecter</div>
+      <div class="tab" id="tabRegister" onclick="showTab('register')">Créer un compte</div>
+    </div>
+
+    <!-- MESSAGE -->
+    <div class="msg error" id="msgError"><i class="ti ti-alert-circle"></i> <span id="msgErrorText"></span></div>
+    <div class="msg success" id="msgSuccess"><i class="ti ti-check"></i> <span id="msgSuccessText"></span></div>
+
+    <!-- LOGIN FORM -->
+    <div id="formLogin">
+      <div class="field field-ic">
+        <label>Adresse email</label>
+        <i class="ti ti-mail"></i>
+        <input type="email" id="loginEmail" placeholder="alex@gmail.com" autocomplete="email">
+      </div>
+      <div class="field field-ic">
+        <label>Mot de passe</label>
+        <i class="ti ti-lock"></i>
+        <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <div style="text-align:right;margin-bottom:16px">
+        <a href="#" style="font-size:12px;color:var(--text3);text-decoration:none" onclick="showForgot()">Mot de passe oublié ?</a>
+      </div>
+      <button class="btn-main" id="btnLogin" onclick="doLogin()">
+        <span>Se connecter</span> <i class="ti ti-arrow-right"></i>
+      </button>
+    </div>
+
+    <!-- REGISTER FORM — step 1 -->
+    <div id="formRegister" style="display:none">
+      <div class="steps" id="regSteps">
+        <div class="step-dot active" id="s1"></div>
+        <div class="step-dot" id="s2"></div>
+        <div class="step-dot" id="s3"></div>
+      </div>
+
+      <!-- STEP 1: compte -->
+      <div id="regStep1">
+        <div class="sect-lbl">Informations de compte</div>
+        <div class="field-row">
+          <div class="field"><label>Prénom</label><input type="text" id="regFirst" placeholder="Alex"></div>
+          <div class="field"><label>Nom</label><input type="text" id="regLast" placeholder="Martin"></div>
+        </div>
+        <div class="field field-ic">
+          <label>Adresse email</label>
+          <i class="ti ti-mail"></i>
+          <input type="email" id="regEmail" placeholder="alex@gmail.com" autocomplete="email">
+        </div>
+        <div class="field field-ic">
+          <label>Mot de passe</label>
+          <i class="ti ti-lock"></i>
+          <input type="password" id="regPassword" placeholder="Min. 8 caractères" autocomplete="new-password">
+        </div>
+        <button class="btn-main" onclick="nextStep(2)">Suivant <i class="ti ti-arrow-right"></i></button>
+      </div>
+
+      <!-- STEP 2: profil créateur -->
+      <div id="regStep2" style="display:none">
+        <div class="sect-lbl">Ton profil créateur</div>
+        <div class="field field-ic">
+          <label>Nom de ta chaîne / page</label>
+          <i class="ti ti-user"></i>
+          <input type="text" id="regChannel" placeholder="Alex Tech">
+        </div>
+        <div class="field">
+          <label>Plateforme principale</label>
+          <select id="regPlatform" style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:var(--font);outline:none">
+            <option value="youtube">YouTube</option>
+            <option value="instagram">Instagram</option>
+            <option value="tiktok">TikTok</option>
+            <option value="twitch">Twitch</option>
+            <option value="podcast">Podcast</option>
+            <option value="newsletter">Newsletter</option>
+            <option value="blog">Blog</option>
+          </select>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Abonnés</label><input type="number" id="regSubs" placeholder="45000"></div>
+          <div class="field"><label>Engagement (%)</label><input type="number" id="regEngagement" placeholder="4.8" step="0.1"></div>
+        </div>
+        <div class="field"><label>Vues / écoutes moyennes</label><input type="number" id="regViews" placeholder="18000"></div>
+        <button class="btn-main" onclick="nextStep(3)">Suivant <i class="ti ti-arrow-right"></i></button>
+        <button style="width:100%;background:transparent;border:none;color:var(--text3);font-size:13px;cursor:pointer;margin-top:10px;font-family:var(--font)" onclick="nextStep(1)">← Retour</button>
+      </div>
+
+      <!-- STEP 3: niche + tarifs -->
+      <div id="regStep3" style="display:none">
+        <div class="sect-lbl">Ta niche</div>
+        <div class="niche-grid" id="nicheGrid">
+          <div class="niche-opt" onclick="selNiche(this,'tech')">💻 Tech</div>
+          <div class="niche-opt" onclick="selNiche(this,'finance')">💰 Finance</div>
+          <div class="niche-opt" onclick="selNiche(this,'lifestyle')">✨ Lifestyle</div>
+          <div class="niche-opt" onclick="selNiche(this,'gaming')">🎮 Gaming</div>
+          <div class="niche-opt" onclick="selNiche(this,'food')">🍕 Food</div>
+          <div class="niche-opt" onclick="selNiche(this,'travel')">✈️ Voyage</div>
+          <div class="niche-opt" onclick="selNiche(this,'fitness')">💪 Fitness</div>
+          <div class="niche-opt" onclick="selNiche(this,'education')">📚 Éducation</div>
+        </div>
+        <div class="field" style="margin-top:16px">
+          <label>Tarif intégration (€) — optionnel</label>
+          <input type="number" id="regRate" placeholder="Ex: 500">
+        </div>
+        <button class="btn-main" id="btnRegister" onclick="doRegister()" style="margin-top:8px">
+          <span>Créer mon compte</span> <i class="ti ti-rocket"></i>
+        </button>
+        <button style="width:100%;background:transparent;border:none;color:var(--text3);font-size:13px;cursor:pointer;margin-top:10px;font-family:var(--font)" onclick="nextStep(2)">← Retour</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    En créant un compte vous acceptez nos <a href="legal.html">CGU</a> et notre <a href="legal.html?tab=priv">politique de confidentialité</a>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+// ── CONFIG ────────────────────────────────────────────────────────────────
+// Ces valeurs sont remplacées automatiquement par Vercel env vars
+// Pour le dev local, remplace ici temporairement
+const SUPABASE_URL = typeof __SUPABASE_URL__ !== 'undefined' ? __SUPABASE_URL__ : (window.ENV_SUPABASE_URL || 'REMPLACE_PAR_TON_URL_SUPABASE');
+const SUPABASE_ANON = typeof __SUPABASE_ANON__ !== 'undefined' ? __SUPABASE_ANON__ : (window.ENV_SUPABASE_ANON || 'REMPLACE_PAR_TA_CLE_ANON');
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+// ── HELPERS ───────────────────────────────────────────────────────────────
+let selectedNiche = '';
+function selNiche(el, v) {
+  document.querySelectorAll('.niche-opt').forEach(n => n.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedNiche = v;
+}
+
+function showTab(t) {
+  document.getElementById('formLogin').style.display = t==='login' ? 'block' : 'none';
+  document.getElementById('formRegister').style.display = t==='register' ? 'block' : 'none';
+  document.getElementById('tabLogin').classList.toggle('active', t==='login');
+  document.getElementById('tabRegister').classList.toggle('active', t==='register');
+  hideMsg();
+}
+
+function showErr(msg) {
+  document.getElementById('msgErrorText').textContent = msg;
+  document.getElementById('msgError').classList.add('show');
+  document.getElementById('msgSuccess').classList.remove('show');
+}
+function showOk(msg) {
+  document.getElementById('msgSuccessText').textContent = msg;
+  document.getElementById('msgSuccess').classList.add('show');
+  document.getElementById('msgError').classList.remove('show');
+}
+function hideMsg() {
+  document.getElementById('msgError').classList.remove('show');
+  document.getElementById('msgSuccess').classList.remove('show');
+}
+
+function setLoading(btnId, loading) {
+  const btn = document.getElementById(btnId);
+  if (loading) {
+    btn._orig = btn.innerHTML;
+    btn.innerHTML = '<div class="spinner"></div>';
+    btn.disabled = true;
+  } else {
+    btn.innerHTML = btn._orig;
+    btn.disabled = false;
+  }
+}
+
+function nextStep(n) {
+  hideMsg();
+  // validation
+  if (n === 2) {
+    if (!document.getElementById('regFirst').value.trim()) return showErr('Entre ton prénom.');
+    if (!document.getElementById('regEmail').value.includes('@')) return showErr('Email invalide.');
+    if (document.getElementById('regPassword').value.length < 8) return showErr('Mot de passe trop court (min. 8 caractères).');
+  }
+  if (n === 3) {
+    if (!document.getElementById('regChannel').value.trim()) return showErr('Entre le nom de ta chaîne.');
+    if (!document.getElementById('regSubs').value) return showErr('Entre ton nombre d\'abonnés.');
+  }
+  [1,2,3].forEach(i => {
+    document.getElementById('regStep'+i).style.display = i===n ? 'block' : 'none';
+    const dot = document.getElementById('s'+i);
+    dot.className = 'step-dot' + (i===n ? ' active' : i<n ? ' done' : '');
+  });
+}
+
+// ── LOGIN ─────────────────────────────────────────────────────────────────
+async function doLogin() {
+  hideMsg();
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPassword').value;
+  if (!email || !pass) return showErr('Remplis tous les champs.');
+  setLoading('btnLogin', true);
+  const { error } = await sb.auth.signInWithPassword({ email, password: pass });
+  setLoading('btnLogin', false);
+  if (error) return showErr(error.message === 'Invalid login credentials' ? 'Email ou mot de passe incorrect.' : error.message);
+  window.location.href = '/';
+}
+
+// ── REGISTER ──────────────────────────────────────────────────────────────
+async function doRegister() {
+  hideMsg();
+  if (!selectedNiche) return showErr('Choisis ta niche.');
+  setLoading('btnRegister', true);
+
+  const email = document.getElementById('regEmail').value.trim();
+  const pass = document.getElementById('regPassword').value;
+  const firstName = document.getElementById('regFirst').value.trim();
+  const lastName = document.getElementById('regLast').value.trim();
+
+  // 1. Créer le compte auth
+  const { data: authData, error: authError } = await sb.auth.signUp({
+    email, password: pass,
+    options: { data: { first_name: firstName, last_name: lastName } }
+  });
+  if (authError) { setLoading('btnRegister', false); return showErr(authError.message); }
+
+  // 2. Créer le profil créateur
+  const profile = {
+    id: authData.user.id,
+    email,
+    first_name: firstName,
+    last_name: lastName,
+    channel_name: document.getElementById('regChannel').value.trim(),
+    platform: document.getElementById('regPlatform').value,
+    subscribers: parseInt(document.getElementById('regSubs').value) || 0,
+    engagement_rate: parseFloat(document.getElementById('regEngagement').value) || 0,
+    avg_views: parseInt(document.getElementById('regViews').value) || 0,
+    niche: selectedNiche,
+    base_rate: parseInt(document.getElementById('regRate').value) || 0,
+    created_at: new Date().toISOString()
+  };
+
+  const { error: profileError } = await sb.from('profiles').insert(profile);
+  setLoading('btnRegister', false);
+
+  if (profileError && !profileError.message.includes('duplicate')) {
+    return showErr('Compte créé mais erreur profil : ' + profileError.message);
+  }
+
+  showOk('Compte créé ! Vérifie ton email pour confirmer, puis connecte-toi.');
+  setTimeout(() => showTab('login'), 2500);
+}
+
+function showForgot() {
+  const email = document.getElementById('loginEmail').value.trim();
+  if (!email) return showErr('Entre ton email d\'abord.');
+  sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + '/reset-password' });
+  showOk('Email de réinitialisation envoyé !');
+}
+
+// ── AUTO-REDIRECT si déjà connecté ────────────────────────────────────────
+sb.auth.getSession().then(({ data: { session } }) => {
+  if (session) window.location.href = '/';
+});
+</script>
+</body>
+</html>

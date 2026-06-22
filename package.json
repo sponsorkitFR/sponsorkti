@@ -1,0 +1,11 @@
+{
+  "name": "sponsorkit",
+  "version": "3.0.0",
+  "description": "SponsorKit - Plateforme de gestion de partenariats créateurs & marques",
+  "private": true,
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "imapflow": "^1.0.162"
+  },
+  "engines": { "node": ">=18" }
+}

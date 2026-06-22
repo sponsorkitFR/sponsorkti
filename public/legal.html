@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SponsorKit — Conditions & confidentialité</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0b0b12;--bg2:#13131e;--bg3:#1a1a28;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --text:#eeeef8;--text2:#9090b0;--text3:#5a5a78;
+  --accent:#7c6fff;--accent2:#5a4fd4;
+  --green:#22d3a8;--orange:#f59e4b;--red:#f05e5e;
+  --font:'DM Sans',sans-serif;--display:'Syne',sans-serif;
+}
+html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:var(--font);font-size:14.5px;line-height:1.7}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 50% -10%,rgba(124,111,255,0.12),transparent);pointer-events:none;z-index:0}
+
+.topbar{position:sticky;top:0;z-index:10;background:rgba(11,11,18,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;gap:10px}
+.topbar .logo-icon{width:30px;height:30px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center}
+.topbar .logo-icon i{font-size:14px;color:#fff}
+.topbar .logo-name{font-family:var(--display);font-weight:700;font-size:15px}
+.topbar a.back{margin-left:auto;color:var(--text2);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:5px}
+.topbar a.back:hover{color:var(--text)}
+
+.wrap{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:40px 22px 80px}
+.page-title{font-family:var(--display);font-weight:700;font-size:30px;margin-bottom:6px}
+.page-sub{color:var(--text3);font-size:13px;margin-bottom:28px}
+
+.tabs{display:flex;gap:4px;background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:32px;width:fit-content}
+.tab-btn{padding:9px 18px;border-radius:9px;font-size:13.5px;font-weight:500;color:var(--text3);cursor:pointer;transition:all .15s;user-select:none}
+.tab-btn.active{background:var(--accent);color:#fff}
+
+.doc{display:none}
+.doc.active{display:block}
+
+.callout{background:linear-gradient(135deg,rgba(124,111,255,.10),rgba(124,111,255,.04));border:1px solid rgba(124,111,255,.25);border-radius:12px;padding:16px 18px;margin-bottom:28px;display:flex;gap:12px;align-items:flex-start}
+.callout i{font-size:18px;color:var(--accent);margin-top:1px;flex-shrink:0}
+.callout-text{font-size:13px;color:var(--text2);line-height:1.6}
+.callout-text strong{color:var(--text)}
+
+h2{font-family:var(--display);font-size:18px;font-weight:700;margin:30px 0 10px;color:var(--text)}
+h2:first-child{margin-top:0}
+h3{font-size:14.5px;font-weight:600;margin:18px 0 6px;color:var(--text)}
+p{color:var(--text2);margin-bottom:10px}
+p strong, li strong{color:var(--text);font-weight:600}
+ul{margin:8px 0 14px 20px;color:var(--text2)}
+li{margin-bottom:6px}
+.meta{color:var(--text3);font-size:12.5px;margin-bottom:30px}
+.badge-ai{display:inline-flex;align-items:center;gap:5px;background:rgba(245,158,75,.12);border:1px solid rgba(245,158,75,.3);color:var(--orange);font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:20px;margin-bottom:14px}
+.table-wrap{overflow-x:auto;margin:14px 0 20px;border:1px solid var(--border);border-radius:10px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--bg3);text-align:left;padding:9px 12px;color:var(--text2);font-weight:600;font-size:12px;border-bottom:1px solid var(--border)}
+td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text2)}
+tr:last-child td{border-bottom:none}
+.contact-box{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px;margin-top:30px}
+.contact-box .lbl{font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+.contact-box a{color:var(--accent);text-decoration:none}
+.edit-note{background:rgba(245,158,75,.08);border:1px dashed rgba(245,158,75,.4);border-radius:10px;padding:14px 16px;margin:24px 0;font-size:12.5px;color:var(--text2)}
+.edit-note strong{color:var(--orange)}
+
+@media(max-width:600px){
+  .wrap{padding:24px 16px 60px}
+  .page-title{font-size:24px}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo-icon"><i class="ti ti-star"></i></div>
+  <div class="logo-name">SponsorKit</div>
+  <a href="login.html" class="back"><i class="ti ti-arrow-left"></i> Retour</a>
+</div>
+
+<div class="wrap">
+  <div class="page-title">Conditions & confidentialité</div>
+  <div class="page-sub">Document généré pour la phase de test du produit — à faire relire par un professionnel avant un lancement commercial à grande échelle.</div>
+
+  <div class="tabs">
+    <div class="tab-btn active" id="tabCGU" onclick="showDoc('cgu')">CGU</div>
+    <div class="tab-btn" id="tabPriv" onclick="showDoc('priv')">Confidentialité</div>
+  </div>
+
+  <!-- ════════════ CGU ════════════ -->
+  <div class="doc active" id="docCgu">
+    <div class="meta">Dernière mise à jour : <span id="dateNowCgu"></span></div>
+
+    <div class="edit-note">
+      <strong>À personnaliser avant publication :</strong> remplace les champs entre crochets [comme ceci] par tes vraies informations (nom légal, statut juridique, email de contact). Si tu opères en auto-entreprise ou société, ajoute ton numéro SIREN/SIRET dans la section Mentions légales.
+    </div>
+
+    <h2>1. Objet</h2>
+    <p>Les présentes conditions générales d'utilisation (CGU) régissent l'accès et l'utilisation de SponsorKit (ci-après « le Service »), une plateforme d'aide à la gestion de partenariats de sponsoring pour créateurs de contenu, éditée par [Ton nom / nom de société].</p>
+    <p>En créant un compte, tu acceptes l'intégralité des présentes CGU ainsi que notre <a href="#" onclick="showDoc('priv');return false" style="color:var(--accent)">politique de confidentialité</a>.</p>
+
+    <h2>2. Description du service</h2>
+    <p>SponsorKit propose notamment :</p>
+    <ul>
+      <li>Un tableau de bord de suivi des partenariats (deals) avec des marques sponsors</li>
+      <li>Des outils d'aide au pricing et à la rédaction de pitchs commerciaux</li>
+      <li>Un assistant conversationnel basé sur l'intelligence artificielle</li>
+      <li>Un moteur de recherche et de mise en relation avec des sponsors potentiels</li>
+      <li>Des automatisations optionnelles (relances, alertes, rapports) activables par l'utilisateur</li>
+    </ul>
+
+    <div class="badge-ai"><i class="ti ti-sparkles" style="font-size:13px"></i> Fonctionnalités IA</div>
+    <h2>3. Utilisation de l'intelligence artificielle</h2>
+    <p>SponsorKit intègre des fonctionnalités basées sur des modèles d'intelligence artificielle tiers afin de générer des réponses, des recommandations de sponsors, des brouillons d'emails et des analyses.</p>
+    <p><strong>Phase actuelle (version de test) :</strong> le Service utilise par défaut l'API <strong>Google Gemini</strong> dans son offre gratuite. Le contenu que tu transmets à l'assistant IA (messages, profil, données de deals) est traité par les serveurs de Google pour générer une réponse.</p>
+    <p>Le détail du traitement de ces données par le fournisseur IA est expliqué dans la section dédiée de notre <a href="#" onclick="showDoc('priv');return false" style="color:var(--accent)">politique de confidentialité</a> — nous t'invitons à la lire avant d'envoyer des informations sensibles dans le chat.</p>
+    <p>Le fournisseur IA utilisé peut évoluer dans le temps (par exemple vers une offre payante avec garanties de confidentialité renforcées) à mesure que le Service se développe. Tout changement substantiel te sera communiqué.</p>
+    <p>Les réponses générées par l'IA sont fournies à titre indicatif et ne constituent ni un conseil juridique, ni un conseil financier, ni une garantie de résultat commercial. Tu restes seul responsable des décisions prises sur la base de ces suggestions (négociation, signature de contrat, tarification).</p>
+
+    <h2>4. Compte utilisateur</h2>
+    <p>Tu es responsable de la confidentialité de tes identifiants de connexion et de toute activité réalisée depuis ton compte. Les informations renseignées (profil créateur, statistiques d'audience, deals) doivent être exactes dans la mesure du possible, certaines fonctionnalités IA (pricing, matching de sponsors) s'appuyant directement dessus.</p>
+
+    <h2>5. Automatisations</h2>
+    <p>Certaines automatisations (relances email automatiques, détection de deals par email, suivi de paiements) nécessitent la connexion de comptes tiers (messagerie, Stripe, PayPal). Ces automatisations sont désactivées par défaut et doivent être explicitement activées par l'utilisateur dans la page Automatisations. Tu peux les désactiver à tout moment.</p>
+
+    <h2>6. Intégrations tierces</h2>
+    <p>Le Service peut se connecter, à ta demande, à des services tiers (Gmail, Outlook, Stripe, PayPal). L'utilisation de ces services reste soumise à leurs propres conditions d'utilisation respectives.</p>
+
+    <h2>7. Limitation de responsabilité</h2>
+    <p>SponsorKit est fourni « en l'état », en particulier durant cette phase de test. Nous ne garantissons pas l'exactitude des tarifs suggérés, des correspondances de sponsors proposées, ni la disponibilité continue du service. SponsorKit ne saurait être tenu responsable des conséquences d'une négociation, d'un deal signé, ou d'une décision commerciale prise sur la base des recommandations de l'assistant IA.</p>
+
+    <h2>8. Résiliation</h2>
+    <p>Tu peux supprimer ton compte à tout moment. Nous nous réservons le droit de suspendre un compte en cas d'utilisation abusive du Service ou de violation des présentes CGU.</p>
+
+    <h2>9. Modification des CGU</h2>
+    <p>Ces CGU peuvent être mises à jour, notamment pour refléter un changement de fournisseur IA ou l'ajout de nouvelles fonctionnalités. La date de dernière mise à jour est indiquée en haut de ce document.</p>
+
+    <h2>10. Mentions légales</h2>
+    <p>Éditeur du service : [Ton nom ou raison sociale]<br>
+    Statut : [Auto-entreprise / Société — à compléter]<br>
+    [N° SIREN/SIRET si applicable]<br>
+    Contact : [ton email de contact]<br>
+    Hébergement : Vercel Inc. (frontend et fonctions serveur), Supabase (base de données)</p>
+  </div>
+
+  <!-- ════════════ CONFIDENTIALITÉ ════════════ -->
+  <div class="doc" id="docPriv">
+    <div class="meta">Dernière mise à jour : <span id="dateNowPriv"></span></div>
+
+    <div class="callout">
+      <i class="ti ti-info-circle"></i>
+      <div class="callout-text"><strong>En résumé :</strong> tes données de profil et tes messages au chat IA sont stockés sur Supabase et envoyés à Google (Gemini) pour générer les réponses de l'assistant. En version de test gratuite, Google peut utiliser ce contenu pour améliorer ses modèles — voir section 3 pour les détails et comment limiter cela.</div>
+    </div>
+
+    <h2>1. Données collectées</h2>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Catégorie</th><th>Exemples</th><th>Finalité</th></tr>
+        <tr><td>Compte</td><td>Email, mot de passe (chiffré)</td><td>Authentification</td></tr>
+        <tr><td>Profil créateur</td><td>Nom de chaîne, abonnés, engagement, niche</td><td>Personnalisation des outils IA (pricing, matching)</td></tr>
+        <tr><td>Deals</td><td>Marques, montants, statuts, emails de contact</td><td>Suivi de tes partenariats</td></tr>
+        <tr><td>Conversations IA</td><td>Messages échangés avec l'assistant</td><td>Génération des réponses, mémoire long-terme</td></tr>
+        <tr><td>Intégrations (optionnel)</td><td>Emails connectés, paiements Stripe/PayPal</td><td>Automatisations que tu actives toi-même</td></tr>
+      </table>
+    </div>
+
+    <h2>2. Où sont stockées tes données</h2>
+    <p>Les données de compte, profil et deals sont stockées dans une base de données <strong>Supabase</strong> (hébergement PostgreSQL). L'application elle-même est hébergée sur <strong>Vercel</strong>. Ces deux prestataires sont des sous-traitants techniques et n'utilisent pas tes données à d'autres fins que l'exécution du Service.</p>
+
+    <h2>3. Traitement par l'intelligence artificielle (Google Gemini)</h2>
+    <p>Lorsque tu utilises l'assistant IA, le moteur de recherche de sponsors ou les automatisations IA, le contenu nécessaire (ton message, ton profil, les informations pertinentes sur tes deals) est transmis à l'API <strong>Google Gemini</strong> pour générer une réponse.</p>
+    <p><strong>Pendant la phase de test (offre gratuite Gemini sans facturation activée) :</strong></p>
+    <ul>
+      <li>Google peut conserver et utiliser le contenu envoyé à l'API pour améliorer ses produits et modèles d'IA, conformément à ses propres conditions d'utilisation de l'API Gemini.</li>
+      <li>Nous n'avons pas de contrôle sur la durée de conservation de ces données par Google dans ce mode gratuit.</li>
+      <li>Nous recommandons de ne pas transmettre via le chat IA d'informations extrêmement sensibles (mots de passe, données bancaires complètes, informations médicales).</li>
+    </ul>
+    <p><strong>Si le Service bascule vers une offre IA payante (par exemple Anthropic Claude ou Gemini avec facturation activée) :</strong> les conditions de traitement des données sont généralement plus protectrices (non-utilisation des données pour l'entraînement par défaut). Ce document sera mis à jour en conséquence, et la date de dernière modification ci-dessus te permet de suivre ces changements.</p>
+
+    <h2>4. Mémoire IA</h2>
+    <p>Pour personnaliser ses réponses dans le temps, l'assistant peut retenir certains faits durables sur toi (préférences de négociation, objectifs, marques à éviter). Cette mémoire est stockée dans notre base de données (Supabase) et reste accessible et supprimable depuis ton compte. La désactiver est possible dans la page Automatisations (« Mémoire IA continue »).</p>
+
+    <h2>5. Partage avec des tiers</h2>
+    <p>Nous ne vendons pas tes données. Elles sont partagées uniquement avec :</p>
+    <ul>
+      <li><strong>Google (API Gemini)</strong> — pour générer les réponses de l'assistant IA et le matching de sponsors (voir section 3)</li>
+      <li><strong>Supabase</strong> — hébergement de la base de données</li>
+      <li><strong>Vercel</strong> — hébergement de l'application</li>
+      <li><strong>Stripe / PayPal</strong> — uniquement si tu connectes ces comptes toi-même pour le suivi automatique des paiements</li>
+      <li><strong>Ton fournisseur email (Gmail/Outlook)</strong> — uniquement si tu actives l'intégration email</li>
+    </ul>
+
+    <h2>6. Durée de conservation</h2>
+    <p>Tes données sont conservées tant que ton compte est actif. En cas de suppression de compte, les données de profil et de deals sont supprimées de notre base sous 30 jours. Concernant les données déjà transmises à Google dans le cadre de l'offre gratuite, reporte-toi à la politique de confidentialité de Google (nous n'avons pas de contrôle direct sur celle-ci dans ce mode).</p>
+
+    <h2>7. Tes droits</h2>
+    <p>Conformément au RGPD (si applicable selon ta localisation), tu disposes d'un droit d'accès, de rectification, de suppression et de portabilité de tes données. Tu peux exercer ces droits en nous contactant (coordonnées ci-dessous) ou directement depuis les paramètres de ton compte pour la suppression.</p>
+
+    <h2>8. Sécurité</h2>
+    <p>Les mots de passe sont chiffrés et jamais stockés en clair (gérés par l'authentification Supabase). Les communications entre ton navigateur et nos serveurs sont chiffrées en HTTPS.</p>
+
+    <h2>9. Cookies</h2>
+    <p>Le Service utilise des cookies/stockage local strictement nécessaires au fonctionnement (session de connexion, préférences d'interface). Aucun cookie publicitaire ou de tracking tiers n'est utilisé à ce stade.</p>
+
+    <h2>10. Modifications</h2>
+    <p>Cette politique peut évoluer, notamment en cas de changement de fournisseur IA. Nous t'invitons à la consulter régulièrement, en particulier la section 3 ci-dessus.</p>
+
+    <div class="contact-box">
+      <div class="lbl">Une question sur tes données ?</div>
+      Contacte-nous à <a href="mailto:[ton-email-de-contact]">[ton-email-de-contact]</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showDoc(name){
+  document.querySelectorAll('.doc').forEach(d=>d.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));
+  document.getElementById('doc'+(name==='cgu'?'Cgu':'Priv')).classList.add('active');
+  document.getElementById(name==='cgu'?'tabCGU':'tabPriv').classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+const today = new Date().toLocaleDateString('fr-FR', { year:'numeric', month:'long', day:'numeric' });
+document.getElementById('dateNowCgu').textContent = today;
+document.getElementById('dateNowPriv').textContent = today;
+
+// Permet d'ouvrir directement sur l'onglet confidentialité via ?tab=priv
+const params = new URLSearchParams(window.location.search);
+if (params.get('tab') === 'priv') showDoc('priv');
+</script>
+
+</body>
+</html>
