@@ -38,6 +38,6 @@
     { "src": "/(.*)",                          "dest": "/public/$1" }
   ],
   "crons": [
-    { "path": "/api/email/sync", "schedule": "0 */2 * * *" }
+    { "path": "/api/email/sync", "schedule": "0 6 * * *" }
   ]
 }
