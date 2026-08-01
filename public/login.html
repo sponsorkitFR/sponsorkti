@@ -310,6 +310,7 @@ async function doLogin() {
   const { error } = await sb.auth.signInWithPassword({ email, password: pass });
   setLoading('btnLogin', false);
   if (error) return showErr(error.message === 'Invalid login credentials' ? 'Email ou mot de passe incorrect.' : error.message);
+  await new Promise(r => setTimeout(r, 400));
   window.location.href = '/';
 }
 
@@ -367,7 +368,7 @@ function showForgot() {
 
 // ── AUTO-REDIRECT si déjà connecté ────────────────────────────────────────
 sb.auth.getSession().then(({ data: { session } }) => {
-  alert('LOGIN voit session: ' + (session ? 'OUI '+session.user.email : 'NON')); if (session) window.location.href = '/';
+  if (session) window.location.href = '/';
 });
 </script>
 </body>
