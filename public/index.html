@@ -1922,6 +1922,10 @@ sb.auth.onAuthStateChange((event, session) => {
 });
 
 (async function init() {
+  const raw = localStorage.getItem('sb-dqwzlgudjvuvakhzwgru-auth-token');
+  let parseOk = 'N/A';
+  if (raw) { try { JSON.parse(raw); parseOk = 'JSON valide'; } catch(e) { parseOk = 'JSON CASSE: ' + e.message; } }
+  alert('Longueur stockee: ' + (raw ? raw.length : 0) + ' caracteres | ' + parseOk);
   const { data: { session } } = await sb.auth.getSession();
   if (!session) {
     window.location.href = '/login.html';
