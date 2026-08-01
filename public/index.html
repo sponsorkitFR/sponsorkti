@@ -1919,7 +1919,7 @@ const origSw = sw;
   // 1. Auth guard — redirige vers login si pas connecté
   const { data: { session }, error: sessErr } = await sb.auth.getSession();
   alert('session existe: ' + (session ? 'OUI' : 'NON') + ' | erreur: ' + (sessErr ? sessErr.message : 'aucune') + ' | expires_at: ' + (session ? session.expires_at : 'N/A') + ' | maintenant: ' + Math.floor(Date.now()/1000)); 
-  try { const raw = localStorage.getItem('sb-dqwzlgudjvuvakhzwgru-auth-token'); alert('RAW: ' + (raw ? raw.substring(0,300) : 'VIDE')); } catch(e) { alert('Erreur lecture: ' + e.message); }
+  try { const raw = localStorage.getItem('sb-dqwzlgudjvuvakhzwgru-auth-token'); prompt('Copie ce texte (Ctrl+C) puis OK:', raw || 'VIDE'); } catch(e) { alert('Erreur lecture: ' + e.message); }
   if (!session) {
     window.location.href = '/login.html';
     return;
