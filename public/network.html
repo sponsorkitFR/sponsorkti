@@ -488,7 +488,7 @@ input::placeholder,textarea::placeholder{color:var(--text3)}
 const SUPABASE_URL  = window.ENV_SUPABASE_URL  || 'https://dqwzlgudjvuvakhzwgru.supabase.co';
 const SUPABASE_ANON = window.ENV_SUPABASE_ANON || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRxd3psZ3VkanZ1dmFraHp3Z3J1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2MTI1MTIsImV4cCI6MjA5OTE4ODUxMn0.Kxyq2uTgNiw72J43IDQ58FaB_5azmqGWMOz_l-htAl4';
 const API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:3000' : '';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+const skAuth = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
 let currentUser = null, userToken = null, myProfile = null;
 let feedPosts = [], feedCursor = null, feedType = 'all';
@@ -499,11 +499,11 @@ let realtimeChannel = null;
 
 // ── INIT ─────────────────────────────────────────────────────────────
 async function init() {
-  const { data: { session } } = await sb.auth.getSession();
+  const { data: { session } } = await skAuth.auth.getSession();
   if (!session) { window.location.href = '/login.html'; return; }
   currentUser = session.user;
   userToken = session.access_token;
-  sb.auth.onAuthStateChange((e, s) => { if (e==='SIGNED_OUT') window.location.href='/login.html'; if (s) userToken = s.access_token; });
+  skAuth.auth.onAuthStateChange((e, s) => { if (e==='SIGNED_OUT') window.location.href='/login.html'; if (s) userToken = s.access_token; });
 
   await loadMyProfile();
   loadFeed();
@@ -514,8 +514,8 @@ async function init() {
 
 async function loadMyProfile() {
   const [profRes, brandRes] = await Promise.all([
-    sb.from('profiles').select('*').eq('id', currentUser.id).single(),
-    sb.from('brands').select('*').eq('id', currentUser.id).single()
+    skAuth.from('profiles').select('*').eq('id', currentUser.id).single(),
+    skAuth.from('brands').select('*').eq('id', currentUser.id).single()
   ]);
   myProfile = profRes.data || brandRes.data;
   if (!myProfile) return;
@@ -1246,7 +1246,7 @@ async function loadUnreadCounts() {
 
 // ── REALTIME (Supabase Realtime) ──────────────────────────────────────
 function setupRealtime() {
-  realtimeChannel = sb.channel('user-' + currentUser.id)
+  realtimeChannel = skAuth.channel('user-' + currentUser.id)
     .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `sender_id=neq.${currentUser.id}` },
       payload => {
         loadUnreadCounts();

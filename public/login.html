@@ -236,7 +236,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 const SUPABASE_URL = typeof __SUPABASE_URL__ !== 'undefined' ? __SUPABASE_URL__ : (window.ENV_SUPABASE_URL || 'https://dqwzlgudjvuvakhzwgru.supabase.co');
 const SUPABASE_ANON = typeof __SUPABASE_ANON__ !== 'undefined' ? __SUPABASE_ANON__ : (window.ENV_SUPABASE_ANON || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRxd3psZ3VkanZ1dmFraHp3Z3J1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2MTI1MTIsImV4cCI6MjA5OTE4ODUxMn0.Kxyq2uTgNiw72J43IDQ58FaB_5azmqGWMOz_l-htAl4');
 
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+const skAuth = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
 // ── HELPERS ───────────────────────────────────────────────────────────────
 let selectedNiche = '';
@@ -307,7 +307,7 @@ async function doLogin() {
   const pass = document.getElementById('loginPassword').value;
   if (!email || !pass) return showErr('Remplis tous les champs.');
   setLoading('btnLogin', true);
-  const { error } = await sb.auth.signInWithPassword({ email, password: pass });
+  const { error } = await skAuth.auth.signInWithPassword({ email, password: pass });
   setLoading('btnLogin', false);
   if (error) return showErr(error.message === 'Invalid login credentials' ? 'Email ou mot de passe incorrect.' : error.message);
   await new Promise(r => setTimeout(r, 400));
@@ -326,7 +326,7 @@ async function doRegister() {
   const lastName = document.getElementById('regLast').value.trim();
 
   // 1. Créer le compte auth
-  const { data: authData, error: authError } = await sb.auth.signUp({
+  const { data: authData, error: authError } = await skAuth.auth.signUp({
     email, password: pass,
     options: { data: { first_name: firstName, last_name: lastName } }
   });
@@ -348,7 +348,7 @@ async function doRegister() {
     created_at: new Date().toISOString()
   };
 
-  const { error: profileError } = await sb.from('profiles').insert(profile);
+  const { error: profileError } = await skAuth.from('profiles').insert(profile);
   setLoading('btnRegister', false);
 
   if (profileError && !profileError.message.includes('duplicate')) {
@@ -362,12 +362,12 @@ async function doRegister() {
 function showForgot() {
   const email = document.getElementById('loginEmail').value.trim();
   if (!email) return showErr('Entre ton email d\'abord.');
-  sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + '/reset-password' });
+  skAuth.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + '/reset-password' });
   showOk('Email de réinitialisation envoyé !');
 }
 
 // ── AUTO-REDIRECT si déjà connecté ────────────────────────────────────────
-sb.auth.onAuthStateChange((event, session) => {
+skAuth.auth.onAuthStateChange((event, session) => {
   if (event === 'INITIAL_SESSION' && session) window.location.href = '/';
 });
 </script>

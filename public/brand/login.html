@@ -169,7 +169,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <script>
 const SUPABASE_URL  = window.ENV_SUPABASE_URL  || 'https://dqwzlgudjvuvakhzwgru.supabase.co';
 const SUPABASE_ANON = window.ENV_SUPABASE_ANON || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRxd3psZ3VkanZ1dmFraHp3Z3J1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2MTI1MTIsImV4cCI6MjA5OTE4ODUxMn0.Kxyq2uTgNiw72J43IDQ58FaB_5azmqGWMOz_l-htAl4';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+const skAuth = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 let selectedPlan = 'starter';
 
 function showTab(t){
@@ -208,12 +208,12 @@ async function doLogin(){
   const pass=document.getElementById('loginPass').value;
   if(!email||!pass)return showErr('Remplis tous les champs.');
   setLoad('btnLogin',true);
-  const {error}=await sb.auth.signInWithPassword({email,password:pass});
+  const {error}=await skAuth.auth.signInWithPassword({email,password:pass});
   setLoad('btnLogin',false);
   if(error)return showErr(error.message==='Invalid login credentials'?'Email ou mot de passe incorrect.':error.message);
 
   // Vérifier que c'est bien un compte marque
-  const {data:brand}=await sb.from('brands').select('id').eq('email',email).single();
+  const {data:brand}=await skAuth.from('brands').select('id').eq('email',email).single();
   if(!brand)return showErr('Ce compte n\'est pas un compte marque. Utilisez l\'espace créateur.');
   window.location.href='/brand/';
 }
@@ -223,11 +223,11 @@ async function doRegister(){
   setLoad('btnReg',true);
   const email=document.getElementById('rEmail').value.trim();
   const pass=document.getElementById('rPass').value;
-  const {data:authData,error:authError}=await sb.auth.signUp({email,password:pass,
+  const {data:authData,error:authError}=await skAuth.auth.signUp({email,password:pass,
     options:{data:{first_name:document.getElementById('rFirst').value.trim(),last_name:document.getElementById('rLast').value.trim(),account_type:'brand'}}
   });
   if(authError){setLoad('btnReg',false);return showErr(authError.message)}
-  const {error:brandError}=await sb.from('brands').insert({
+  const {error:brandError}=await skAuth.from('brands').insert({
     id:authData.user.id,email,
     first_name:document.getElementById('rFirst').value.trim(),
     last_name:document.getElementById('rLast').value.trim(),
@@ -248,11 +248,11 @@ async function doRegister(){
 function showForgot(){
   const email=document.getElementById('loginEmail').value.trim();
   if(!email)return showErr('Entre ton email d\'abord.');
-  sb.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin+'/brand/reset'});
+  skAuth.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin+'/brand/reset'});
   showOk('Email de réinitialisation envoyé !');
 }
 
-sb.auth.getSession().then(({data:{session}})=>{if(session)window.location.href='/brand/'});
+skAuth.auth.getSession().then(({data:{session}})=>{if(session)window.location.href='/brand/'});
 document.getElementById('msgError').classList.remove('show');
 </script>
 </body>

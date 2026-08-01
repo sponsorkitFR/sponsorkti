@@ -1494,7 +1494,7 @@ function restoreChatHistory() {
 // ── SUPABASE + AUTH + REAL DATA ───────────────────────────────────────────
 const SUPABASE_URL = window.ENV_SUPABASE_URL || 'https://dqwzlgudjvuvakhzwgru.supabase.co';
 const SUPABASE_ANON = window.ENV_SUPABASE_ANON || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRxd3psZ3VkanZ1dmFraHp3Z3J1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2MTI1MTIsImV4cCI6MjA5OTE4ODUxMn0.Kxyq2uTgNiw72J43IDQ58FaB_5azmqGWMOz_l-htAl4';
-const sb = supabase.createClient('https://uinynydhksabcnrglevx.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVpbnlueWRoa3NhYmNucmdsZXZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwNjczOTYsImV4cCI6MjA5NzY0MzM5Nn0.-hNQc9__c9llxvBe8XJZ-0erse6dl-ZXXA47SkY4ukw');let currentUser = null;
+const skAuth = supabase.createClient('https://uinynydhksabcnrglevx.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVpbnlueWRoa3NhYmNucmdsZXZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwNjczOTYsImV4cCI6MjA5NzY0MzM5Nn0.-hNQc9__c9llxvBe8XJZ-0erse6dl-ZXXA47SkY4ukw');let currentUser = null;
 let userProfile = null;
 let userDeals = [];
 let userToken = null;
@@ -1916,7 +1916,7 @@ const origSw = sw;
 
 // ── INIT PRINCIPAL ─────────────────────────────────────────────────────
 let initDone = false;
-sb.auth.onAuthStateChange((event, session) => {
+skAuth.auth.onAuthStateChange((event, session) => {
   
   if (session) userToken = session.access_token;
 });
@@ -1924,7 +1924,7 @@ sb.auth.onAuthStateChange((event, session) => {
 (async function init() {
   let session = null;
   for (let i = 0; i < 3 && !session; i++) {
-    const res = await sb.auth.getSession();
+    const res = await skAuth.auth.getSession();
     session = res.data.session;
     if (!session) await new Promise(r => setTimeout(r, 300));
   }
@@ -2215,7 +2215,7 @@ function copyWebhook(type) {
 async function loadNotifications() {
   try {
     // On lit depuis Supabase directement (table notifications)
-    const { data, error } = await sb
+    const { data, error } = await skAuth
       .from('notifications')
       .select('*')
       .eq('user_id', currentUser.id)
@@ -2481,7 +2481,7 @@ async function loadAutomationLogs() {
   const el = document.getElementById('automation-logs-list');
   if (!el) return;
   try {
-    const { data, error } = await sb
+    const { data, error } = await skAuth
       .from('automation_logs')
       .select('*')
       .eq('user_id', currentUser.id)
@@ -2505,12 +2505,12 @@ async function loadAutomationLogs() {
 }
 
 async function markRead(id) {
-  await sb.from('notifications').update({ read: true }).eq('id', id);
+  await skAuth.from('notifications').update({ read: true }).eq('id', id);
   loadNotifications();
 }
 
 async function doLogout() {
-  await sb.auth.signOut();
+  await skAuth.auth.signOut();
   localStorage.removeItem('sk_admin_secret');
   window.location.href = '/login.html';
 }

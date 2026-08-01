@@ -450,7 +450,7 @@ textarea{resize:vertical}
 const SUPABASE_URL  = window.ENV_SUPABASE_URL  || 'https://dqwzlgudjvuvakhzwgru.supabase.co';
 const SUPABASE_ANON = window.ENV_SUPABASE_ANON || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRxd3psZ3VkanZ1dmFraHp3Z3J1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2MTI1MTIsImV4cCI6MjA5OTE4ODUxMn0.Kxyq2uTgNiw72J43IDQ58FaB_5azmqGWMOz_l-htAl4';
 const API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:3000' : '';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+const skAuth = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
 let currentUser = null, brandProfile = null, userToken = null;
 let allCampaigns = [], allCreators = [], allApplications = [];
@@ -482,12 +482,12 @@ const STATUS_PILLS  = { draft:'pgy', active:'pg', paused:'pa', completed:'pb', c
 
 // ── AUTH ──────────────────────────────────────────────────────────────────
 async function init() {
-  const { data: { session } } = await sb.auth.getSession();
+  const { data: { session } } = await skAuth.auth.getSession();
   if (!session) { window.location.href = '/brand/login.html'; return; }
   currentUser = session.user;
   userToken = session.access_token;
 
-  sb.auth.onAuthStateChange((event, session) => {
+  skAuth.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_OUT') { window.location.href = '/brand/login.html'; }
     if (session) userToken = session.access_token;
   });
