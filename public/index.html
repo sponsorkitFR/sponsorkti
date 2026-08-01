@@ -1915,23 +1915,20 @@ async function deleteDeal(id) {
 const origSw = sw;
 
 // ── INIT PRINCIPAL ─────────────────────────────────────────────────────
+let initDone = false;
+sb.auth.onAuthStateChange((event, session) => {
+  if (event === 'SIGNED_OUT') { window.location.href = '/login.html'; return; }
+  if (session) userToken = session.access_token;
+});
+
 (async function init() {
-  // 1. Auth guard — redirige vers login si pas connecté
-  const { data: { session }, error: sessErr } = await sb.auth.getSession();
-  alert('session existe: ' + (session ? 'OUI' : 'NON') + ' | erreur: ' + (sessErr ? sessErr.message : 'aucune') + ' | expires_at: ' + (session ? session.expires_at : 'N/A') + ' | maintenant: ' + Math.floor(Date.now()/1000)); 
-  try { const raw = localStorage.getItem('sb-dqwzlgudjvuvakhzwgru-auth-token'); prompt('Copie ce texte (Ctrl+C) puis OK:', raw || 'VIDE'); } catch(e) { alert('Erreur lecture: ' + e.message); }
+  const { data: { session } } = await sb.auth.getSession();
   if (!session) {
     window.location.href = '/login.html';
     return;
   }
   currentUser = session.user;
   userToken = session.access_token;
-
-  // Refresh token automatique
-  sb.auth.onAuthStateChange((event, session) => {
-    alert('EVENT: ' + event);
-    if (session) userToken = session.access_token;
-  });
 
   // 2. Cookie banner
   const ck = localStorage.getItem('ck');

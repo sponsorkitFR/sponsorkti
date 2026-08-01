@@ -367,8 +367,8 @@ function showForgot() {
 }
 
 // ── AUTO-REDIRECT si déjà connecté ────────────────────────────────────────
-sb.auth.getSession().then(({ data: { session } }) => {
-  if (session) window.location.href = '/';
+sb.auth.onAuthStateChange((event, session) => {
+  if (event === 'INITIAL_SESSION' && session) window.location.href = '/';
 });
 </script>
 </body>
