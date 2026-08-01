@@ -233,8 +233,8 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 // ── CONFIG ────────────────────────────────────────────────────────────────
 // Ces valeurs sont remplacées automatiquement par Vercel env vars
 // Pour le dev local, remplace ici temporairement
-const SUPABASE_URL = typeof __SUPABASE_URL__ !== 'undefined' ? __SUPABASE_URL__ : (window.ENV_SUPABASE_URL || 'REMPLACE_PAR_TON_URL_SUPABASE');
-const SUPABASE_ANON = typeof __SUPABASE_ANON__ !== 'undefined' ? __SUPABASE_ANON__ : (window.ENV_SUPABASE_ANON || 'REMPLACE_PAR_TA_CLE_ANON');
+const SUPABASE_URL = typeof __SUPABASE_URL__ !== 'undefined' ? __SUPABASE_URL__ : (window.ENV_SUPABASE_URL || 'https://dqwzlgudjvuvakhzwgru.supabase.co');
+const SUPABASE_ANON = typeof __SUPABASE_ANON__ !== 'undefined' ? __SUPABASE_ANON__ : (window.ENV_SUPABASE_ANON || 'sb_publishable_TgUUCkjjb-cuXOEwTLTMxg_DiMjPwbY');
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
