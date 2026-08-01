@@ -1918,6 +1918,7 @@ const origSw = sw;
 (async function init() {
   // 1. Auth guard — redirige vers login si pas connecté
   const { data: { session } } = await sb.auth.getSession(); 
+  try { const raw = localStorage.getItem('sb-dqwzlgudjvuvakhzwgru-auth-token'); alert('RAW: ' + (raw ? raw.substring(0,300) : 'VIDE')); } catch(e) { alert('Erreur lecture: ' + e.message); }
   if (!session) {
     window.location.href = '/login.html';
     return;
