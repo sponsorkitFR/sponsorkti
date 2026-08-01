@@ -367,7 +367,7 @@ function showForgot() {
 
 // ── AUTO-REDIRECT si déjà connecté ────────────────────────────────────────
 sb.auth.getSession().then(({ data: { session } }) => {
-  if (session) window.location.href = '/';
+  alert('LOGIN voit session: ' + (session ? 'OUI '+session.user.email : 'NON')); if (session) window.location.href = '/';
 });
 </script>
 </body>

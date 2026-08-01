@@ -1917,7 +1917,7 @@ const origSw = sw;
 // ── INIT PRINCIPAL ─────────────────────────────────────────────────────
 (async function init() {
   // 1. Auth guard — redirige vers login si pas connecté
-  const { data: { session } } = await sb.auth.getSession();
+  const { data: { session } } = await sb.auth.getSession(); alert('INDEX voit session: ' + (session ? 'OUI '+session.user.email : 'NON'));
   if (!session) {
     window.location.href = '/login.html';
     return;
