@@ -1,40 +1,129 @@
 {
   "version": 2,
   "builds": [
-    { "src": "api/ai.js", "use": "@vercel/node" },
-    { "src": "api/brand.js", "use": "@vercel/node" },
-    { "src": "api/social.js", "use": "@vercel/node" },
-    { "src": "api/network.js", "use": "@vercel/node" },
-    { "src": "api/email.js", "use": "@vercel/node" },
-    { "src": "api/payments.js", "use": "@vercel/node" },
-    { "src": "api/misc.js", "use": "@vercel/node" },
-    { "src": "public/**", "use": "@vercel/static" }
+    {
+      "src": "api/ai.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/brand.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/social.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/network.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/email.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/payments.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/misc.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    }
   ],
   "routes": [
-    { "src": "/api/ai/(.*)",       "dest": "/api/ai.js?action=$1" },
-    { "src": "/api/brand/(.*)",    "dest": "/api/brand.js?action=$1" },
-    { "src": "/api/social/(.*)",   "dest": "/api/social.js?action=$1" },
-    { "src": "/api/network/(.*)",  "dest": "/api/network.js?action=$1" },
-    { "src": "/api/email/(.*)",    "dest": "/api/email.js?action=$1" },
-    { "src": "/api/payments/(.*)", "dest": "/api/payments.js?action=$1" },
-
-    { "src": "/api/chat",             "dest": "/api/misc.js?action=chat" },
-    { "src": "/api/deals",            "dest": "/api/misc.js?action=deals" },
-    { "src": "/api/events",           "dest": "/api/misc.js?action=events" },
-    { "src": "/api/profile",          "dest": "/api/misc.js?action=profile" },
-    { "src": "/api/stats",            "dest": "/api/misc.js?action=stats" },
-    { "src": "/api/messages/inbox",   "dest": "/api/misc.js?action=messages-inbox" },
-    { "src": "/api/collab/request",   "dest": "/api/misc.js?action=collab-request" },
-
-    { "src": "/dashboard",       "dest": "/public/dashboard.html" },
-    { "src": "/login",          "dest": "/public/login.html" },
-    { "src": "/network",        "dest": "/public/network.html" },
-    { "src": "/brand/login",    "dest": "/public/brand/login.html" },
-    { "src": "/brand/(.*)",     "dest": "/public/brand/$1" },
-    { "src": "/brand",          "dest": "/public/brand/index.html" },
-    { "src": "/(.*)",           "dest": "/public/$1" }
+    {
+      "src": "/api/ai/(.*)",
+      "dest": "/api/ai.js?action=$1"
+    },
+    {
+      "src": "/api/brand/(.*)",
+      "dest": "/api/brand.js?action=$1"
+    },
+    {
+      "src": "/api/social/(.*)",
+      "dest": "/api/social.js?action=$1"
+    },
+    {
+      "src": "/api/network/(.*)",
+      "dest": "/api/network.js?action=$1"
+    },
+    {
+      "src": "/api/email/(.*)",
+      "dest": "/api/email.js?action=$1"
+    },
+    {
+      "src": "/api/payments/(.*)",
+      "dest": "/api/payments.js?action=$1"
+    },
+    {
+      "src": "/api/chat",
+      "dest": "/api/misc.js?action=chat"
+    },
+    {
+      "src": "/api/deals",
+      "dest": "/api/misc.js?action=deals"
+    },
+    {
+      "src": "/api/events",
+      "dest": "/api/misc.js?action=events"
+    },
+    {
+      "src": "/api/profile",
+      "dest": "/api/misc.js?action=profile"
+    },
+    {
+      "src": "/api/stats",
+      "dest": "/api/misc.js?action=stats"
+    },
+    {
+      "src": "/api/messages/inbox",
+      "dest": "/api/misc.js?action=messages-inbox"
+    },
+    {
+      "src": "/api/collab/request",
+      "dest": "/api/misc.js?action=collab-request"
+    },
+    {
+      "src": "/",
+      "dest": "/public/index.html"
+    },
+    {
+      "src": "/dashboard",
+      "dest": "/public/dashboard.html"
+    },
+    {
+      "src": "/login",
+      "dest": "/public/login.html"
+    },
+    {
+      "src": "/network",
+      "dest": "/public/network.html"
+    },
+    {
+      "src": "/brand/login",
+      "dest": "/public/brand/login.html"
+    },
+    {
+      "src": "/brand/(.*)",
+      "dest": "/public/brand/$1"
+    },
+    {
+      "src": "/brand",
+      "dest": "/public/brand/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/$1"
+    }
   ],
   "crons": [
-    { "path": "/api/email/sync", "schedule": "0 6 * * *" }
+    {
+      "path": "/api/email/sync",
+      "schedule": "0 6 * * *"
+    }
   ]
 }
