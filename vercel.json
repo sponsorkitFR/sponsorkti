@@ -2,6 +2,10 @@
   "version": 2,
   "builds": [
     {
+      "src": "api/debug.js",
+      "use": "@vercel/node"
+    },
+    {
       "src": "api/ai.js",
       "use": "@vercel/node"
     },
@@ -35,6 +39,10 @@
     }
   ],
   "routes": [
+    {
+      "src": "/api/debug",
+      "dest": "/api/debug.js"
+    },
     {
       "src": "/api/ai/(.*)",
       "dest": "/api/ai.js?action=$1"
