@@ -10,7 +10,7 @@
 // 5. Tout est sauvegardé dans ai_conversations pour persister entre sessions
 
 import { createClient } from '@supabase/supabase-js';
-import { callAI, extractJSON } from '../_lib/ai-client.js';
+import { callAI, extractJSON } from '../../ai-client.js';
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
 

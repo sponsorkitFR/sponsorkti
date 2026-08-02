@@ -5,7 +5,7 @@
 // POST /api/social/sync?provider=x   → resync uniquement cette plateforme
 
 import { createClient } from '@supabase/supabase-js';
-import { encryptToken, decryptToken } from '../_lib/crypto.js';
+import { encryptToken, decryptToken } from '../../crypto.js';
 import { syncYouTubeStats, syncInstagramStats, syncTikTokStats } from './callback.js';
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY);

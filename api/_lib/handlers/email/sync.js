@@ -6,7 +6,7 @@
 // 4. Met à jour les deals automatiquement
 
 import { createClient } from '@supabase/supabase-js';
-import { callAI, extractJSON } from '../_lib/ai-client.js';
+import { callAI, extractJSON } from '../../ai-client.js';
 
 const supabase = createClient(
   process.env.SUPABASE_URL,

@@ -3,7 +3,7 @@
 // Utilise la couche d'abstraction api/_lib/ai-client.js — Gemini par défaut
 // (gratuit), bascule vers Anthropic possible via AI_PROVIDER=anthropic.
 
-import { callAI } from './_lib/ai-client.js';
+import { callAI } from '../ai-client.js';
 
 export default async function handler(req, res) {
   // CORS
